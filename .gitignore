@@ -1,5 +1,11 @@
+# General
+.DS_store
+
 # Compiled class file
 *.class
+
+# Project file
+*.project
 
 # Log file
 *.log
