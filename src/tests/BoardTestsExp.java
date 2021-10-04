@@ -10,13 +10,13 @@ import experiment.TestBoardCell;
 class BoardTestsExp {
 	TestBoard board;
 
-	@BeforeEach //Sets up 4x4 board for each test
+	@BeforeEach
 	void setUp() throws Exception {
 		board = new TestBoard(4, 4);
 	}
 
 	@Test
-	public void topLeftCorner() { //Tests adjacency in top left cell
+	public void topLeftCorner() {
 		TestBoardCell cell = board.getCell(0, 0);
 		Set<TestBoardCell> testList = cell.getAdjList();
 		Assert.assertTrue(testList.contains(board.getCell(1, 0)));
@@ -25,7 +25,7 @@ class BoardTestsExp {
 	}
 
 	@Test
-	public void bottomRightCorner() { //Tests adjacency in bottom right cell
+	public void bottomRightCorner() {
 		TestBoardCell cell = board.getCell(3, 3);
 		Set<TestBoardCell> testList = cell.getAdjList();
 		Assert.assertTrue(testList.contains(board.getCell(3, 2)));
@@ -34,7 +34,7 @@ class BoardTestsExp {
 	}
 
 	@Test
-	public void rightEdge() { //Tests adjacency on a right edge cell
+	public void rightEdge() {
 		TestBoardCell cell = board.getCell(1, 3);
 		Set<TestBoardCell> testList = cell.getAdjList();
 		Assert.assertTrue(testList.contains(board.getCell(0, 3)));
@@ -44,7 +44,7 @@ class BoardTestsExp {
 	}
 
 	@Test
-	public void leftEdge() { //Tests adjacency on a left edge cell
+	public void leftEdge() {
 		TestBoardCell cell = board.getCell(2, 0);
 		Set<TestBoardCell> testList = cell.getAdjList();
 		Assert.assertTrue(testList.contains(board.getCell(3, 0)));
@@ -55,7 +55,7 @@ class BoardTestsExp {
 	}
 	
 	@Test
-	public void middleOfGrid() { //Tests adjacency on a cell with no edges
+	public void middleOfGrid() {
 		TestBoardCell cell = board.getCell(2, 2);
 		Set<TestBoardCell> testList = cell.getAdjList();
 		Assert.assertTrue(testList.contains(board.getCell(2, 1)));
@@ -67,7 +67,7 @@ class BoardTestsExp {
 	}
 	
 	@Test
-	public void emptyBoard() { //Tests targets on an empty board
+	public void emptyBoard() {
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 3);
 		Set<TestBoardCell> targets = board.getTargets();
@@ -81,7 +81,7 @@ class BoardTestsExp {
 	}
 	
 	@Test
-	public void testOccupied() { //Tests targets on a board where there is an occupied cell
+	public void testOccupied() {
 		board.getCell(0, 2).setOccupied(true);
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 3);
@@ -93,7 +93,7 @@ class BoardTestsExp {
 	}
 	
 	@Test
-	public void testRoom() { //Tests targets on a board where there is a room cell
+	public void testRoom() {
 		board.getCell(0, 2).setRoom(true);
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 3);
@@ -105,7 +105,7 @@ class BoardTestsExp {
 	}
 	
 	@Test
-	public void testMovement() { //Tests targets, making sure that walked on cells can not be targets again
+	public void testMovement() {
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 2);
 		Set<TestBoardCell> targets = board.getTargets();
@@ -116,7 +116,7 @@ class BoardTestsExp {
 	}
 	
 	@Test
-	public void testTwoOccupied() { //Tests targets on a board where there is two occupied cells
+	public void testTwoOccupied() {
 		board.getCell(0, 2).setRoom(true);
 		board.getCell(1, 2).setOccupied(true);
 		TestBoardCell cell = board.getCell(0, 0);
