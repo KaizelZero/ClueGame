@@ -7,7 +7,7 @@ public class TestBoard {
 	private Set<TestBoardCell> targets;
 	private ArrayList<ArrayList<TestBoardCell>> board;
 	void calcTargets(TestBoardCell startCell, int pathlength) {
-		
+	
 	}
 	
 	public TestBoard(int width, int height) {
@@ -27,6 +27,7 @@ public class TestBoard {
 	public Set<TestBoardCell> getTargets(){
 		return targets;
 	}
+	
 	public TestBoardCell getCell(int row, int col) {
 		return board.get(col).get(row);
 	}
