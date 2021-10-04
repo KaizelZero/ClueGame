@@ -12,7 +12,7 @@ public class TestBoardCell {
 		this.column = column;
 	}
 	void addAdjacency(TestBoardCell cell) {
-		
+		adjacencyList.add(cell);
 	}
 	Set<TestBoardCell> getAdjList(){
 		return this.adjacencyList;
