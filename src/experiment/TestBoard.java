@@ -20,10 +20,14 @@ public class TestBoard {
 		}
 	}
 
-	Set<TestBoardCell> getTargets(){
+	public TestBoard() {
+
+	}
+
+	public Set<TestBoardCell> getTargets(){
 		return targets;
 	}
-	TestBoardCell getCell(int row, int col) {
+	public TestBoardCell getCell(int row, int col) {
 		return board.get(col).get(row);
 	}
 }

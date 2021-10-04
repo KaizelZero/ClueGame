@@ -14,7 +14,7 @@ public class TestBoardCell {
 	void addAdjacency(TestBoardCell cell) {
 		adjacencyList.add(cell);
 	}
-	Set<TestBoardCell> getAdjList(){
+	public Set<TestBoardCell> getAdjList(){
 		return this.adjacencyList;
 	}
 	void setRoom(boolean isAssignRoom) {
