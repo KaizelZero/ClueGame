@@ -1,20 +1,22 @@
 package experiment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class TestBoard {
-	private Set<TestBoardCell> targets;
-	private ArrayList<ArrayList<TestBoardCell>> board;
+	private Set<TestBoardCell> targets = new HashSet<TestBoardCell>();
+	private ArrayList<ArrayList<TestBoardCell>> board = new ArrayList<ArrayList<TestBoardCell>>();
 	public void calcTargets(TestBoardCell startCell, int pathlength) {}
 	
 	public TestBoard(int width, int height) {
 		super();
 		for(int i = 0; i < width; i++) {
-			board.add(null);
+			ArrayList<TestBoardCell> temp = new ArrayList<TestBoardCell>();
 			for(int j = 0; j < height; j++) {
-				board.get(i).add(new TestBoardCell(j, i));
+				temp.add(new TestBoardCell(j, i));
 			}
+			board.add(temp);
 		}
 	}
 
