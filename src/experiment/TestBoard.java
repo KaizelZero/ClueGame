@@ -6,9 +6,7 @@ import java.util.Set;
 public class TestBoard {
 	private Set<TestBoardCell> targets;
 	private ArrayList<ArrayList<TestBoardCell>> board;
-	void calcTargets(TestBoardCell startCell, int pathlength) {
-	
-	}
+	public void calcTargets(TestBoardCell startCell, int pathlength) {}
 	
 	public TestBoard(int width, int height) {
 		super();
