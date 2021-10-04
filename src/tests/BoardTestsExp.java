@@ -115,6 +115,7 @@ class BoardTestsExp {
 		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
 	}
 	
+	@Test
 	public void testTwoOccupied() {
 		board.getCell(0, 2).setRoom(true);
 		board.getCell(1, 2).setOccupied(true);
