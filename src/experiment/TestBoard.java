@@ -15,8 +15,25 @@ public class TestBoard {
 	final static int ROWS = 4;
 
 	public void calcTargets(TestBoardCell startCell, int pathlength) {
+		visited.add(startCell);
+		findAllTargets(startCell, pathlength);
 	}
-
+	private void findAllTargets(TestBoardCell thisCell, int numSteps) {
+		for(TestBoardCell adjCell : thisCell.getAdjList()) {
+			if(visited.contains(adjCell)){
+				continue;
+			}
+			visited.add(adjCell);
+			if(numSteps == 1) {
+				if(!adjCell.getOccupied() && !adjCell.getRoom()) {
+					targets.add(adjCell);
+				}
+			}else {
+				findAllTargets(adjCell, numSteps - 1);
+			}
+			visited.remove(adjCell);
+		}
+	}
 	// Creates a TestBoard
 	public TestBoard(int width, int height) {
 		super();

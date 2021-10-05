@@ -69,39 +69,37 @@ class BoardTestsExp {
 	@Test
 	public void emptyBoard() { // Tests targets on an empty board
 		TestBoardCell cell = board.getCell(0, 0);
-		board.calcTargets(cell, 3);
+		board.calcTargets(cell, 2);
 		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(6, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
-		Assert.assertTrue(targets.contains(board.getCell(2, 1)));
-		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
-		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(0, 3)));
-		Assert.assertTrue(targets.contains(board.getCell(1, 0)));
+		Assert.assertEquals(3, targets.size());
+		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
+		Assert.assertTrue(targets.contains(board.getCell(1, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
+		
 	}
 
 	@Test
 	public void testOccupied() { // Tests targets on a board where there is an occupied cell
-		board.getCell(0, 2).setOccupied(true);
+		board.getCell(1, 1).setOccupied(true);
 		TestBoardCell cell = board.getCell(0, 0);
-		board.calcTargets(cell, 3);
+		board.calcTargets(cell, 2);
 		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(3, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
+		Assert.assertEquals(2, targets.size());
+		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
+		Assert.assertFalse(targets.contains(board.getCell(1, 1)));
 	}
 
-	//@Test
+	@Test
 	public void testRoom() { // Tests targets on a board where there is a room cell
 		board.getCell(0, 2).setRoom(true);
 		TestBoardCell cell = board.getCell(0, 0);
-		board.calcTargets(cell, 3);
+		board.calcTargets(cell, 2);
 		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(3, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
+		Assert.assertEquals(2, targets.size());
+		Assert.assertFalse(targets.contains(board.getCell(0, 2)));
+		Assert.assertTrue(targets.contains(board.getCell(1, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
 	}
 
 	@Test
@@ -109,23 +107,24 @@ class BoardTestsExp {
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 2);
 		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(2, targets.size());
+		Assert.assertEquals(3, targets.size());
 		Assert.assertFalse(targets.contains(board.getCell(0, 0)));
-		Assert.assertTrue(targets.contains(board.getCell(1, 0)));
-		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
+		Assert.assertTrue(targets.contains(board.getCell(1, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
 	}
 
 	@Test
 	public void testTwoOccupied() { // Tests targets on a board where there is two occupied cells
 		board.getCell(0, 2).setRoom(true);
-		board.getCell(1, 2).setOccupied(true);
+		board.getCell(1, 1).setOccupied(true);
 		TestBoardCell cell = board.getCell(0, 0);
-		board.calcTargets(cell, 3);
+		board.calcTargets(cell, 2);
 		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(2, targets.size());
-		Assert.assertFalse(targets.contains(board.getCell(1, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
+		Assert.assertEquals(1, targets.size());
+		Assert.assertFalse(targets.contains(board.getCell(0, 2)));
+		Assert.assertFalse(targets.contains(board.getCell(1, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
 	}
 
 }
