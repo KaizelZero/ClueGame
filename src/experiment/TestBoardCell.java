@@ -45,9 +45,4 @@ public class TestBoardCell {
 		return isOccupied;
 	}
 
-	@Override
-	public String toString() {
-		return "TestBoardCell [row=" + row + ", column=" + column + "]";
-	}
-
 }
