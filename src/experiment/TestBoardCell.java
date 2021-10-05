@@ -1,10 +1,11 @@
 package experiment;
+import java.util.HashSet;
 import java.util.Set;
 
 public class TestBoardCell {
 	// Variables
 	private int row, column;
-	Set<TestBoardCell> adjList;
+	Set<TestBoardCell> adjList = new HashSet<TestBoardCell>();
 	private boolean isRoom, isOccupied;
 
 	// Constructor
@@ -21,6 +22,7 @@ public class TestBoardCell {
 
 	// Returns the adjacencyList
 	public Set<TestBoardCell> getAdjList() {
+		this.adjList.add(new TestBoardCell(0,0));
 		return this.adjList;
 	}
 

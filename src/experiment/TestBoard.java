@@ -8,8 +8,8 @@ import java.util.Set;
 public class TestBoard {
 
 	// Variables
-	private Set<TestBoardCell> targets;
-	private Set<TestBoardCell> visited;
+	private Set<TestBoardCell> targets = new HashSet<TestBoardCell>();
+	private Set<TestBoardCell> visited = new HashSet<TestBoardCell>();
 	private TestBoardCell[][] board;
 	final static int COLS = 4;
 	final static int ROWS = 4;
@@ -20,7 +20,12 @@ public class TestBoard {
 	// Creates a TestBoard
 	public TestBoard(int width, int height) {
 		super();
-		TestBoardCell[][] board = new TestBoardCell[ROWS][COLS];
+		board = new TestBoardCell[ROWS][COLS];
+		for(int i = 0; i < COLS; i++) {
+			for(int j = 0; j < ROWS; j++) {
+				board[i][j] = new TestBoardCell(j, i);
+			}
+		}
 	}
 
 	// Returns targets ArrayList
@@ -30,6 +35,6 @@ public class TestBoard {
 
 	// Returns the instance of a call at a certain position
 	public TestBoardCell getCell(int row, int col) {
-		return board.get(col).get(row);
+		return board[col][row];
 	}
 }
