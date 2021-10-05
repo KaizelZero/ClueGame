@@ -1,5 +1,6 @@
 package experiment;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,8 +8,11 @@ import java.util.Set;
 public class TestBoard {
 
 	// Variables
-	private Set<TestBoardCell> targets = new HashSet<TestBoardCell>();
-	private ArrayList<ArrayList<TestBoardCell>> board = new ArrayList<ArrayList<TestBoardCell>>();
+	private Set<TestBoardCell> targets;
+	private Set<TestBoardCell> visited;
+	private TestBoardCell[][] board;
+	final static int COLS = 4;
+	final static int ROWS = 4;
 
 	public void calcTargets(TestBoardCell startCell, int pathlength) {
 	}
@@ -16,13 +20,7 @@ public class TestBoard {
 	// Creates a TestBoard
 	public TestBoard(int width, int height) {
 		super();
-		for (int i = 0; i < width; i++) {
-			ArrayList<TestBoardCell> temp = new ArrayList<TestBoardCell>();
-			for (int j = 0; j < height; j++) {
-				temp.add(new TestBoardCell(j, i));
-			}
-			board.add(temp);
-		}
+		TestBoardCell[][] board = new TestBoardCell[ROWS][COLS];
 	}
 
 	// Returns targets ArrayList
