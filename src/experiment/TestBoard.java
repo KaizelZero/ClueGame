@@ -21,13 +21,33 @@ public class TestBoard {
 	public TestBoard(int width, int height) {
 		super();
 		board = new TestBoardCell[ROWS][COLS];
-		for(int i = 0; i < COLS; i++) {
-			for(int j = 0; j < ROWS; j++) {
-				board[i][j] = new TestBoardCell(j, i);
+		for(int i = 0; i < ROWS; i++) {
+			for(int j = 0; j < COLS; j++) {
+				board[i][j] = new TestBoardCell(i, j);
+			}
+		}
+		for(int i = 0; i < ROWS; i++) {
+			for(int j = 0; j < COLS; j++) {
+				board[i][j].addAdjacency(calcAdj(i, j));
 			}
 		}
 	}
-
+	public Set<TestBoardCell> calcAdj(int row, int col) {
+		Set<TestBoardCell> adjList = new HashSet<TestBoardCell>();
+		if(row > 0) {
+			adjList.add(board[row - 1][col]);
+		}
+		if(row < 3) {
+			adjList.add(board[row + 1][col]);
+		}
+		if(col > 0) {
+			adjList.add(board[row][col - 1]);
+		}
+		if(col < 3) {
+			adjList.add(board[row][col + 1]);
+		}
+		return adjList;
+	}
 	// Returns targets ArrayList
 	public Set<TestBoardCell> getTargets() {
 		return targets;
@@ -35,6 +55,6 @@ public class TestBoard {
 
 	// Returns the instance of a call at a certain position
 	public TestBoardCell getCell(int row, int col) {
-		return board[col][row];
+		return board[row][col];
 	}
 }

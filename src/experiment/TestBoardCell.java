@@ -5,7 +5,7 @@ import java.util.Set;
 public class TestBoardCell {
 	// Variables
 	private int row, column;
-	Set<TestBoardCell> adjList = new HashSet<TestBoardCell>();
+	private Set<TestBoardCell> adjList = new HashSet<TestBoardCell>();
 	private boolean isRoom, isOccupied;
 
 	// Constructor
@@ -16,13 +16,12 @@ public class TestBoardCell {
 	}
 
 	// Adds adjacent cells to adjacencyList
-	public void addAdjacency(TestBoardCell cell) {
-		adjList.add(cell);
+	public void addAdjacency(Set<TestBoardCell> adjacencyList) {
+		this.adjList = adjacencyList;
 	}
 
 	// Returns the adjacencyList
 	public Set<TestBoardCell> getAdjList() {
-		this.adjList.add(new TestBoardCell(0,0));
 		return this.adjList;
 	}
 
@@ -44,6 +43,11 @@ public class TestBoardCell {
 	// Returns whether the cell is occupied
 	public boolean getOccupied() {
 		return isOccupied;
+	}
+
+	@Override
+	public String toString() {
+		return "TestBoardCell [row=" + row + ", column=" + column + "]";
 	}
 
 }
