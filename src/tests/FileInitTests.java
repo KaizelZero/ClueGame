@@ -21,7 +21,7 @@ public class FileInitTests {
     @BeforeAll
     public static void setUp() { //Setup test board
         board = Board.getInstance();
-        board.setConfigFiles("Clue Excel Diagram.csv", "ClueSetup.txt");
+        board.setConfigFiles("bin/data/Clue Excel Diagram.csv", "bin/data/ClueSetup.txt");
         board.initialize();
     }
 
