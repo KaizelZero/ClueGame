@@ -12,10 +12,10 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import clueGame.Board;
-import clueGame.BoardCell;
-import clueGame.DoorDirection;
-import clueGame.Room;
+import game.Board;
+import game.BoardCell;
+import game.DoorDirection;
+import game.Room;
 
 public class FileInitTests306 {
 	// Constants that I will use to test whether the file was loaded correctly
