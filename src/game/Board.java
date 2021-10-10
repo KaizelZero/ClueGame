@@ -13,6 +13,7 @@ public class Board {
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
 	private BoardCell[][] board;
 	private Set<Room> roomList = new HashSet<Room>();
+	private ArrayList<String> roomTracker = new ArrayList<String>();
 	static int cols = 0;
 	static int rows = 0;
 	File layoutCSV;
@@ -38,21 +39,6 @@ public class Board {
 			visited.remove(adjCell); //Removes adjCell from visited for remaining recursive calls
 		}
 	}
-    
-	//  public Board(int width, int height) { // Creates a Board using width and height, 
-	//  	super();
-	//  	board = new BoardCell[ROWS][COLS];
-	//  	for(int i = 0; i < ROWS; i++) {
-	//  		for(int j = 0; j < COLS; j++) {
-	//  			board[i][j] = new BoardCell(i, j);
-	//  		}
-	//  	}
-	//  	for(int i = 0; i < ROWS; i++) {
-	//  		for(int j = 0; j < COLS; j++) {
-	//  			board[i][j].addAdjacency(calcAdj(i, j));
-	//  		}
-	//  	}
-	//  }
 
     private static Board theInstance = new Board();
     private Board()  {// constructor is private to ensure only one can be created
@@ -62,11 +48,16 @@ public class Board {
         return theInstance;
     }
     public void initialize(){ // initialize the board (since we are using singleton pattern)
-    	System.out.println('A');
+    	roomList.clear();
+    	roomTracker.clear();
     	loadLayoutConfig();
-    	loadSetupConfig();
+    	try {
+			loadSetupConfig();
+		} catch (BadConfigFormatException e) {
+			System.out.println("Ensure your .csv file is correctly formatted and try again.");
+		}
     }
-    private void generateCells(int rows, int cols) {
+    private void generateCells(int rows, int cols) { //Generates the actual BoardCells and places them in the array based on data found in the .csv file
     	board = new BoardCell[rows][cols];
 	 	for(int i = 0; i < rows; i++) {
 	 		for(int j = 0; j < cols; j++) {
@@ -97,35 +88,30 @@ public class Board {
 		return adjList;
 	}
 
-	public void setConfigFiles(String csv, String text){
+	public void setConfigFiles(String csv, String text){ //Sets config files to load in
 		layoutCSV = new File(csv);
-		layoutText = new File(text);
-		
-		try {
-			Scanner Text = new Scanner(layoutText);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
+		layoutText = new File(text);		
 	}
 
-	public void loadSetupConfig(){
-		int cRow = 0, cCol = 0;
-		Scanner csvIn = null;
+	public void loadSetupConfig() throws BadConfigFormatException{ //Loads the .csv file
+		int cRow = 0, cCol = -1;
+		Scanner csvIn = null; 
 		try {
 			csvIn = new Scanner(layoutCSV);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		while(csvIn.hasNext()){
+		while(csvIn.hasNext()){ //Initial read through allows for number of columns and rows to be calculated
 			String[] newLine = csvIn.nextLine().split(",");
+			if(cCol != -1 && cCol != newLine.length) {
+				throw new BadConfigFormatException("The number of columns in this .csv file is inconsistant");
+			}
 			cCol = newLine.length;
 			cRow++;
 		}
 		csvIn.close();
 		rows = cRow;
 		cols = cCol;
-		System.out.println(cRow + " " + cCol);
 		this.generateCells(cRow, cCol);
 		cRow = 0; cCol = 0; csvIn = null;
 		try {
@@ -133,23 +119,26 @@ public class Board {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		while (csvIn.hasNext()) {
+		while (csvIn.hasNext()) { //Second run through creates rooms and assigns them to corisponding cells based on read in data
 			String[] newLine = csvIn.nextLine().split(",");
 			for(String inCell : newLine) {
+				if(!roomTracker.contains(inCell.substring(0, 1))) {
+					throw new BadConfigFormatException("The room loaded in your " + layoutCSV.getName() + " file does not exist within " + layoutText.getName());
+				}
 				this.getCell(cRow, cCol).getCellRoom().setRoom(inCell.substring(0, 1));
 				for(Room r : roomList) {
 					if(r.getRoom().equals(inCell.substring(0, 1))) {
 						this.getCell(cRow, cCol).getCellRoom().setName(r.getName());
 					}
 				}
-				if(inCell == "X"){
+				if(inCell == "X"){ //Base cases (to be expanded)
 					continue;
 				}else if(inCell == "W" ){
 					
 				}else if(inCell.length() == 1){
 					this.getCell(cRow, cCol).setRoom(true);
 					
-				}else if(inCell.charAt(1) == '#') {
+				}else if(inCell.charAt(1) == '#') { //If label
 					this.getCell(cRow, cCol).setRoom(true);
 					for(Room r : roomList) {
 						if(r.getRoom().equals(inCell.substring(0, 1))) {
@@ -157,7 +146,7 @@ public class Board {
 							this.getCell(cRow, cCol).getCellRoom().setLabelCell(this.getCell(cRow, cCol));
 						}
 					}
-				}else if(inCell.charAt(1) == '*') {
+				}else if(inCell.charAt(1) == '*') { //If centerCell
 					this.getCell(cRow, cCol).setRoom(true);
 					for(Room r : roomList) {
 						if(r.getRoom().equals(inCell.substring(0, 1))) {
@@ -178,9 +167,8 @@ public class Board {
 		csvIn.close();
 	}
 
-	public void loadLayoutConfig(){
+	public void loadLayoutConfig(){ //Loads the setup.txt file, creating the base rooms and naming them
 		Scanner layoutIn = null;
-		System.out.println('b');
 		try {
 			layoutIn = new Scanner(layoutText);
 		} catch (FileNotFoundException e) {
@@ -193,6 +181,7 @@ public class Board {
 			}
 			Room tempRoom = new Room(newLine[2]);
 			tempRoom.setName(newLine[1]);
+			roomTracker.add(newLine[2]);
 			roomList.add(tempRoom);
 	    }
 		layoutIn.close();

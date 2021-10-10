@@ -6,8 +6,6 @@ public class Room {
     private BoardCell centerCell = null;
     private BoardCell labelCell = null;
     
-    
-    
 	public Room(String roomLetter) {
 		super();
 		this.room = roomLetter;

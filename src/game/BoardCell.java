@@ -50,32 +50,33 @@ public class BoardCell {
 	public boolean getOccupied() {
 		return isOccupied;
 	}
-
+	// Returns if the cell is a label cell
 	public boolean isLabel() {
 		if(this.getCellRoom().getLabelCell() != null) {
 			return true;
 		}
 		return false;
 	}
-
+	// Returns if the cell is the center of a room
 	public boolean isRoomCenter() {
 		if(this.getCellRoom().getCenterCell() != null) {
 			return true;
 		}
 		return false;
 	}
-
+	// Returns if the cell is a doorway
     public boolean isDoorway() {
         if(doorDirection != DoorDirection.NONE) {
         	return true;
         }
         return false;
     }
-    
+    // Returns doorway direction
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
 	}
-	public void setDoorDirection(char direction) {
+	//Specifies door direction
+	public void setDoorDirection(char direction) { 
 		if(direction == '^') {
 			this.doorDirection = DoorDirection.UP;
 		}else if(direction == '<') {
@@ -86,10 +87,11 @@ public class BoardCell {
 			this.doorDirection = DoorDirection.RIGHT;
 		}
 	}
-	
+	//Returns the secret passage char
 	public char getSecretPassage() {
 		return secretPassage;
 	}
+	//Sets the secret passage char
 	public void setSecretPassage(char pass) {
 		this.secretPassage = pass;
 	}
