@@ -13,15 +13,15 @@ import game.Room;
 
 public class FileInitTests {
     public static final int LEGEND_SIZE = 11;
-    public static final int NUM_ROWS = 21;
-    public static final int NUM_COLUMNS = 21;
+    public static final int NUM_ROWS = 22;
+    public static final int NUM_COLUMNS = 22;
 
     private static Board board;
 
     @BeforeAll
     public static void setUp() { //Setup test board
         board = Board.getInstance();
-        board.setConfigFiles("bin/data/Clue Excel Diagram.csv", "bin/data/ClueSetup.txt");
+        board.setConfigFiles("bin/data/Clue Excel Diagram2.csv", "bin/data/ClueSetup.txt");
         board.initialize();
     }
 
@@ -76,7 +76,7 @@ public class FileInitTests {
                 if (cell.isDoorway())
                     numDoors++;
             }
-        Assert.assertEquals(10, numDoors); //10 doors total
+        Assert.assertEquals(11, numDoors); //10 doors total
     }
 
     // Test a few room cells to ensure the room initial is correct.
@@ -85,7 +85,7 @@ public class FileInitTests {
         BoardCell cell = board.getCell(13, 2); //Standard room test
         Room room = board.getRoom(cell);
         assertTrue(room != null);
-        assertEquals(room.getName(), "Hull");
+        assertEquals(room.getName(), "Helm");
         assertFalse(cell.isLabel());
         assertFalse(cell.isRoomCenter());
         assertFalse(cell.isDoorway());
@@ -107,8 +107,8 @@ public class FileInitTests {
         cell = board.getCell(9, 2); //Secret passage test
         room = board.getRoom(cell);
         assertTrue(room != null);
-        assertEquals(room.getName(), "Hull");
-        assertTrue(cell.getSecretPassage() == 'K');
+        assertEquals(room.getName(), "Helm");
+        assertTrue(cell.getSecretPassage() == 'E');
 
         cell = board.getCell(17, 7); //Walkway test
         room = board.getRoom(cell);

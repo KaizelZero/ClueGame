@@ -8,7 +8,6 @@ Room, Left Thruster, L
 Room, Engine, E
 Room, Canteen, C
 Room, Communications, A
-
 // Other spaces
 Space, Unused, X
 Space, Walkway, W
