@@ -3,16 +3,18 @@ package game;
 public class Room {
     private String room;
     private String name;
-    private BoardCell centerCell;
-    private BoardCell labelCell;
+    private BoardCell centerCell = null;
+    private BoardCell labelCell = null;
     
     
     
-	public Room(char room) {
+	public Room(String roomLetter) {
 		super();
-		this.room = Character.toString(room);
+		this.room = roomLetter;
 	}
-
+	public Room() {
+		super();
+	}
     public String getRoom() {
 		return room;
 	}
@@ -26,12 +28,11 @@ public class Room {
 		this.centerCell = centerCell;
 	}
 	public BoardCell getLabelCell() {
-		return labelCell;
+		return this.labelCell;
 	}
 	public void setLabelCell(BoardCell labelCell) {
 		this.labelCell = labelCell;
 	}
-
     public String getName() {
         return name;
     }

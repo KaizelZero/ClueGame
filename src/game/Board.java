@@ -12,12 +12,11 @@ public class Board {
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
 	private BoardCell[][] board;
-	private ArrayList<Room> roomList;
-	final static int COLS = 25;
-	final static int ROWS = 25;
+	private Set<Room> roomList = new HashSet<Room>();
+	static int cols = 0;
+	static int rows = 0;
 	File layoutCSV;
 	File layoutText;
-	Room testRoom = new Room('a');
 
 	public void calcTargets(BoardCell startCell, int pathlength) { //Caller function for findAllTargets
 		visited.add(startCell);
@@ -58,23 +57,28 @@ public class Board {
     private static Board theInstance = new Board();
     private Board()  {// constructor is private to ensure only one can be created
         super() ;
-		board = new BoardCell[ROWS][COLS];
-	 	for(int i = 0; i < ROWS; i++) {
-	 		for(int j = 0; j < COLS; j++) {
-	 			board[i][j] = new BoardCell(i, j);
-	 		}
-	 	}
-	 	for(int i = 0; i < ROWS; i++) {
-	 		for(int j = 0; j < COLS; j++) {
-	 			board[i][j].addAdjacency(calcAdj(i, j));
-	 		}
-	 	}
     }
     public static Board getInstance() { // this method returns the only Board
         return theInstance;
     }
-    public void initialize(){} // initialize the board (since we are using singleton pattern)
-
+    public void initialize(){ // initialize the board (since we are using singleton pattern)
+    	System.out.println('A');
+    	loadLayoutConfig();
+    	loadSetupConfig();
+    }
+    private void generateCells(int rows, int cols) {
+    	board = new BoardCell[rows][cols];
+	 	for(int i = 0; i < rows; i++) {
+	 		for(int j = 0; j < cols; j++) {
+	 			board[i][j] = new BoardCell(i, j);
+	 		}
+	 	}
+	 	for(int i = 0; i < rows; i++) {
+	 		for(int j = 0; j < cols; j++) {
+	 			board[i][j].addAdjacency(calcAdj(i, j));
+	 		}
+	 	}
+    }
     
 	public Set<BoardCell> calcAdj(int row, int col) { //Calculates adjacent cells from a given cell
 		Set<BoardCell> adjList = new HashSet<BoardCell>();
@@ -106,26 +110,92 @@ public class Board {
 	}
 
 	public void loadSetupConfig(){
+		int cRow = 0, cCol = 0;
 		Scanner csvIn = null;
 		try {
 			csvIn = new Scanner(layoutCSV);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		while(csvIn.hasNext()){
+			String[] newLine = csvIn.nextLine().split(",");
+			cCol = newLine.length;
+			cRow++;
+		}
+		csvIn.close();
+		rows = cRow;
+		cols = cCol;
+		System.out.println(cRow + " " + cCol);
+		this.generateCells(cRow, cCol);
+		cRow = 0; cCol = 0; csvIn = null;
+		try {
+			csvIn = new Scanner(layoutCSV);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		while (csvIn.hasNext()) {
-			char current = csvIn.findInLine(".").charAt(0);
-			if(current == 'X'){
-				continue;
+			String[] newLine = csvIn.nextLine().split(",");
+			for(String inCell : newLine) {
+				this.getCell(cRow, cCol).getCellRoom().setRoom(inCell.substring(0, 1));
+				for(Room r : roomList) {
+					if(r.getRoom().equals(inCell.substring(0, 1))) {
+						this.getCell(cRow, cCol).getCellRoom().setName(r.getName());
+					}
+				}
+				if(inCell == "X"){
+					continue;
+				}else if(inCell == "W" ){
+					
+				}else if(inCell.length() == 1){
+					this.getCell(cRow, cCol).setRoom(true);
+					
+				}else if(inCell.charAt(1) == '#') {
+					this.getCell(cRow, cCol).setRoom(true);
+					for(Room r : roomList) {
+						if(r.getRoom().equals(inCell.substring(0, 1))) {
+							r.setLabelCell(this.getCell(cRow, cCol));
+							this.getCell(cRow, cCol).getCellRoom().setLabelCell(this.getCell(cRow, cCol));
+						}
+					}
+				}else if(inCell.charAt(1) == '*') {
+					this.getCell(cRow, cCol).setRoom(true);
+					for(Room r : roomList) {
+						if(r.getRoom().equals(inCell.substring(0, 1))) {
+							r.setCenterCell(this.getCell(cRow, cCol));
+							this.getCell(cRow, cCol).getCellRoom().setCenterCell(this.getCell(cRow, cCol));
+						}
+					}
+				}else if(inCell.charAt(1) == '^' || inCell.charAt(1) == '<' || inCell.charAt(1) == '>' || inCell.charAt(1) == 'v') {
+					this.getCell(cRow, cCol).setDoorDirection(inCell.charAt(1));
+				}else {
+					this.getCell(cRow, cCol).setSecretPassage(inCell.charAt(1));
+				}
+				cCol++;
 			}
-			if(current != 'W' ){
-				roomList = new ArrayList<Room>();
-				roomList.add(new Room(current));
-			}
+			cCol = 0;
+			cRow++;
 	    }
+		csvIn.close();
 	}
 
 	public void loadLayoutConfig(){
-		
+		Scanner layoutIn = null;
+		System.out.println('b');
+		try {
+			layoutIn = new Scanner(layoutText);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		while (layoutIn.hasNext()) {
+			String[] newLine = layoutIn.nextLine().split(", ");
+			if(newLine[0].charAt(0) == '/' ) {
+				continue;
+			}
+			Room tempRoom = new Room(newLine[2]);
+			tempRoom.setName(newLine[1]);
+			roomList.add(tempRoom);
+	    }
+		layoutIn.close();
 	}
 
 	// Returns targets ArrayList
@@ -138,15 +208,23 @@ public class Board {
 		return board[row][col];
 	}
 	public Room getRoom(BoardCell cellBoardCell){
-		return testRoom;
+		return cellBoardCell.getCellRoom();
 	}
 	public Room getRoom(char roomChar){
-		return testRoom;
+		for(Room r : roomList) {
+			if(r.getRoom().equals(Character.toString(roomChar))) {
+				return r;
+			}
+		}
+		return null;
 	}
 	public int getNumRows() {
-		return ROWS;
+		return rows;
 	}
 	public int getNumColumns() {
-		return COLS;
+		return cols;
+	}
+	public Set<BoardCell> getAdjList(int row, int col) {
+		return getCell(row, col).getAdjList();
 	}
 }
