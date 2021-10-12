@@ -9,7 +9,7 @@ public class BoardCell {
 	private Set<BoardCell> adjList = new HashSet<BoardCell>();
 	private boolean isRoom, isOccupied;
 	private Room thisRoom = new Room();
-	private char secretPassage;
+	private char secretPassage = ']';
 	private DoorDirection doorDirection = DoorDirection.NONE;
 
 	// Constructor
@@ -37,7 +37,7 @@ public class BoardCell {
 	}
 
 	// Returns the whether the cell is in the room
-	public boolean getRoom() {
+	public boolean isRoom() {
 		return isRoom;
 	}
 
@@ -87,6 +87,14 @@ public class BoardCell {
 			this.doorDirection = DoorDirection.RIGHT;
 		}
 	}
+	public boolean isSecretPassage(){
+		if(secretPassage != ']'){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	//Returns the secret passage char
 	public char getSecretPassage() {
 		return secretPassage;
