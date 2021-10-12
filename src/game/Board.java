@@ -85,9 +85,9 @@ public class Board {
 	public Set<BoardCell> calcAdj(int row, int col) { // Calculates adjacent cells from a given cell
 		Set<BoardCell> adjList = new HashSet<BoardCell>();
 		if (row > 0) {
-			if (!board[row - 1][col].isRoom()) {
+			if (board[row - 1][col].isRoom()) {
 				adjList.add(board[row - 1][col]);
-			} else if (board[row][col].isDoorway() && board[row][col].getDoorDirection() == DoorDirection.DOWN) {
+			} else if (board[row][col].isDoorway() && board[row][col].getDoorDirection() == DoorDirection.UP) {
 				for (Room r : roomList) { // Refactor This
 					if (r.getRoom().equals(board[row - 1][col].getCellRoom().getName())) {
 						adjList.add(r.getCenterCell());
@@ -108,10 +108,10 @@ public class Board {
 				}
 			}
 		}
-		if (row < 3) {
-			if (!board[row + 1][col].isRoom()) {
+		if (row < rows - 1) {
+			if (board[row + 1][col].isRoom()) {
 				adjList.add(board[row + 1][col]);
-			} else if (board[row][col].isDoorway() && board[row][col].getDoorDirection() == DoorDirection.UP) {
+			} else if (board[row][col].isDoorway() && board[row][col].getDoorDirection() == DoorDirection.DOWN) {
 				for (Room r : roomList) { // Refactor This
 					if (r.getRoom().equals(board[row + 1][col].getCellRoom().getName())) {
 						adjList.add(r.getCenterCell());
@@ -132,10 +132,10 @@ public class Board {
 				}
 			}
 		}
-		if (col > 0) {
-			if (!board[row][col + 1].isRoom()) {
+		if (col < cols - 1) {
+			if (board[row][col + 1].isRoom()) {
 				adjList.add(board[row][col + 1]);
-			} else if (board[row][col].isDoorway() && board[row][col].getDoorDirection() == DoorDirection.RIGHT) {
+			} else if (board[row][col].isDoorway() && board[row][col].getDoorDirection() == DoorDirection.LEFT) {
 				for (Room r : roomList) { // Refactor This
 					if (r.getRoom().equals(board[row][col + 1].getCellRoom().getName())) {
 						adjList.add(r.getCenterCell());
@@ -156,10 +156,10 @@ public class Board {
 				}
 			}
 		}
-		if (col < 3) {
-			if (!board[row][col - 1].isRoom()) {
+		if (col > 0) {
+			if (board[row][col - 1].isRoom()) {
 				adjList.add(board[row][col - 1]);
-			} else if (board[row][col].isDoorway() && board[row][col].getDoorDirection() == DoorDirection.LEFT) {
+			} else if (board[row][col].isDoorway() && board[row][col].getDoorDirection() == DoorDirection.RIGHT) {
 				for (Room r : roomList) { // Refactor This
 					if (r.getRoom().equals(board[row][col - 1].getCellRoom().getName())) {
 						adjList.add(r.getCenterCell());
