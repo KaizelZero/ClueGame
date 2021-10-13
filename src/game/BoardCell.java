@@ -104,4 +104,10 @@ public class BoardCell {
 		this.secretPassage = pass;
 	}
 
+	public boolean isWalkway(){
+		if(thisRoom.getName() == "W"){
+			return true;
+		}
+		return false;
+	}
 }
