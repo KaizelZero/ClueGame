@@ -24,19 +24,20 @@ public class Board {
 	File layoutText;
 
 	public void calcTargets(BoardCell startCell, int pathlength) { // Caller function for findAllTargets
+		targets.clear();
+		visited.clear();
 		visited.add(startCell);
 		findAllTargets(startCell, pathlength);
 	}
 
-	private void findAllTargets(BoardCell thisCell, int numSteps) { // Recursively searches through adj cells for
-																	// targets given a roll
+	private void findAllTargets(BoardCell thisCell, int numSteps) { // Recursively searches through adj cells for targets given a roll
 		for (BoardCell adjCell : thisCell.getAdjList()) {
-			if (visited.contains(adjCell) || adjCell.getOccupied()) { // If visited, skip that cell
+			if (visited.contains(adjCell) || (adjCell.getOccupied() && adjCell.getCellRoom().getCenterCell() != adjCell) || (adjCell.getOccupied() && thisCell.getCellRoom().getCenterCell() == thisCell)) { // If visited, skip that cell
 				continue;
 			}
 			visited.add(adjCell);
 			if (numSteps == 1) { // If at limit of dice roll, then the current cell must be a target
-				if (!adjCell.getOccupied() && !adjCell.isRoom()) { // Checks if current cell is not occupied
+				if (!adjCell.getOccupied() && !adjCell.isRoom() || adjCell.getCellRoom().getCenterCell() == adjCell) { // Checks if current cell is not occupied
 					targets.add(adjCell);
 				}
 			} else { // Recursively checks next targets
@@ -79,31 +80,6 @@ public class Board {
 
 	public Set<BoardCell> calcAdj(int row, int col) { // Calculates adjacent cells from a given cell
 		Set<BoardCell> adjList = new HashSet<BoardCell>();
-
-//		if(board[row][col].isWalkway() && !board[row][col].isDoorway()){
-//			if (row > 0){ //Looking UP
-//				if(board[row - 1][col].isWalkway()){
-//					adjList.add(board[row - 1][col]);
-//				}
-//			}
-//			if (row < rows - 1){ //Looking DOWN
-//				if(board[row + 1][col].isWalkway()){
-//					adjList.add(board[row + 1][col]);
-//				}
-//			}
-//			if(col > 0){ //Looking RIGHT
-//				if(board[row][col - 1].isWalkway()){
-//					adjList.add(board[row][col - 1]);
-//				}
-//			}
-//			if(col < cols - 1){ //Looking LEFT
-//				if (board[row][col + 1].isWalkway()) {
-//					adjList.add(board[row][col + 1]);
-//				}
-//			}
-//		} else if(board[row][col].isRoomCenter()){
-//			Room room 
-//		}
 		if(board[row][col].isRoom()) {
 			if(board[row][col].isRoomCenter()) {
 				for (Room r : roomList) {
@@ -116,7 +92,7 @@ public class Board {
 			if (row > 0) {
 				if (!board[row - 1][col].isRoom()) {
 					adjList.add(board[row - 1][col]);
-				} 
+				}
 			}
 			if (row < rows - 1) {
 				if (!board[row + 1][col].isRoom()) {
