@@ -39,6 +39,7 @@ public class BoardAdjTargetTest306 {
 		assertTrue(testList.contains(board.getCell(4, 6)));
 		assertTrue(testList.contains(board.getCell(20, 19)));
 		
+		
 		// now test the ballroom (note not marked since multiple test here)
 		testList = board.getAdjList(20, 11);
 		assertEquals(4, testList.size());
@@ -262,6 +263,9 @@ public class BoardAdjTargetTest306 {
 		board.calcTargets(board.getCell(13, 7), 4);
 		board.getCell(15, 7).setOccupied(false);
 		Set<BoardCell> targets = board.getTargets();
+		for(BoardCell c : targets) {
+			System.out.println(c);
+		}
 		assertEquals(13, targets.size());
 		assertTrue(targets.contains(board.getCell(14, 2)));
 		assertTrue(targets.contains(board.getCell(15, 9)));

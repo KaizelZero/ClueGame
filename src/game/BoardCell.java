@@ -11,6 +11,7 @@ public class BoardCell {
 	private Room thisRoom = new Room();
 	private char secretPassage = ']';
 	private DoorDirection doorDirection = DoorDirection.NONE;
+	
 
 	// Constructor
 	public BoardCell(int row, int column) {
@@ -71,6 +72,7 @@ public class BoardCell {
         }
         return false;
     }
+
     // Returns doorway direction
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
@@ -110,4 +112,9 @@ public class BoardCell {
 		}
 		return false;
 	}
+	@Override
+	public String toString() {
+		return "BoardCell [row=" + row + ", column=" + column + "]";
+	}
+	
 }

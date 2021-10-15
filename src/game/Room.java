@@ -7,7 +7,7 @@ public class Room {
 	private String name;
 	private BoardCell centerCell = null;
 	private BoardCell labelCell = null;
-	private ArrayList<BoardCell> roomDoors = new ArrayList<BoardCell>;
+	private ArrayList<BoardCell> roomDoors = new ArrayList<BoardCell>();
 
 	public Room(String roomLetter) {
 		super();
