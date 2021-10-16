@@ -112,7 +112,7 @@ public class BoardCell {
 		}
 		return false;
 	}
-	@Override
+	@Override //Simple toString for debugging cells
 	public String toString() {
 		return "BoardCell [row=" + row + ", column=" + column + "]";
 	}
