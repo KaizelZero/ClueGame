@@ -8,8 +8,8 @@ X,X,X,X,W,W,W,W,W,W,W,W,W,W,W,W,X,X,X,X,X,X
 X,X,H,H,W,W,W,W,W,W,W,W,W,W,W,W,X,X,X,X,X,X
 X,H,H,H,W,W,W,W,W,W,W,W,W,W,W,W,E,E,E,E,X,X
 H,H,HE,H,W,W,X,X,X,X,X,X,X,X,W,W,E,E,E,E,X,X
-H,H,H*,H,W<,W,X,X,X,X,X,X,X,X,W,Wv,E,E,E*,E,X,X
-H#,H,H,H,W<,W,X,X,X,X,X,X,X,X,W,Wv,E,E,E,E,X,X
+H,H,H*,H,W<,W,X,X,X,X,X,X,X,X,W,W>,E,E,E*,E,X,X
+H#,H,H,H,W<,W,X,X,X,X,X,X,X,X,W,W>,E,E,E,E,X,X
 H,H,H,H,W,W,X,X,X,X,X,X,X,X,W,W,E,E,E,EH,X,X
 X,H,H,H,W,W,W,W,W,W,W,W,W,W,W,W,E,E#,E,E,X,X
 X,X,H,H,W,W,W,W,W,W,W,W,W,W,W,W,X,X,X,X,X,X

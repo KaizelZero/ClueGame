@@ -40,6 +40,8 @@ public class Board {
 				if (!adjCell.getOccupied() && !adjCell.isRoom() || adjCell.getCellRoom().getCenterCell() == adjCell) { // Checks if current cell is not occupied
 					targets.add(adjCell);
 				}
+			} else if(adjCell.getCellRoom().getCenterCell() == adjCell) {
+				targets.add(adjCell);
 			} else { // Recursively checks next targets
 				findAllTargets(adjCell, numSteps - 1);
 			}
@@ -60,7 +62,12 @@ public class Board {
 	public void initialize() { // initialize the board (since we are using singleton pattern)
 		roomList.clear();
 		roomTracker.clear();
-		loadSetupConfig();
+		try {
+			loadSetupConfig();
+		} catch (BadConfigFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			loadLayoutConfig();
 		} catch (BadConfigFormatException e) {
@@ -257,7 +264,7 @@ public class Board {
 			}
 		}
 	}
-	public void loadSetupConfig() { // Loads the setup.txt file, creating the base rooms and naming them
+	public void loadSetupConfig() throws BadConfigFormatException { // Loads the setup.txt file, creating the base rooms and naming them
 		Scanner layoutIn = null;
 		try {
 			layoutIn = new Scanner(layoutText);
@@ -268,6 +275,9 @@ public class Board {
 			String[] newLine = layoutIn.nextLine().split(", ");
 			if (newLine[0].charAt(0) == '/') {
 				continue;
+			}
+			if(!newLine[0].equals("Room") && !newLine[0].equals("Space")) {
+				throw new BadConfigFormatException("Check your setup.txt, there seems to be an error with the formatting of this file.");
 			}
 			Room tempRoom = new Room(newLine[2]);
 			tempRoom.setName(newLine[1]);
