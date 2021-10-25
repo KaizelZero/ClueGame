@@ -1,7 +1,10 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.border.Border;
@@ -16,7 +19,7 @@ public class Board {
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
 	private BoardCell[][] board;
-	private Set<Room> roomList = new HashSet<Room>();
+	private Map<String, Room> roomMap = new HashMap<String, Room>();
 	private ArrayList<String> roomTracker = new ArrayList<String>();
 	static int cols = 0;
 	static int rows = 0;
@@ -60,7 +63,7 @@ public class Board {
 	}
 
 	public void initialize() { // initialize the board (since we are using singleton pattern)
-		roomList.clear();
+		roomMap.clear();
 		roomTracker.clear();
 		try {
 			loadSetupConfig();
@@ -88,11 +91,7 @@ public class Board {
 		Set<BoardCell> adjList = new HashSet<BoardCell>();
 		if(board[row][col].isRoom()) {
 			if(board[row][col].isRoomCenter()) { //If the cell is a super-room (room center) then add all doors and portals to the adj list for that cell
-				for (Room r : roomList) {
-					if (r.getRoom().charAt(0) == (this.getCell(row, col).getCellRoom().getRoom().charAt(0))) {
-						adjList.addAll(r.getRoomDoors());				
-					}
-				}
+				adjList.addAll(roomMap.get(String.valueOf(this.getCell(row, col).getCellRoom().getRoom().charAt(0))).getRoomDoors());
 			}
 		}else {
 			if (row > 0) { //If the cell we are calculating adj for is not a room or doorway, then simply add all adj non-room cells to it
@@ -164,11 +163,7 @@ public class Board {
 							+ " file does not exist within " + layoutText.getName());
 				}
 				this.getCell(cRow, cCol).getCellRoom().setRoom(inCell.substring(0, 1));
-				for (Room r : roomList) {
-					if (r.getRoom().equals(inCell.substring(0, 1))) {
-						this.getCell(cRow, cCol).getCellRoom().setName(r.getName());
-					}
-				}
+				this.getCell(cRow, cCol).getCellRoom().setName(roomMap.get(inCell.substring(0, 1)).getName());
 				if (inCell.equals("X")) { // Base cases (to be expanded)
 					this.getCell(cRow, cCol).setRoom(true); //Closet cells are set to rooms to simplify code
 				} else if (inCell.equals("W")) {
@@ -177,20 +172,12 @@ public class Board {
 					this.getCell(cRow, cCol).setRoom(true);
 				} else if (inCell.charAt(1) == '#') { // If label
 					this.getCell(cRow, cCol).setRoom(true);
-					for (Room r : roomList) {
-						if (r.getRoom().equals(inCell.substring(0, 1))) {
-							r.setLabelCell(this.getCell(cRow, cCol));
-							this.getCell(cRow, cCol).getCellRoom().setLabelCell(this.getCell(cRow, cCol));
-						}
-					}
+					roomMap.get(inCell.substring(0, 1)).setLabelCell(this.getCell(cRow, cCol));
+					this.getCell(cRow, cCol).getCellRoom().setLabelCell(this.getCell(cRow, cCol));
 				} else if (inCell.charAt(1) == '*') { // If centerCell
 					this.getCell(cRow, cCol).setRoom(true);
-					for (Room r : roomList) {
-						if (r.getRoom().equals(inCell.substring(0, 1))) {
-							r.setCenterCell(this.getCell(cRow, cCol));
-							this.getCell(cRow, cCol).getCellRoom().setCenterCell(this.getCell(cRow, cCol));
-						}
-					}
+					roomMap.get(inCell.substring(0, 1)).setCenterCell(this.getCell(cRow, cCol));
+					this.getCell(cRow, cCol).getCellRoom().setCenterCell(this.getCell(cRow, cCol));
 				} else if (inCell.charAt(1) == '^' || inCell.charAt(1) == '<' || inCell.charAt(1) == '>' || inCell.charAt(1) == 'v') {
 					this.getCell(cRow, cCol).setDoorDirection(inCell.charAt(1));
 				} else {
@@ -215,50 +202,22 @@ public class Board {
                 BoardCell cell = this.getCell(i, j);
 				if (cell.isDoorway()){
 					if(cell.getDoorDirection() == DoorDirection.DOWN){
-						for (Room r : roomList) {
-							if (r.getRoom().equals(this.getCell(i + 1, j).getCellRoom().getRoom())) {
-								r.addDoor(cell);
-								cell.getCellRoom().setCenterCell(r.getCenterCell());
-								break;
-							}
-						}
+						roomMap.get(this.getCell(i + 1, j).getCellRoom().getRoom()).addDoor(cell);
+						cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i + 1, j).getCellRoom().getRoom()).getCenterCell());
 					}else if(cell.getDoorDirection() == DoorDirection.UP){
-						for (Room r : roomList) {
-							if (r.getRoom().equals(this.getCell(i - 1, j).getCellRoom().getRoom())) {
-								r.addDoor(cell);
-								cell.getCellRoom().setCenterCell(r.getCenterCell());
-								break;
-							}
-						}
+						roomMap.get(this.getCell(i - 1, j).getCellRoom().getRoom()).addDoor(cell);
+						cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i - 1, j).getCellRoom().getRoom()).getCenterCell());
 					}else if(cell.getDoorDirection() == DoorDirection.RIGHT){
-						for (Room r : roomList) {
-							if (r.getRoom().equals(this.getCell(i, j + 1).getCellRoom().getRoom())) {
-								r.addDoor(cell);
-								cell.getCellRoom().setCenterCell(r.getCenterCell());
-								break;
-							}
-						}
+						roomMap.get(this.getCell(i, j + 1).getCellRoom().getRoom()).addDoor(cell);
+						cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i, j + 1).getCellRoom().getRoom()).getCenterCell());
 					}else{
-						for (Room r : roomList) {
-							if (r.getRoom().equals(this.getCell(i, j - 1).getCellRoom().getRoom())) {
-								r.addDoor(cell);
-								cell.getCellRoom().setCenterCell(r.getCenterCell());
-								break;
-							}
-						}
+						roomMap.get(this.getCell(i, j - 1).getCellRoom().getRoom()).addDoor(cell);
+						cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i, j - 1).getCellRoom().getRoom()).getCenterCell());
 					}
 				}else if(cell.isSecretPassage()) {
-					for (Room r : roomList) {
-						if (r.getRoom().charAt(0) == cell.getSecretPassage()) {
-							for(Room r2 : roomList) {
-								if(r2.getRoom().equals(cell.getCellRoom().getRoom())) {
-									r.addDoor(r2.getCenterCell());
-									break;
-								}
-							}
-						}
-						
-					}
+					Room temp = roomMap.get(String.valueOf(cell.getSecretPassage()));
+					Room temp2 = roomMap.get(cell.getCellRoom().getRoom());
+					temp.addDoor(temp2.getCenterCell());
 				}
 			}
 		}
@@ -281,7 +240,7 @@ public class Board {
 			Room tempRoom = new Room(newLine[2]);
 			tempRoom.setName(newLine[1]);
 			roomTracker.add(newLine[2]);
-			roomList.add(tempRoom);
+			roomMap.put(newLine[2], tempRoom);
 		}
 		layoutIn.close();
 	}
@@ -304,12 +263,7 @@ public class Board {
 	}
 
 	public Room getRoom(char roomChar) {
-		for (Room r : roomList) {
-			if (r.getRoom().equals(Character.toString(roomChar))) {
-				return r;
-			}
-		}
-		return null;
+		return roomMap.get(String.valueOf(roomChar));
 	}
 
 	public int getNumRows() {
