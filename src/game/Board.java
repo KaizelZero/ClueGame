@@ -26,32 +26,6 @@ public class Board {
 	File layoutCSV;
 	File layoutText;
 
-	public void calcTargets(BoardCell startCell, int pathlength) { // Caller function for findAllTargets
-		targets.clear();//Clears out old data to ensure the sets only contain data from this call
-		visited.clear();
-		visited.add(startCell);
-		findAllTargets(startCell, pathlength);
-	}
-
-	private void findAllTargets(BoardCell thisCell, int numSteps) { // Recursively searches through adj cells for targets given a roll
-		for (BoardCell adjCell : thisCell.getAdjList()) {
-			if (visited.contains(adjCell) || (adjCell.getOccupied() && adjCell.getCellRoom().getCenterCell() != adjCell) || (adjCell.getOccupied() && thisCell.getCellRoom().getCenterCell() == thisCell)) { // If visited, skip that cell
-				continue;
-			}
-			visited.add(adjCell);
-			if (numSteps == 1) { // If at limit of dice roll, then the current cell must be a target
-				if (!adjCell.getOccupied() && !adjCell.isRoom() || adjCell.getCellRoom().getCenterCell() == adjCell) { // Checks if current cell is not occupied
-					targets.add(adjCell);
-				}
-			} else if(adjCell.getCellRoom().getCenterCell() == adjCell) { //If the adj cell is a room center, then stop the recursive call and add that room to the targets list
-				targets.add(adjCell);
-			} else { // Recursively checks next targets
-				findAllTargets(adjCell, numSteps - 1);
-			}
-			visited.remove(adjCell); // Removes adjCell from visited for remaining recursive calls
-		}
-	}
-
 	private static Board theInstance = new Board();
 
 	private Board() {// constructor is private to ensure only one can be created
@@ -78,6 +52,34 @@ public class Board {
 		}
 	}
 
+	public void setConfigFiles(String csv, String text) { // Sets config files to load in
+		layoutCSV = new File(csv);
+		layoutText = new File(text);
+	}
+	
+	public void loadSetupConfig() throws BadConfigFormatException { // Loads the setup.txt file, creating the base rooms and naming them
+		Scanner layoutIn = null;
+		try {
+			layoutIn = new Scanner(layoutText);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		while (layoutIn.hasNext()) {
+			String[] newLine = layoutIn.nextLine().split(", ");
+			if (newLine[0].charAt(0) == '/') {
+				continue;
+			}
+			if(!newLine[0].equals("Room") && !newLine[0].equals("Space")) { //Checks if there is an unexpected room type in setup
+				throw new BadConfigFormatException("Check your setup.txt, there seems to be an error with the formatting of this file.");
+			}
+			Room tempRoom = new Room(newLine[2]);
+			tempRoom.setName(newLine[1]);
+			roomTracker.add(newLine[2]);
+			roomMap.put(newLine[2], tempRoom);
+		}
+		layoutIn.close();
+	}
+	
 	private void generateCells(int rows, int cols) { // Generates the actual BoardCells and places them in the array based on data found in the .csv file
 		board = new BoardCell[rows][cols];
 		for (int i = 0; i < rows; i++) {
@@ -86,46 +88,7 @@ public class Board {
 			}
 		}
 	}
-
-	public Set<BoardCell> calcAdj(int row, int col) { // Calculates adjacent cells from a given cell
-		Set<BoardCell> adjList = new HashSet<BoardCell>();
-		if(board[row][col].isRoom()) {
-			if(board[row][col].isRoomCenter()) { //If the cell is a super-room (room center) then add all doors and portals to the adj list for that cell
-				adjList.addAll(roomMap.get(String.valueOf(this.getCell(row, col).getCellRoom().getRoom().charAt(0))).getRoomDoors());
-			}
-		}else {
-			if (row > 0) { //If the cell we are calculating adj for is not a room or doorway, then simply add all adj non-room cells to it
-				if (!board[row - 1][col].isRoom()) {
-					adjList.add(board[row - 1][col]);
-				}
-			}
-			if (row < rows - 1) {
-				if (!board[row + 1][col].isRoom()) {
-					adjList.add(board[row + 1][col]);
-				} 
-			}
-			if (col < cols - 1) {
-				if (!board[row][col + 1].isRoom()) {
-					adjList.add(board[row][col + 1]);
-				}
-			}
-			if (col > 0) {
-				if (!board[row][col - 1].isRoom()) {
-					adjList.add(board[row][col - 1]);
-				} 
-			}
-			if(board[row][col].isDoorway()) { //Add room centers to the adj list of that room's doors
-				adjList.add(board[row][col].getCellRoom().getCenterCell());
-			}
-		}
-		return adjList;
-	}
-
-	public void setConfigFiles(String csv, String text) { // Sets config files to load in
-		layoutCSV = new File(csv);
-		layoutText = new File(text);
-	}
-
+	
 	public void loadLayoutConfig() throws BadConfigFormatException { // Loads the .csv file
 		int cRow = 0, cCol = -1;
 		Scanner csvIn = null;
@@ -196,6 +159,7 @@ public class Board {
 			}
 		}
 	}
+	
 	public void addRoomDoorways(){ //Adds all of the doorways to the super-rooms they lead to (This inclues portals)
 		for (int i = 0; i < rows; i++){
             for (int j = 0; j < cols; j++) {
@@ -222,32 +186,67 @@ public class Board {
 			}
 		}
 	}
-	public void loadSetupConfig() throws BadConfigFormatException { // Loads the setup.txt file, creating the base rooms and naming them
-		Scanner layoutIn = null;
-		try {
-			layoutIn = new Scanner(layoutText);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		while (layoutIn.hasNext()) {
-			String[] newLine = layoutIn.nextLine().split(", ");
-			if (newLine[0].charAt(0) == '/') {
-				continue;
-			}
-			if(!newLine[0].equals("Room") && !newLine[0].equals("Space")) { //Checks if there is an unexpected room type in setup
-				throw new BadConfigFormatException("Check your setup.txt, there seems to be an error with the formatting of this file.");
-			}
-			Room tempRoom = new Room(newLine[2]);
-			tempRoom.setName(newLine[1]);
-			roomTracker.add(newLine[2]);
-			roomMap.put(newLine[2], tempRoom);
-		}
-		layoutIn.close();
+	
+	public void calcTargets(BoardCell startCell, int pathlength) { // Caller function for findAllTargets
+		targets.clear();//Clears out old data to ensure the sets only contain data from this call
+		visited.clear();
+		visited.add(startCell);
+		findAllTargets(startCell, pathlength);
 	}
 
-
-
-
+	private void findAllTargets(BoardCell thisCell, int numSteps) { // Recursively searches through adj cells for targets given a roll
+		for (BoardCell adjCell : thisCell.getAdjList()) {
+			if (visited.contains(adjCell) || (adjCell.getOccupied() && adjCell.getCellRoom().getCenterCell() != adjCell) || (adjCell.getOccupied() && thisCell.getCellRoom().getCenterCell() == thisCell)) { // If visited, skip that cell
+				continue;
+			}
+			visited.add(adjCell);
+			if (numSteps == 1) { // If at limit of dice roll, then the current cell must be a target
+				if (!adjCell.getOccupied() && !adjCell.isRoom() || adjCell.getCellRoom().getCenterCell() == adjCell) { // Checks if current cell is not occupied
+					targets.add(adjCell);
+				}
+			} else if(adjCell.getCellRoom().getCenterCell() == adjCell) { //If the adj cell is a room center, then stop the recursive call and add that room to the targets list
+				targets.add(adjCell);
+			} else { // Recursively checks next targets
+				findAllTargets(adjCell, numSteps - 1);
+			}
+			visited.remove(adjCell); // Removes adjCell from visited for remaining recursive calls
+		}
+	}
+	
+	public Set<BoardCell> calcAdj(int row, int col) { // Calculates adjacent cells from a given cell
+		Set<BoardCell> adjList = new HashSet<BoardCell>();
+		if(board[row][col].isRoom()) {
+			if(board[row][col].isRoomCenter()) { //If the cell is a super-room (room center) then add all doors and portals to the adj list for that cell
+				adjList.addAll(roomMap.get(String.valueOf(this.getCell(row, col).getCellRoom().getRoom().charAt(0))).getRoomDoors());
+			}
+		}else {
+			if (row > 0) { //If the cell we are calculating adj for is not a room or doorway, then simply add all adj non-room cells to it
+				if (!board[row - 1][col].isRoom()) {
+					adjList.add(board[row - 1][col]);
+				}
+			}
+			if (row < rows - 1) {
+				if (!board[row + 1][col].isRoom()) {
+					adjList.add(board[row + 1][col]);
+				} 
+			}
+			if (col < cols - 1) {
+				if (!board[row][col + 1].isRoom()) {
+					adjList.add(board[row][col + 1]);
+				}
+			}
+			if (col > 0) {
+				if (!board[row][col - 1].isRoom()) {
+					adjList.add(board[row][col - 1]);
+				} 
+			}
+			if(board[row][col].isDoorway()) { //Add room centers to the adj list of that room's doors
+				adjList.add(board[row][col].getCellRoom().getCenterCell());
+			}
+		}
+		return adjList;
+	}
+	
 	// Returns targets ArrayList
 	public Set<BoardCell> getTargets() {
 		return targets;
