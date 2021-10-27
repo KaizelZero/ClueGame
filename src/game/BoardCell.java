@@ -78,15 +78,20 @@ public class BoardCell {
 		return doorDirection;
 	}
 	//Specifies door direction
-	public void setDoorDirection(char direction) { 
-		if(direction == '^') {
-			this.doorDirection = DoorDirection.UP;
-		}else if(direction == '<') {
-			this.doorDirection = DoorDirection.LEFT;
-		}else if(direction == 'v') {
-			this.doorDirection = DoorDirection.DOWN;
-		}else {
-			this.doorDirection = DoorDirection.RIGHT;
+	public void setDoorDirection(char direction) {
+		switch (direction){
+			case '^':
+				this.doorDirection = DoorDirection.UP;
+				break;
+			case 'v':
+				this.doorDirection = DoorDirection.DOWN;
+				break;
+			case '<':
+				this.doorDirection = DoorDirection.LEFT;
+				break;
+			case '>':
+				this.doorDirection = DoorDirection.RIGHT;
+				break;
 		}
 	}
 	public boolean isSecretPassage(){
