@@ -1,13 +1,6 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.swing.border.Border;
+import java.util.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -165,20 +158,26 @@ public class Board {
             for (int j = 0; j < cols; j++) {
                 BoardCell cell = this.getCell(i, j);
 				if (cell.isDoorway()){
-					if(cell.getDoorDirection() == DoorDirection.DOWN){
-						roomMap.get(this.getCell(i + 1, j).getCellRoom().getRoom()).addDoor(cell);
-						cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i + 1, j).getCellRoom().getRoom()).getCenterCell());
-					}else if(cell.getDoorDirection() == DoorDirection.UP){
-						roomMap.get(this.getCell(i - 1, j).getCellRoom().getRoom()).addDoor(cell);
-						cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i - 1, j).getCellRoom().getRoom()).getCenterCell());
-					}else if(cell.getDoorDirection() == DoorDirection.RIGHT){
-						roomMap.get(this.getCell(i, j + 1).getCellRoom().getRoom()).addDoor(cell);
-						cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i, j + 1).getCellRoom().getRoom()).getCenterCell());
-					}else{
-						roomMap.get(this.getCell(i, j - 1).getCellRoom().getRoom()).addDoor(cell);
-						cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i, j - 1).getCellRoom().getRoom()).getCenterCell());
+					switch (cell.getDoorDirection()){
+						case UP:
+							// Get cell at the top with i-1
+							roomMap.get(this.getCell(i - 1, j).getCellRoom().getRoom()).addDoor(cell);
+							cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i - 1, j).getCellRoom().getRoom()).getCenterCell());
+						case DOWN:
+							//Get cell below with i+1
+							roomMap.get(this.getCell(i + 1, j).getCellRoom().getRoom()).addDoor(cell);
+							cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i + 1, j).getCellRoom().getRoom()).getCenterCell());
+						case LEFT:
+							//Get the cell to the left if j-1
+							roomMap.get(this.getCell(i, j - 1).getCellRoom().getRoom()).addDoor(cell);
+							cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i, j - 1).getCellRoom().getRoom()).getCenterCell());
+						case RIGHT:
+							//Get cell at the right with j+1
+							roomMap.get(this.getCell(i, j + 1).getCellRoom().getRoom()).addDoor(cell);
+							cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i, j + 1).getCellRoom().getRoom()).getCenterCell());
+						case NONE:
 					}
-				}else if(cell.isSecretPassage()) {
+				} else if(cell.isSecretPassage()) {
 					Room temp = roomMap.get(String.valueOf(cell.getSecretPassage()));
 					Room temp2 = roomMap.get(cell.getCellRoom().getRoom());
 					temp.addDoor(temp2.getCenterCell());
