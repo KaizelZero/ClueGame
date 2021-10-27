@@ -163,19 +163,24 @@ public class Board {
 							// Get cell at the top with i-1
 							roomMap.get(this.getCell(i - 1, j).getCellRoom().getRoom()).addDoor(cell);
 							cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i - 1, j).getCellRoom().getRoom()).getCenterCell());
+							break;
 						case DOWN:
 							//Get cell below with i+1
 							roomMap.get(this.getCell(i + 1, j).getCellRoom().getRoom()).addDoor(cell);
 							cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i + 1, j).getCellRoom().getRoom()).getCenterCell());
+							break;
 						case LEFT:
 							//Get the cell to the left if j-1
 							roomMap.get(this.getCell(i, j - 1).getCellRoom().getRoom()).addDoor(cell);
 							cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i, j - 1).getCellRoom().getRoom()).getCenterCell());
+							break;
 						case RIGHT:
 							//Get cell at the right with j+1
 							roomMap.get(this.getCell(i, j + 1).getCellRoom().getRoom()).addDoor(cell);
 							cell.getCellRoom().setCenterCell(roomMap.get(this.getCell(i, j + 1).getCellRoom().getRoom()).getCenterCell());
+							break;
 						case NONE:
+							break;
 					}
 				} else if(cell.isSecretPassage()) {
 					Room temp = roomMap.get(String.valueOf(cell.getSecretPassage()));
