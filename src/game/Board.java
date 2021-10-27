@@ -14,12 +14,11 @@ public class Board {
 	private BoardCell[][] board;
 	private Map<String, Room> roomMap = new HashMap<String, Room>();
 	private ArrayList<String> roomTracker = new ArrayList<String>();
+	private static Board theInstance = new Board();
 	static int cols = 0;
 	static int rows = 0;
 	File layoutCSV;
 	File layoutText;
-
-	private static Board theInstance = new Board();
 
 	private Board() {// constructor is private to ensure only one can be created
 		super();

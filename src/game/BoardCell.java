@@ -11,7 +11,6 @@ public class BoardCell {
 	private Room thisRoom = new Room();
 	private char secretPassage = ']';
 	private DoorDirection doorDirection = DoorDirection.NONE;
-	
 
 	// Constructor
 	public BoardCell(int row, int column) {
