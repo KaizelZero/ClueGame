@@ -1,4 +1,4 @@
-package game;
+package clueGame;
 
 public class BadConfigFormatException extends Exception{ //Custom exception to ensure that config files are properly loaded in
     public BadConfigFormatException() {

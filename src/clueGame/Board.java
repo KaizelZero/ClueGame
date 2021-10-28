@@ -1,4 +1,4 @@
-package game;
+package clueGame;
 
 import java.util.*;
 
@@ -14,6 +14,8 @@ public class Board {
 	private BoardCell[][] board;
 	private Map<String, Room> roomMap = new HashMap<String, Room>();
 	private ArrayList<String> roomTracker = new ArrayList<String>();
+	private ArrayList<Card> deck = new ArrayList<Card>();
+	private ArrayList<Player> playerList = new ArrayList<Player>();
 	private static Board theInstance = new Board();
 	static int cols = 0;
 	static int rows = 0;
@@ -64,10 +66,32 @@ public class Board {
 			if(!newLine[0].equals("Room") && !newLine[0].equals("Space")) { //Checks if there is an unexpected room type in setup
 				throw new BadConfigFormatException("Check your setup.txt, there seems to be an error with the formatting of this file.");
 			}
-			Room tempRoom = new Room(newLine[2]);
-			tempRoom.setName(newLine[1]);
-			roomTracker.add(newLine[2]);
-			roomMap.put(newLine[2], tempRoom);
+
+			Card inCard;
+			switch (newLine[0]){
+				case "Weapon":
+					inCard = new Card(newLine[1], CardType.WEAPON, newLine[2]);
+					deck.add(inCard);
+					break;
+				case "Room":
+					inCard = new Card(newLine[1], CardType.ROOM, newLine[2]);
+					deck.add(inCard);
+					break;
+				case "Person":
+					inCard = new Card(newLine[1], CardType.PERSON, newLine[2]);
+					deck.add(inCard);
+					break;
+				case "Space":
+					break;
+				default:
+					throw new BadConfigFormatException("Check your setup.txt, one of the fields is not correct.");
+			}
+			if(newLine[0].equals("Space") || newLine[0].equals("Room")){
+				Room tempRoom = new Room(newLine[2]);
+				tempRoom.setName(newLine[1]);
+				roomTracker.add(newLine[2]);
+				roomMap.put(newLine[2], tempRoom);
+			}
 		}
 		layoutIn.close();
 	}
@@ -267,6 +291,9 @@ public class Board {
 	public Room getRoom(char roomChar) {
 		return roomMap.get(String.valueOf(roomChar));
 	}
+	public Room getRoom(String roomString){
+		return roomMap.get(String.valueOf(roomString));
+	}
 
 	public int getNumRows() {
 		return rows;
@@ -279,4 +306,15 @@ public class Board {
 	public Set<BoardCell> getAdjList(int row, int col) {
 		return getCell(row, col).getAdjList();
 	}
-}
+
+	public void deal() {
+		Solution s = new Solution(deck.get(0), deck.get(0), deck.get(0));
+	}
+	public ArrayList<Card> getDeck(){
+		return deck;
+	}
+	public ArrayList<Player> getPlayerList(){
+		return playerList;
+	}
+}	
+

@@ -11,3 +11,17 @@ Room, Communications, A
 // Other spaces
 Space, Unused, X
 Space, Walkway, W
+// Weapons
+Weapon, RayGun, rg
+Weapon, Sonic Screwdriver, ss
+Weapon, Knife, k
+Weapon, Lightsabers, ls
+Weapon, Proton Packs, pp
+Weapom, Rock, r
+// Players
+Person, Neytterson Huntwalker, NH
+Person, Autoson Whiteverse, AW
+Person, Ron Moondancer, RM
+Person, Eleado Neonross, EN
+Person, Leyla Smith, LS
+Person, Shane Fisher, SH

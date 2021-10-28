@@ -6,10 +6,10 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import game.Board;
-import game.BoardCell;
-import game.DoorDirection;
-import game.Room;
+import clueGame.Board;
+import clueGame.BoardCell;
+import clueGame.DoorDirection;
+import clueGame.Room;
 
 public class FileInitTests {
     public static final int LEGEND_SIZE = 11;

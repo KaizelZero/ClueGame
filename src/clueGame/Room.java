@@ -1,4 +1,4 @@
-package game;
+package clueGame;
 
 import java.util.ArrayList;
 
