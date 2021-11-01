@@ -322,7 +322,7 @@ public class Board {
 		for(Player p : playerList) { //Clear all players hands before dealing
 			p.getHand().clear();
 		}
-		Card[] cardSet = new Card[] {tempDeck.get(0), tempDeck.get(0), tempDeck.get(0)}; //Solution set definition
+		Card[] cardSet = new Card[] {tempDeck.get(0), tempDeck.get(tempDeck.size() - 1), tempDeck.get(0)}; //Solution set definition
 		while(true) { //Randomized solution set
 			int rand = (int)Math.floor(Math.random()*(tempDeck.size()));
 			if(tempDeck.get(rand).getType() == CardType.PERSON) {
