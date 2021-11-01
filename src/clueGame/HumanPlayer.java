@@ -1,13 +1,31 @@
 package clueGame;
 
 public class HumanPlayer extends Player{
-    public HumanPlayer(String name, String color, int row, int col){
-        super(name, color, row, col);
+
+    private boolean hasMoved;
+    private boolean isTurn;
+
+    public HumanPlayer(String name, String color){
+        super(name, color);
+        hasMoved = false;
     }
 
-    @Override
-    void movePlayer() {
-        // TODO Auto-generated method stub
-        
+    public void setLocation(BoardCell cell) {
+        this.location = cell;
     }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
+
+    public Boolean hasMoved() {
+        return this.hasMoved;
+    }
+
+    public Boolean isTurn() {
+        return this.isTurn;
+    }
+
+
+
 }

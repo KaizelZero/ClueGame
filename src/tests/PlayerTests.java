@@ -59,7 +59,7 @@ public class PlayerTests {
 
     @Test
     public void testPlayerName() {//Test that players are correctly loaded
-        Player player = new ComputerPlayer("Neytterson Huntwalker", "blue", 5, 5);
+        Player player = new ComputerPlayer("Neytterson Huntwalker", "blue");
 
         assertEquals("Neytterson Huntwalker", player.getName());
     }
@@ -75,7 +75,7 @@ public class PlayerTests {
     @Test
     public void testAllDealt(){
         board.deal();
-        Player player = new ComputerPlayer("Neytterson Huntwalker", "blue", 5, 5);
+        Player player = new ComputerPlayer("Neytterson Huntwalker", "blue");
         assertEquals(player.getHand().size(), 3, 1);
     }
 

@@ -1,13 +1,9 @@
 package clueGame;
 
 public class ComputerPlayer extends Player {
-    public ComputerPlayer(String name, String color, int row, int col){
-        super(name, color, row, col);
+    public ComputerPlayer(String name, String color){
+        super(name, color);
     }
 
-    @Override
-    void movePlayer() {
-        // TODO Auto-generated method stub
-        
-    }
+    //TODO: Random selection, accusations, random cell generation to select
 }
