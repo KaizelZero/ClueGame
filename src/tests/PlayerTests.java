@@ -86,4 +86,11 @@ public class PlayerTests {
             assertTrue(duplicateCards.addAll(p.getHand()));
         }
     }
+
+    // Tests that there were 6 people loaded
+    @Test
+    public void testNumPeopleLoaded() {
+        ArrayList<Player> players = board.getPlayerList();
+        assertEquals(6, players.size());
+    }
 }

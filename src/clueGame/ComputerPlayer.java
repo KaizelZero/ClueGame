@@ -5,5 +5,5 @@ public class ComputerPlayer extends Player {
         super(name, color);
     }
 
-    //TODO: Random selection, accusations, random cell generation to select
+    //TODO: Random selection, accusations, random dice roll?
 }

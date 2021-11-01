@@ -18,6 +18,7 @@ public abstract class Player {
         hand = new ArrayList<Card>();
         diceRoll = 0;
     }
+    
     public String getName(){
         return name;
     }
