@@ -58,13 +58,6 @@ public class PlayerTests {
     }
 
     @Test
-    public void testPlayerName() {//Test that players are correctly loaded
-        Player player = new ComputerPlayer("Neytterson Huntwalker", "blue", 5, 5);
-
-        assertEquals("Neytterson Huntwalker", player.getName());
-    }
-
-    @Test
     public void testSolution(){
         board.deal();
         assertEquals(Solution.person.getType(), CardType.PERSON);
@@ -78,10 +71,6 @@ public class PlayerTests {
         for(Player player : board.getPlayerList()){
         	assertEquals(player.getHand().size(), 3, 1);
         }
-        assertEquals(board.getSolution().person.getType(), CardType.PERSON);
-        assertEquals(board.getSolution().weapon.getType(), CardType.WEAPON);
-        assertEquals(board.getSolution().room.getType(), CardType.ROOM);
-
     }
 
     @Test
@@ -96,5 +85,10 @@ public class PlayerTests {
         assertTrue(duplicateCards.add(board.getSolution().room));
 
     }
-    
+
+    // Tests that there were 6 people loaded
+    @Test
+    public void testNumPeopleLoaded() {
+        assertEquals(board.getPlayerList().size(), 6);
+    }
 }

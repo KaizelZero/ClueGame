@@ -70,7 +70,7 @@ public class Board {
 			}
 
 			Card inCard;
-			switch (newLine[0]){ //Add new cards to the deck
+			switch (newLine[0]){ //Add new card to the deck
 				case "Weapon":
 					inCard = new Card(newLine[1], CardType.WEAPON, newLine[2]);
 					deck.add(inCard);

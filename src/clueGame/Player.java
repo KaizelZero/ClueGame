@@ -5,35 +5,55 @@ import java.util.ArrayList;
 public abstract class Player {
     private String name;
     private String color;
-    ArrayList<Card> hand = new ArrayList<Card>();
-    protected int row, col; 
-    abstract void movePlayer();
+
+    protected ArrayList<Card> hand;
+    protected BoardCell location;
+    protected int row, col;
+    protected int diceRoll;
+
+
     public Player(String name, String color, int row, int col){
         super();
         this.name = name;
         this.color = color;
         this.row = row;
         this.col = col;
+        hand = new ArrayList<Card>();
+        diceRoll = 0;
     }
+    
     public String getName(){
         return name;
     }
     public String getColor(){
         return color;
     }
-    public int getRow(){
-        return row;
+
+    public void setLocation(BoardCell target) {
+        this.location = target;
     }
-    public int getCol(){
-        return col;
+
+    public BoardCell getLocation() {
+        return this.location;
     }
+
     public ArrayList<Card> getHand(){
         return hand;
     }
     public void updateHand(Card newCard){
         hand.add(newCard);
     }
+
+    public void movePlayer(BoardCell target) {
+        this.location = target;
+    }
+
 	public static String getSymbol(String symbol) {
 		return symbol;
 	}
+
+    public String toString() {
+        return ("Name: " + getName() + " Color: " + this.color + "Location: " + getLocation());
+
+    }
 }

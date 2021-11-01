@@ -5,9 +5,5 @@ public class ComputerPlayer extends Player {
         super(name, color, row, col);
     }
 
-    @Override
-    void movePlayer() {
-        // TODO Auto-generated method stub
-        
-    }
+    //TODO: Random selection, accusations, random dice roll?
 }
