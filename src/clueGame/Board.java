@@ -17,6 +17,7 @@ public class Board {
 	private ArrayList<Card> deck = new ArrayList<Card>();
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	private static Board theInstance = new Board();
+	private Solution gameSolution;
 	static int cols = 0;
 	static int rows = 0;
 	File layoutCSV;
@@ -33,6 +34,9 @@ public class Board {
 	public void initialize() { // initialize the board (since we are using singleton pattern)
 		roomMap.clear();
 		roomTracker.clear();
+		deck.clear();
+		playerList.clear();
+
 		try {
 			loadSetupConfig();
 		} catch (BadConfigFormatException e1) {
@@ -52,6 +56,7 @@ public class Board {
 	}
 	
 	public void loadSetupConfig() throws BadConfigFormatException { // Loads the setup.txt file, creating the base rooms and naming them
+		deck.clear();
 		Scanner layoutIn = null;
 		try {
 			layoutIn = new Scanner(layoutText);
@@ -63,12 +68,9 @@ public class Board {
 			if (newLine[0].charAt(0) == '/') {
 				continue;
 			}
-			if(!newLine[0].equals("Room") && !newLine[0].equals("Space")) { //Checks if there is an unexpected room type in setup
-				throw new BadConfigFormatException("Check your setup.txt, there seems to be an error with the formatting of this file.");
-			}
 
 			Card inCard;
-			switch (newLine[0]){
+			switch (newLine[0]){ //Add new cards to the deck
 				case "Weapon":
 					inCard = new Card(newLine[1], CardType.WEAPON, newLine[2]);
 					deck.add(inCard);
@@ -79,6 +81,13 @@ public class Board {
 					break;
 				case "Person":
 					inCard = new Card(newLine[1], CardType.PERSON, newLine[2]);
+					Player player;
+					if(playerList.size() == 0) {
+						player = new HumanPlayer(newLine[1], newLine[2], Integer.parseInt(newLine[3]), Integer.parseInt(newLine[4]));
+					}else {
+						player = new ComputerPlayer(newLine[1], newLine[2], Integer.parseInt(newLine[3]), Integer.parseInt(newLine[4]));
+					}
+					playerList.add(player);
 					deck.add(inCard);
 					break;
 				case "Space":
@@ -308,13 +317,47 @@ public class Board {
 	}
 
 	public void deal() {
-		Solution s = new Solution(deck.get(0), deck.get(0), deck.get(0));
+		ArrayList<Card> tempDeck = new ArrayList<Card>();
+		tempDeck.addAll(deck);
+		for(Player p : playerList) { //Clear all players hands before dealing
+			p.getHand().clear();
+		}
+		Card[] cardSet = new Card[] {tempDeck.get(0), tempDeck.get(0), tempDeck.get(0)}; //Solution set definition
+		while(true) { //Randomized solution set
+			int rand = (int)Math.floor(Math.random()*(tempDeck.size()));
+			if(tempDeck.get(rand).getType() == CardType.PERSON) {
+				cardSet[0] = deck.get(rand);
+			}else if(tempDeck.get(rand).getType() == CardType.ROOM) {
+				cardSet[1] = tempDeck.get(rand);
+			}else {
+				cardSet[2] = tempDeck.get(rand);
+			}
+			if(cardSet[0].getType() == CardType.PERSON && cardSet[1].getType() == CardType.ROOM && cardSet[2].getType() == CardType.WEAPON) {
+				gameSolution = new Solution(cardSet[0], cardSet[1], cardSet[2]);
+				tempDeck.remove(cardSet[0]);
+				tempDeck.remove(cardSet[1]);
+				tempDeck.remove(cardSet[2]);
+				break;
+			}
+		}
+		while(tempDeck.size() > 0) {
+			for(Player p : playerList) { //Randomly looks for a card and gives it to the next player
+				if(tempDeck.size() > 0) { //If there are more cards, then continue dealing
+					int rand = (int)Math.floor(Math.random()*(tempDeck.size()));
+					p.updateHand(tempDeck.get(rand));
+					tempDeck.remove(rand); //Remove the delt card from the pool
+				}
+			}
+		}
 	}
 	public ArrayList<Card> getDeck(){
 		return deck;
 	}
 	public ArrayList<Player> getPlayerList(){
 		return playerList;
+	}
+	public Solution getSolution() {
+		return gameSolution;
 	}
 }	
 

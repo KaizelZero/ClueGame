@@ -27,7 +27,7 @@ public class PlayerTests {
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// set the file names to use my config files
-		board.setConfigFiles("bin/data/ClueLayout306.csv", "bin/data/ClueSetup306.txt");		
+		board.setConfigFiles("bin/data/Clue Excel Diagram2.csv", "bin/data/ClueSetup.txt");		
 		// Initialize will load config files 
 		board.initialize();
 	}
@@ -73,17 +73,28 @@ public class PlayerTests {
     }
 
     @Test
-    public void testAllDealt(){
+    public void testAllDealt(){//Test if all of the cards are dealt to a player or solution
         board.deal();
-        Player player = new ComputerPlayer("Neytterson Huntwalker", "blue", 5, 5);
-        assertEquals(player.getHand().size(), 3, 1);
+        for(Player player : board.getPlayerList()){
+        	assertEquals(player.getHand().size(), 3, 1);
+        }
+        assertEquals(board.getSolution().person.getType(), CardType.PERSON);
+        assertEquals(board.getSolution().weapon.getType(), CardType.WEAPON);
+        assertEquals(board.getSolution().room.getType(), CardType.ROOM);
+
     }
 
     @Test
-    public void testDuplicates(){
+    public void testDuplicates(){ //Make sure there are no duplicate cards among those playing or in the solution
+    	board.deal();
         Set<Card> duplicateCards = new HashSet<Card>();
         for(Player p : board.getPlayerList()){
             assertTrue(duplicateCards.addAll(p.getHand()));
         }
+        assertTrue(duplicateCards.add(board.getSolution().person));
+        assertTrue(duplicateCards.add(board.getSolution().weapon));
+        assertTrue(duplicateCards.add(board.getSolution().room));
+
     }
+    
 }

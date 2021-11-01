@@ -11,3 +11,17 @@ Room, Hall, H
 // other spaces on board
 Space, Unused, X
 Space, Walkway, W
+// Weapons
+Weapon, RayGun, rg
+Weapon, Sonic Screwdriver, ss
+Weapon, Knife, k
+Weapon, Lightsabers, ls
+Weapon, Proton Packs, pp
+Weapon, Rock, r
+// Players
+Person, Neytterson Huntwalker, Blue, 0, 8
+Person, Autoson Whiteverse, Red, 0, 11
+Person, Ron Moondancer, Pink, 0, 13
+Person, Eleado Neonross, Green, 21, 8
+Person, Leyla Smith, Orange, 21, 14
+Person, Shane Fisher, Violet, 16, 4

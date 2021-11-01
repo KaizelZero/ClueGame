@@ -17,11 +17,11 @@ Weapon, Sonic Screwdriver, ss
 Weapon, Knife, k
 Weapon, Lightsabers, ls
 Weapon, Proton Packs, pp
-Weapom, Rock, r
+Weapon, Rock, r
 // Players
-Person, Neytterson Huntwalker, NH
-Person, Autoson Whiteverse, AW
-Person, Ron Moondancer, RM
-Person, Eleado Neonross, EN
-Person, Leyla Smith, LS
-Person, Shane Fisher, SH
+Person, Neytterson Huntwalker, Blue, 0, 8
+Person, Autoson Whiteverse, Red, 0, 11
+Person, Ron Moondancer, Pink, 0, 13
+Person, Eleado Neonross, Green, 21, 8
+Person, Leyla Smith, Orange, 21, 14
+Person, Shane Fisher, Violet, 16, 4
