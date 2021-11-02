@@ -54,6 +54,5 @@ public abstract class Player {
 
     public String toString() {
         return ("Name: " + getName() + " Color: " + this.color + "Location: " + getLocation());
-
     }
 }

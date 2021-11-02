@@ -60,9 +60,9 @@ public class PlayerTests {
     @Test
     public void testSolution(){
         board.deal();
-        assertEquals(Solution.person.getType(), CardType.PERSON);
-        assertEquals(Solution.room.getType(), CardType.ROOM);
-        assertEquals(Solution.weapon.getType(), CardType.WEAPON);
+        assertEquals(board.getSolution().person.getType(), CardType.PERSON);
+        assertEquals(board.getSolution().room.getType(), CardType.ROOM);
+        assertEquals(board.getSolution().weapon.getType(), CardType.WEAPON);
     }
 
     @Test
@@ -91,4 +91,6 @@ public class PlayerTests {
     public void testNumPeopleLoaded() {
         assertEquals(board.getPlayerList().size(), 6);
     }
+
+
 }

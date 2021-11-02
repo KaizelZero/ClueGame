@@ -1,39 +1,39 @@
 package clueGame;
 
 public class Solution {
-    public static Card person;
-    public static Card room;
-    public static Card weapon;
+    public Card person;
+    public Card room;
+    public Card weapon;
 
     public Solution(Card person, Card room, Card weapon){
         super();
-        Solution.person = person;
-        Solution.room = room;
-        Solution.weapon = weapon;
+        this.person = person;
+        this.room = room;
+        this.weapon = weapon;
     }
 
     public void setWeapon(Card weapon) {
-        Solution.weapon = weapon;
+        this.weapon = weapon;
     }
 
     public void setPerson(Card person) {
-        Solution.person = person;
+        this.person = person;
     }
 
     public void setRoom(Card room) {
-        Solution.room = room;
+        this.room = room;
     }
 
     public Card getWeapon() {
-        return Solution.weapon;
+        return this.weapon;
     }
 
     public Card getPerson() {
-        return Solution.person;
+        return this.person;
     }
 
     public Card getRoom() {
-        return Solution.room;
+        return this.room;
     }
 
     @Override
