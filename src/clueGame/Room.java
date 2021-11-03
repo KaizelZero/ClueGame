@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Room {
 	private String room;
 	private String name;
+	private Card roomCard;
 	private BoardCell centerCell = null;
 	private BoardCell labelCell = null;
 	private ArrayList<BoardCell> roomDoors = new ArrayList<BoardCell>();
@@ -56,5 +57,13 @@ public class Room {
 
 	public ArrayList<BoardCell> getRoomDoors() {
 		return roomDoors;
+	}
+	
+	public void setRoomCard(Card c) {
+		this.roomCard = c;
+	}
+	
+	public Card getRoomCard() {
+		return this.roomCard;
 	}
 }

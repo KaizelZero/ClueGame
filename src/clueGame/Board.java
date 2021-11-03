@@ -101,6 +101,7 @@ public class Board {
 			if (newLine[0].equals("Space") || newLine[0].equals("Room")) {
 				Room tempRoom = new Room(newLine[2]);
 				tempRoom.setName(newLine[1]);
+				tempRoom.setRoomCard(deck.get(deck.size() - 1));
 				roomTracker.add(newLine[2]);
 				roomMap.put(newLine[2], tempRoom);
 			}
@@ -420,7 +421,7 @@ public class Board {
 			} else if (matchingCards.size() > 1) {
 				return matchingCards.get((int) Math.floor(Math.random() * (matchingCards.size())));
 			}
-			if (i == playerList.indexOf(currentPlayer) - 1) {
+			if (i == playerList.indexOf(currentPlayer) - 1 || (i == playerList.size() - 1 && playerList.indexOf(currentPlayer) == 0)) {
 				return null;
 			}
 		}

@@ -7,6 +7,7 @@ public abstract class Player {
     private String color;
 
     protected ArrayList<Card> hand;
+    protected ArrayList<Card> currentSuggestion;
     protected BoardCell location;
     protected int row, col;
     protected int diceRoll;
@@ -19,6 +20,7 @@ public abstract class Player {
         this.row = row;
         this.col = col;
         hand = new ArrayList<Card>();
+        currentSuggestion = new ArrayList<Card>();
         diceRoll = 0;
     }
     
@@ -40,9 +42,9 @@ public abstract class Player {
     public ArrayList<Card> getHand(){
         return hand;
     }
-    public void updateHand(Card newCard){
-        hand.add(newCard);
-    }
+    public abstract void updateHand(Card newCard);
+    
+    public abstract void generateSuggestion();
 
     public void movePlayer(BoardCell target) {
         this.location = target;

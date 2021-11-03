@@ -26,6 +26,17 @@ public class HumanPlayer extends Player{
         return this.isTurn;
     }
 
+	@Override
+	public void updateHand(Card newCard){
+        hand.add(newCard);
+	}
+
+	@Override
+	public void generateSuggestion() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }
