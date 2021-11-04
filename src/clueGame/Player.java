@@ -23,6 +23,17 @@ public abstract class Player {
         currentSuggestion = new ArrayList<Card>();
         diceRoll = 0;
     }
+    
+    public Player(String name, String color, BoardCell location){
+        super();
+        this.name = name;
+        this.color = color;
+        this.location = location;
+        hand = new ArrayList<Card>();
+        currentSuggestion = new ArrayList<Card>();
+        diceRoll = 0;
+    }
+    
     public void setLocation(int row, int col) {
     	this.location = Board.getInstance().getCell(row, col);
     }
@@ -35,11 +46,12 @@ public abstract class Player {
     public String getColor(){
         return color;
     }
-
     public BoardCell getLocation() {
-    	return Board.getInstance().getCell(row, col);
+    	return location;
     }
-
+    public void initializePosition() {
+    	this.location = Board.getInstance().getCell(row, col);
+    }
     public ArrayList<Card> getHand(){
         return hand;
     }

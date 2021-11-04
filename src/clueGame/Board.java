@@ -171,6 +171,7 @@ public class Board {
 					this.getCell(cRow, cCol).setRoom(true);
 					roomMap.get(inCell.substring(0, 1)).setCenterCell(this.getCell(cRow, cCol));
 					this.getCell(cRow, cCol).getCellRoom().setCenterCell(this.getCell(cRow, cCol));
+					this.getCell(cRow, cCol).getCellRoom().setRoomCard(roomMap.get(inCell.substring(0, 1)).getRoomCard());;
 				} else if (inCell.charAt(1) == '^' || inCell.charAt(1) == '<' || inCell.charAt(1) == '>'
 						|| inCell.charAt(1) == 'v') {
 					this.getCell(cRow, cCol).setDoorDirection(inCell.charAt(1));
@@ -183,6 +184,11 @@ public class Board {
 			cRow++;
 		}
 		csvIn.close();
+		
+		for(Player p : playerList) {
+			p.initializePosition();
+		}
+		
 		addRoomDoorways();
 		for (int i = 0; i < rows; i++) { // Calculates all cells adj lists
 			for (int j = 0; j < cols; j++) {

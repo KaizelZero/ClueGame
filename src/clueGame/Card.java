@@ -15,5 +15,9 @@ public class Card {
     public CardType getType(){
         return this.type;
     }
+	@Override
+	public String toString() {
+		return "Card [cardName=" + cardName + ", type=" + type + "]";
+	}
     
 }
