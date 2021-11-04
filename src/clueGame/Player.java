@@ -23,7 +23,12 @@ public abstract class Player {
         currentSuggestion = new ArrayList<Card>();
         diceRoll = 0;
     }
-    
+    public void setLocation(int row, int col) {
+    	this.location = Board.getInstance().getCell(row, col);
+    }
+    public void setLocation(BoardCell cell) {
+    	this.location = cell;
+    }
     public String getName(){
         return name;
     }
@@ -31,12 +36,8 @@ public abstract class Player {
         return color;
     }
 
-    public void setLocation(BoardCell target) {
-        this.location = target;
-    }
-
     public BoardCell getLocation() {
-        return this.location;
+    	return Board.getInstance().getCell(row, col);
     }
 
     public ArrayList<Card> getHand(){
@@ -57,4 +58,5 @@ public abstract class Player {
     public String toString() {
         return ("Name: " + getName() + " Color: " + this.color + "Location: " + getLocation());
     }
+
 }
