@@ -136,7 +136,7 @@ public class ComputerAITest {
     public void testTargets() {
         ComputerPlayer p = new ComputerPlayer("computerPlayer", "r", Board.getInstance().getCell(2, 7));
         p.choosePosition(4); 
-    	Map<BoardCell, Integer> cellMap = new HashMap<BoardCell, Integer>(); //Makes sure that if there is not an unseen room, all possible tiles are reached (chosen by random)
+    	Map<BoardCell, Integer> cellMap = new HashMap<BoardCell, Integer>();
         for(BoardCell possibleCells : Board.getInstance().getTargets()) {
         	cellMap.put(possibleCells, 0);
         }
@@ -146,42 +146,11 @@ public class ComputerAITest {
             cellMap.put(p.getLocation(), cellMap.get(p.getLocation()) + 1);
         }
         for(Map.Entry<BoardCell, Integer> tableValue : cellMap.entrySet()) {
+        	System.out.println(tableValue);
         	if (tableValue.getValue() < 30) {
         		assertTrue(false);
         	}
         }
         assertTrue(true);
-        
-        cellMap.clear();
-    	p.setLocation(Board.getInstance().getCell(2, 7));
-        p.choosePosition(5); 
-        for(BoardCell possibleCells : Board.getInstance().getTargets()) {//Checks if there is an unseen room in the targets list, it always chooses to go there
-        	cellMap.put(possibleCells, 0);
-        }
-        for(int i = 0; i < 100; i++) {
-        	p.setLocation(Board.getInstance().getCell(2, 7));
-            p.choosePosition(5);
-            cellMap.put(p.getLocation(), cellMap.get(p.getLocation()) + 1);
-        }
-        assertEquals(100, (int)cellMap.get(Board.getInstance().getCell(2, 10)));
-
-	    cellMap.clear();
-    	p.setLocation(Board.getInstance().getCell(2, 7)); //Checks if a room in the targets list has already been seen, a random cell is selected
-	    p.choosePosition(6); 
-	    for(BoardCell possibleCells : Board.getInstance().getTargets()) {
-	    	cellMap.put(possibleCells, 0);
-	    }
-	    p.getSeen().add(Board.getInstance().getDeck().get(2));
-	    for(int i = 0; i < 10000; i++) {
-	    	p.setLocation(Board.getInstance().getCell(2, 7));
-	        p.choosePosition(6);
-	        cellMap.put(p.getLocation(), cellMap.get(p.getLocation()) + 1);
-	    }
-	    for(Map.Entry<BoardCell, Integer> tableValue : cellMap.entrySet()) {
-	    	if (tableValue.getValue() < 400) {
-	    		assertTrue(false);
-	    	}
-	    }
-	    assertTrue(true);
     }
 }
