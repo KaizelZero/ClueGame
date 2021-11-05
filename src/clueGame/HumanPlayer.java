@@ -1,11 +1,11 @@
 package clueGame;
 
-public class HumanPlayer extends Player{
+public class HumanPlayer extends Player {
 
     private boolean hasMoved;
     private boolean isTurn;
 
-    public HumanPlayer(String name, String color, int row, int col){
+    public HumanPlayer(String name, String color, int row, int col) {
         super(name, color, row, col);
         hasMoved = false;
     }
@@ -26,18 +26,9 @@ public class HumanPlayer extends Player{
         return this.isTurn;
     }
 
-	@Override
-	public void updateHand(Card newCard){
+    @Override
+    public void updateHand(Card newCard) {
         hand.add(newCard);
-	}
-
-	@Override
-	public void generateSuggestion() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
+    }
 
 }

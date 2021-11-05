@@ -171,7 +171,6 @@ public class Board {
 					this.getCell(cRow, cCol).setRoom(true);
 					roomMap.get(inCell.substring(0, 1)).setCenterCell(this.getCell(cRow, cCol));
 					this.getCell(cRow, cCol).getCellRoom().setCenterCell(this.getCell(cRow, cCol));
-					this.getCell(cRow, cCol).getCellRoom().setRoomCard(roomMap.get(inCell.substring(0, 1)).getRoomCard());;
 				} else if (inCell.charAt(1) == '^' || inCell.charAt(1) == '<' || inCell.charAt(1) == '>'
 						|| inCell.charAt(1) == 'v') {
 					this.getCell(cRow, cCol).setDoorDirection(inCell.charAt(1));
@@ -184,11 +183,11 @@ public class Board {
 			cRow++;
 		}
 		csvIn.close();
-		
-		for(Player p : playerList) {
+
+		for (Player p : playerList) {
 			p.initializePosition();
 		}
-		
+
 		addRoomDoorways();
 		for (int i = 0; i < rows; i++) { // Calculates all cells adj lists
 			for (int j = 0; j < cols; j++) {
@@ -403,6 +402,7 @@ public class Board {
 		gameSolution = new Solution(person, room, weapon);
 	}
 
+	// REQUIREMENT: Check an accusation
 	public boolean checkAccusation(Card person, Card room, Card weapon) {
 		if (person == gameSolution.person && room == gameSolution.room && weapon == gameSolution.weapon) {
 			return true;
@@ -410,7 +410,9 @@ public class Board {
 		return false;
 	}
 
+	// Player disproves suggestion and handle a suggestion made
 	public Card handleSuggestion(Player currentPlayer, Card person, Card room, Card weapon) {
+		// This for loop round robins and starts at the player making a suggestion
 		for (int i = playerList.indexOf(currentPlayer) + 1;; i = (i + 1) % playerList.size()) {
 			ArrayList<Card> matchingCards = new ArrayList<Card>();
 			for (Card c : playerList.get(i).getHand()) {
@@ -422,13 +424,15 @@ public class Board {
 					matchingCards.add(c);
 				}
 			}
+			// Return card based on how many matching cards
 			if (matchingCards.size() == 1) {
 				return matchingCards.get(0);
 			} else if (matchingCards.size() > 1) {
 				return matchingCards.get((int) Math.floor(Math.random() * (matchingCards.size())));
 			}
-			if (i == playerList.indexOf(currentPlayer) - 1 || (i == playerList.size() - 1 && playerList.indexOf(currentPlayer) == 0)) {
-				return null;
+			if (i == playerList.indexOf(currentPlayer) - 1
+					|| (i == playerList.size() - 1 && playerList.indexOf(currentPlayer) == 0)) {
+				return null; // Returns null if no matching cards done
 			}
 		}
 	}

@@ -5,7 +5,7 @@ public class Solution {
     public Card room;
     public Card weapon;
 
-    public Solution(Card person, Card room, Card weapon){
+    public Solution(Card person, Card room, Card weapon) {
         super();
         this.person = person;
         this.room = room;
@@ -41,6 +41,5 @@ public class Solution {
         return (person + " with the\n" + weapon + " in the\n" + room);
 
     }
-
 
 }
