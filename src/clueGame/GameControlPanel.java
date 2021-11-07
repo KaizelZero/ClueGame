@@ -51,7 +51,7 @@ public class GameControlPanel extends JPanel {
         labelTurn = new JLabel("firstPlayer");
         // The color code is somewhat there
         labelTurn.setOpaque(true);
-        labelTurn.setBackground(setColor(p));
+        labelTurn.setBackground(p.getColor());
         newPanel.add(labelTurn, constraints);
 
         constraints.gridx = 1;
@@ -94,11 +94,6 @@ public class GameControlPanel extends JPanel {
     public void setTurn(Player p, int roll) {
         this.labelTurn.setText(p.getName());
         this.labelRoll.setText(String.valueOf(roll));
-    }
-    
-    public Color setColor(Player p) {
-    	this.color = p.getColor();
-    	return color;
     }
 
     public void setGuess(String guess) {
