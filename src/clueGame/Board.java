@@ -1,7 +1,7 @@
 package clueGame;
 
 import java.util.*;
-
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -69,7 +69,7 @@ public class Board {
 			if (newLine[0].charAt(0) == '/') {
 				continue;
 			}
-
+			
 			Card inCard;
 			switch (newLine[0]) { // Add new card to the deck
 			case "Weapon":
@@ -83,6 +83,7 @@ public class Board {
 			case "Person":
 				inCard = new Card(newLine[1], CardType.PERSON, newLine[2]);
 				Player player;
+				
 				if (playerList.size() == 0) {
 					player = new HumanPlayer(newLine[1], newLine[2], Integer.parseInt(newLine[3]),
 							Integer.parseInt(newLine[4]));

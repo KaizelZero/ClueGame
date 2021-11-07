@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.util.ArrayList;
+import java.awt.Color;
 
 public class ComputerPlayer extends Player {
 	private ArrayList<Card> seen;

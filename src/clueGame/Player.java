@@ -1,10 +1,13 @@
 package clueGame;
 
 import java.util.ArrayList;
+import java.awt.Color;
+import java.lang.reflect.Field;
 
 public abstract class Player {
     private String name;
-    private String color;
+    private Color color;
+    private String colorString;
 
     protected ArrayList<Card> hand;
     protected ArrayList<Card> currentSuggestion;
@@ -15,7 +18,8 @@ public abstract class Player {
     public Player(String name, String color, int row, int col) {
         super();
         this.name = name;
-        this.color = color;
+        this.colorString = color;
+        this.color = convertColor(color);
         this.row = row;
         this.col = col;
         hand = new ArrayList<Card>();
@@ -26,7 +30,8 @@ public abstract class Player {
     public Player(String name, String color, BoardCell location) {
         super();
         this.name = name;
-        this.color = color;
+        this.colorString = color;
+        this.color = convertColor(color);
         this.location = location;
         hand = new ArrayList<Card>();
         currentSuggestion = new ArrayList<Card>();
@@ -45,9 +50,40 @@ public abstract class Player {
         return name;
     }
 
-    public String getColor() {
+    public Color convertColor(String strColor) {
+    	// https://stackoverflow.com/questions/2854043/converting-a-string-to-color-in-java
+	    Color color = null;
+	    switch(strColor) {
+	    	case "Blue":
+	    		color = Color.BLUE;
+	    		break;
+	    	case "Red":
+	    		color = Color.RED;
+	    		break;
+	    	case "Pink":
+	    		color = Color.PINK;
+	    		break;
+	    	case "Green":
+	    		color = Color.GREEN;
+	    		break;
+	    	case "Orange":
+	    		color = Color.ORANGE;
+	    		break;
+	    	case "Violet":
+	    		color = Color.MAGENTA;
+	    		break;
+	    }
+	    System.out.println(color);
+	    return color;
+    } 
+    
+    public Color getColor() {
         return color;
     }
+    
+    public String getColorString() {
+		return colorString;
+	}
 
     public BoardCell getLocation() {
         return location;
