@@ -29,10 +29,10 @@ public class GameControlPanel extends JPanel {
     private JLabel labelGuess;
     private JLabel labelGuessResult;
     private Color color;
-
+    static Player p = new ComputerPlayer("Col. Mustard", "Orange", 1, 1);
     public GameControlPanel() {
         super();
-
+        
         JPanel newPanel = new JPanel(new GridBagLayout());
         JLabel label;
         JButton button;
@@ -41,7 +41,6 @@ public class GameControlPanel extends JPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
         constraints.insets = new Insets(10, 10, 10, 10);
-
         // add components to the panel
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -50,10 +49,9 @@ public class GameControlPanel extends JPanel {
 
         constraints.gridy = 1;
         labelTurn = new JLabel("firstPlayer");
-        // TODO: THIS SHIT
+        // The color code is somewhat there
         labelTurn.setOpaque(true);
-        labelTurn.setBackground(color);
-        System.out.println("yuhh" + color);
+        labelTurn.setBackground(setColor(p));
         newPanel.add(labelTurn, constraints);
 
         constraints.gridx = 1;
@@ -96,8 +94,11 @@ public class GameControlPanel extends JPanel {
     public void setTurn(Player p, int roll) {
         this.labelTurn.setText(p.getName());
         this.labelRoll.setText(String.valueOf(roll));
-        color = p.getColor();
-        System.out.println(p.getColor());
+    }
+    
+    public Color setColor(Player p) {
+    	this.color = p.getColor();
+    	return color;
     }
 
     public void setGuess(String guess) {
@@ -117,7 +118,7 @@ public class GameControlPanel extends JPanel {
         frame.setVisible(true); // make it visible
 
         // test filling in the data
-        panel.setTurn(new ComputerPlayer("Col. Mustard", "Orange", 1, 1), 5);
+        panel.setTurn(p, 5);
         panel.setGuess("I have no guess!");
         panel.setGuessResult("So you have nothing?");
     }

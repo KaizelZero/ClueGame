@@ -73,7 +73,6 @@ public abstract class Player {
 	    		color = Color.MAGENTA;
 	    		break;
 	    }
-	    System.out.println(color);
 	    return color;
     } 
     
