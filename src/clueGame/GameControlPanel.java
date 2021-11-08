@@ -89,6 +89,37 @@ public class GameControlPanel extends JFrame {
         controlPanel.add(topControl);
         controlPanel.add(bottomControl);
 
+        // Cards Section
+        cardPanel.setBorder(new TitledBorder("Card Panel"));
+        JPanel peopleCardPanel = new JPanel();
+        JPanel weaponCardPanel = new JPanel();
+        JPanel roomCardPanel = new JPanel();
+        JLabel myCards = new JLabel("My Cards");
+
+        // Weapons
+        JTextField weaponsText = new JTextField();
+        weaponCardPanel.setBorder(new TitledBorder("Weapons"));
+        weaponsText.setText("weapon");
+        weaponCardPanel.add(weaponsText);
+        weaponsText.setEditable(false);
+        cardPanel.add(weaponCardPanel, BorderLayout.NORTH);
+
+        // People
+        JTextField peopleText = new JTextField();
+        peopleCardPanel.setBorder(new TitledBorder("People"));
+        peopleText.setEditable(false);
+        peopleText.setText("people");
+        peopleCardPanel.add(peopleText);
+        cardPanel.add(peopleCardPanel, BorderLayout.CENTER);
+
+        // Rooms
+        JTextField roomsText = new JTextField();
+        roomCardPanel.setBorder(new TitledBorder("Rooms"));
+        roomsText.setEditable(false);
+        roomsText.setText("rooms");
+        roomCardPanel.add(roomsText);
+        cardPanel.add(roomCardPanel, BorderLayout.SOUTH);
+
         mainPanel.add(boardPanel, BorderLayout.CENTER);
         mainPanel.add(cardPanel, BorderLayout.EAST);
         mainPanel.add(controlPanel, BorderLayout.SOUTH);
