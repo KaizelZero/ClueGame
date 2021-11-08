@@ -2,115 +2,115 @@ package clueGame;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Color;
+import java.awt.GridLayout;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
-public class GameControlPanel extends JPanel {
+public class GameControlPanel extends JFrame {
 
     // private String playerName = "First Player", guess = "First guess",
     // guessResult = "First guess result";
     private int roll;
-    private JLabel labelTurn;
-    private JLabel labelRoll;
-    private JLabel labelGuess;
-    private JLabel labelGuessResult;
+    private String whoseTurn = "No player yet";
+    private String resultString = "So you have nothing";
+    private String guessString = "I have no guess";
     private Color color;
+
     static Player p = new ComputerPlayer("Col. Mustard", "Orange", 1, 1);
+
     public GameControlPanel() {
-        super();
-        
-        JPanel newPanel = new JPanel(new GridBagLayout());
-        JLabel label;
-        JButton button;
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        setTitle("Clue Game");
+        setSize(750, 750);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        createLayout();
+    }
 
-        constraints.insets = new Insets(10, 10, 10, 10);
-        // add components to the panel
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        label = new JLabel("Whose turn is it?");
-        newPanel.add(label, constraints);
+    public void createLayout() {
 
-        constraints.gridy = 1;
-        labelTurn = new JLabel("firstPlayer");
-        // The color code is somewhat there
-        labelTurn.setOpaque(true);
-        labelTurn.setBackground(p.getColor());
-        newPanel.add(labelTurn, constraints);
+        JPanel mainPanel = new JPanel(new BorderLayout()); // Whole GUI
+        JPanel controlPanel = new JPanel(new GridLayout(2, 0)); // Control panel at the bottom
+        JPanel cardPanel = new JPanel(new GridLayout(3, 0)); // Shows cards
+        JPanel boardPanel = new JPanel(new BorderLayout()); // Shows Game Board
+        // set panel sizes
+        boardPanel.setMaximumSize(new Dimension(600, 600));
+        boardPanel.setMinimumSize(new Dimension(600, 600));
+        boardPanel.setPreferredSize(new Dimension(600, 600));
+        cardPanel.setPreferredSize(new Dimension(150, 680));
 
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        label = new JLabel("Roll");
-        newPanel.add(label, constraints);
+        // --- Buttons and Whose Turn ---
+        JPanel topControl = new JPanel(new GridLayout(1, 3)); // Top row with 3 columns
 
-        constraints.gridy = 1;
-        labelRoll = new JLabel(String.valueOf(roll));
-        newPanel.add(labelRoll, constraints);
+        // Whose Turn
+        JPanel whoseTurnPanel = new JPanel();
+        JTextField whoseTurnField = new JTextField();
+        whoseTurnPanel.setBorder(new TitledBorder("Whose Turn"));
+        whoseTurnField.setEditable(false);
+        whoseTurnField.setText(whoseTurn);
+        whoseTurnField.setBackground(p.getColor());
+        topControl.add(whoseTurnPanel);
 
-        constraints.gridx = 2;
-        constraints.gridy = 0;
-        button = new JButton("Make Accusation");
-        newPanel.add(button, constraints);
+        // Buttons
+        JButton nextButton = new JButton("Next Player");
+        topControl.add(nextButton);
+        JButton accuseButton = new JButton("Make Accusation");
+        topControl.add(accuseButton);
 
-        constraints.gridx = 3;
-        button = new JButton("NEXT!");
-        newPanel.add(button, constraints);
+        // --- Dice Roll and Guess ---
+        JPanel bottomControl = new JPanel(new GridLayout(1, 3)); // Bottom row with 3 columns
 
-        constraints.gridwidth = 2;
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        labelGuess = new JLabel("firstGuess");
-        newPanel.add(labelGuess, constraints);
+        // Dice rolls
+        JPanel dicePanel = new JPanel(new GridLayout(1, 2));
+        dicePanel.setBorder(new TitledBorder("Dice"));
+        JTextField diceRoll = new JTextField();
+        diceRoll.setEditable(false);
+        diceRoll.setText(String.valueOf(roll));
+        bottomControl.add(dicePanel);
 
-        labelGuess.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Guess"));
+        // Guess
+        JPanel guessPanel = new JPanel(new GridLayout(1, 2));
+        guessPanel.setBorder(new TitledBorder("Guess"));
+        JTextField guess = new JTextField(guessString);
+        guess.setEditable(false);
 
-        constraints.gridx = 2;
-        constraints.gridy = 2;
-        labelGuessResult = new JLabel("firstGuessResult");
-        newPanel.add(labelGuessResult, constraints);
+        JPanel guessResultPanel = new JPanel(new GridLayout(1, 2));
+        guessResultPanel.setBorder(new TitledBorder("Guess Result"));
+        JTextField guessResult = new JTextField(resultString);
+        guessResult.setEditable(false);
+        guessResultPanel.add(guessResult);
+        bottomControl.add(guessPanel);
+        bottomControl.add(guessResultPanel);
 
-        labelGuessResult
-                .setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Guess Result"));
+        controlPanel.add(topControl);
+        controlPanel.add(bottomControl);
 
-        add(newPanel);
+        mainPanel.add(boardPanel, BorderLayout.CENTER);
+        mainPanel.add(cardPanel, BorderLayout.EAST);
+        mainPanel.add(controlPanel, BorderLayout.SOUTH);
+
+        add(mainPanel);
+        setVisible(true);
     }
 
     public void setTurn(Player p, int roll) {
-        this.labelTurn.setText(p.getName());
-        this.labelRoll.setText(String.valueOf(roll));
+        whoseTurn = p.getName();
     }
 
     public void setGuess(String guess) {
-        this.labelGuess.setText(guess);
+        guessString = guess;
     }
 
-    public void setGuessResult(String guessResult) {
-        this.labelGuessResult.setText(guessResult);
+    public void setGuessResult(String result) {
+        resultString = result;
     }
 
     public static void main(String[] args) {
         GameControlPanel panel = new GameControlPanel(); // create the panel
-        JFrame frame = new JFrame(); // create the frame
-        frame.setContentPane(panel); // put the panel in the frame
-        frame.setSize(750, 180); // size the frame
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-        frame.setVisible(true); // make it visible
 
         // test filling in the data
         panel.setTurn(p, 5);
