@@ -1,11 +1,7 @@
 package clueGame;
 
 import java.util.ArrayList;
-
-import javax.swing.text.AttributeSet.ColorAttribute;
-
 import java.awt.Color;
-import java.lang.reflect.Field;
 
 public abstract class Player {
     private String name;

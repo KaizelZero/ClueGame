@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JFrame {
