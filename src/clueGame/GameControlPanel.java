@@ -99,7 +99,6 @@ public class GameControlPanel extends JFrame {
         JPanel peopleCardPanel = new JPanel();
         JPanel weaponCardPanel = new JPanel();
         JPanel roomCardPanel = new JPanel();
-        JLabel myCards = new JLabel("My Cards");
 
         // Prints In Hand Label, will not print if no cards in hand
         // Definately could get implemented better
