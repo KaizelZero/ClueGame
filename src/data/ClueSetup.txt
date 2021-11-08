@@ -1,13 +1,13 @@
 // Rooms and Symbols
 Room, Helm, H
-Room, Medical, M
-Room, Weapons, D
-Room, Sleeping, S
+Room, Medical Room, M
+Room, Weapons Room, D
+Room, Sleeping Quarters, S
 Room, Right Thruster, R
 Room, Left Thruster, L
-Room, Engine, E
+Room, Engine Room, E
 Room, Canteen, C
-Room, Communications, A
+Room, Communications Room, A
 // Other spaces
 Space, Unused, X
 Space, Walkway, W
