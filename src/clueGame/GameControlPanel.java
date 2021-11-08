@@ -259,7 +259,5 @@ public class GameControlPanel extends JFrame {
 
         GameControlPanel panel = new GameControlPanel(); // create the panel
         panel.setVisible(true);
-
-        whoseTurn = board.getHumanPlayer().getName();
     }
 }
