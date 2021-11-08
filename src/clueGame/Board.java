@@ -20,6 +20,7 @@ public class Board {
 	private HumanPlayer humanPlayer;
 	static int cols = 0;
 	static int rows = 0;
+	private int currentPlayerIndex;
 	File layoutCSV;
 	File layoutText;
 
@@ -110,7 +111,6 @@ public class Board {
 		}
 		layoutIn.close();
 		deal();
-		System.out.println(humanPlayer.getHand());
 	}
 
 	private void generateCells(int rows, int cols) { // Generates the actual BoardCells and places them in the array
@@ -418,10 +418,15 @@ public class Board {
 		return false;
 	}
 
+	public int getCurrentPlayerIndex() {
+		return currentPlayerIndex;
+	}
+
 	// Player disproves suggestion and handle a suggestion made
 	public Card handleSuggestion(Player currentPlayer, Card person, Card room, Card weapon) {
 		// This for loop round robins and starts at the player making a suggestion
 		for (int i = playerList.indexOf(currentPlayer) + 1;; i = (i + 1) % playerList.size()) {
+			currentPlayer = playerList.get(i - 1);
 			ArrayList<Card> matchingCards = new ArrayList<Card>();
 			for (Card c : playerList.get(i).getHand()) {
 				if (c == person) {

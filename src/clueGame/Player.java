@@ -1,6 +1,9 @@
 package clueGame;
 
 import java.util.ArrayList;
+
+import javax.swing.text.AttributeSet.ColorAttribute;
+
 import java.awt.Color;
 import java.lang.reflect.Field;
 
@@ -51,38 +54,42 @@ public abstract class Player {
     }
 
     public Color convertColor(String strColor) {
-    	// https://stackoverflow.com/questions/2854043/converting-a-string-to-color-in-java
-	    Color color = null;
-	    switch(strColor) {
-	    	case "Blue":
-	    		color = Color.BLUE;
-	    		break;
-	    	case "Red":
-	    		color = Color.RED;
-	    		break;
-	    	case "Pink":
-	    		color = Color.PINK;
-	    		break;
-	    	case "Green":
-	    		color = Color.GREEN;
-	    		break;
-	    	case "Orange":
-	    		color = Color.ORANGE;
-	    		break;
-	    	case "Violet":
-	    		color = Color.MAGENTA;
-	    		break;
-	    }
-	    return color;
-    } 
-    
+        int alpha = 180;
+        // https://stackoverflow.com/questions/2854043/converting-a-string-to-color-in-java
+        switch (strColor) {
+        case "Blue":
+            color = newColorWithAlpha(Color.BLUE, alpha);
+            break;
+        case "Red":
+            color = newColorWithAlpha(Color.RED, alpha);
+            break;
+        case "Pink":
+            color = newColorWithAlpha(Color.PINK, alpha);
+            break;
+        case "Green":
+            color = newColorWithAlpha(Color.GREEN, alpha);
+            break;
+        case "Orange":
+            color = newColorWithAlpha(Color.ORANGE, alpha);
+            break;
+        case "Violet":
+            color = newColorWithAlpha(Color.MAGENTA, alpha);
+            break;
+        }
+        return color;
+    }
+
+    public static Color newColorWithAlpha(Color original, int alpha) {
+        return new Color(original.getRed(), original.getGreen(), original.getBlue(), alpha);
+    }
+
     public Color getColor() {
         return color;
     }
-    
+
     public String getColorString() {
-		return colorString;
-	}
+        return colorString;
+    }
 
     public BoardCell getLocation() {
         return location;

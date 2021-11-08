@@ -11,7 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JFrame {
@@ -19,14 +19,13 @@ public class GameControlPanel extends JFrame {
     private static Board board;
     private static HumanPlayer player;
     private static ArrayList<Card> playerCards;
+    private static ArrayList<Card> seenCards;
 
     private int roll;
     private static String whoseTurn = "No player yet";
     private String resultString = "So you have nothing";
     private String guessString = "I have no guess";
     private Color color;
-
-    static Player p = new ComputerPlayer("Col. Mustard", "Orange", 1, 1);
 
     public GameControlPanel() {
         setTitle("Clue Game");
@@ -45,18 +44,21 @@ public class GameControlPanel extends JFrame {
         boardPanel.setMaximumSize(new Dimension(600, 600));
         boardPanel.setMinimumSize(new Dimension(600, 600));
         boardPanel.setPreferredSize(new Dimension(600, 600));
-        cardPanel.setPreferredSize(new Dimension(150, 680));
+        cardPanel.setPreferredSize(new Dimension(190, 680));
 
         // --- Buttons and Whose Turn ---
         JPanel topControl = new JPanel(new GridLayout(1, 3)); // Top row with 3 columns
 
         // Whose Turn
         JPanel whoseTurnPanel = new JPanel();
-        JTextField whoseTurnField = new JTextField();
+        JLabel whoseTurnField = new JLabel();
         whoseTurnPanel.setBorder(new TitledBorder("Whose Turn"));
-        whoseTurnField.setEditable(false);
         whoseTurnField.setText(whoseTurn);
-        whoseTurnField.setBackground(p.getColor());
+        whoseTurnField.setBackground(player.getColor());
+        whoseTurnField.setOpaque(true);
+        whoseTurnField.setPreferredSize(new Dimension(170, 35));
+        whoseTurnField.setHorizontalAlignment(JLabel.CENTER);
+        whoseTurnPanel.add(whoseTurnField);
         topControl.add(whoseTurnPanel);
 
         // Buttons
@@ -71,21 +73,18 @@ public class GameControlPanel extends JFrame {
         // Dice rolls
         JPanel dicePanel = new JPanel(new GridLayout(1, 2));
         dicePanel.setBorder(new TitledBorder("Dice"));
-        JTextField diceRoll = new JTextField();
-        diceRoll.setEditable(false);
+        JLabel diceRoll = new JLabel();
         diceRoll.setText(String.valueOf(roll));
         bottomControl.add(dicePanel);
 
         // Guess
         JPanel guessPanel = new JPanel(new GridLayout(1, 2));
         guessPanel.setBorder(new TitledBorder("Guess"));
-        JTextField guess = new JTextField(guessString);
-        guess.setEditable(false);
+        JLabel guess = new JLabel(guessString);
 
         JPanel guessResultPanel = new JPanel(new GridLayout(1, 2));
         guessResultPanel.setBorder(new TitledBorder("Guess Result"));
-        JTextField guessResult = new JTextField(resultString);
-        guessResult.setEditable(false);
+        JLabel guessResult = new JLabel(resultString);
         guessResultPanel.add(guessResult);
         bottomControl.add(guessPanel);
         bottomControl.add(guessResultPanel);
@@ -94,58 +93,136 @@ public class GameControlPanel extends JFrame {
         controlPanel.add(bottomControl);
 
         // Cards Section
-        cardPanel.setBorder(new TitledBorder("Card Panel"));
+        cardPanel.setBorder(new TitledBorder("Known Cards"));
         JPanel peopleCardPanel = new JPanel();
         JPanel weaponCardPanel = new JPanel();
         JPanel roomCardPanel = new JPanel();
         JLabel myCards = new JLabel("My Cards");
 
-        // Weapons
-        JTextField weaponsText = new JTextField();
-        weaponCardPanel.setBorder(new TitledBorder("Weapons"));
-        weaponsText.setText("weapon");
-        weaponCardPanel.add(weaponsText);
-        weaponsText.setEditable(false);
-        cardPanel.add(weaponCardPanel, BorderLayout.NORTH);
+        // Prints In Hand Label, will not print if no cards in hand
+        // Definately could get implemented better
+        int personCount = 0, roomCount = 0, weaponCount = 0;
+        for (Card type : playerCards) {
+            if (type.getType() == CardType.PERSON && personCount == 0) {
+                // People
+                JLabel inHandPeople = new JLabel();
+                peopleCardPanel.setBorder(new TitledBorder("People"));
+                inHandPeople.setText("In Hand:");
+                inHandPeople.setPreferredSize(new Dimension(170, 35));
+                peopleCardPanel.add(inHandPeople);
+                cardPanel.add(peopleCardPanel, BorderLayout.CENTER);
+                personCount++;
+            }
+            // Rooms
+            if (type.getType() == CardType.ROOM && roomCount == 0) {
+                JLabel inHandRoom = new JLabel();
+                roomCardPanel.setBorder(new TitledBorder("Rooms"));
+                inHandRoom.setText("In Hand:");
+                inHandRoom.setPreferredSize(new Dimension(170, 35));
+                roomCardPanel.add(inHandRoom);
+                cardPanel.add(roomCardPanel, BorderLayout.SOUTH);
+                roomCount++;
+            }
+            // Weapons
+            if (type.getType() == CardType.WEAPON && weaponCount == 0) {
+                JLabel inHandWeapon = new JLabel();
+                weaponCardPanel.setBorder(new TitledBorder("Weapons"));
+                inHandWeapon.setText("In Hand:");
+                inHandWeapon.setPreferredSize(new Dimension(170, 35));
+                weaponCardPanel.add(inHandWeapon);
+                cardPanel.add(weaponCardPanel, BorderLayout.NORTH);
+                weaponCount++;
+            }
+        }
 
-        // People
-        JTextField peoplesText = new JTextField();
-        peopleCardPanel.setBorder(new TitledBorder("People"));
-        peoplesText.setEditable(false);
-        peoplesText.setText("people");
-        peopleCardPanel.add(peoplesText);
-        cardPanel.add(peopleCardPanel, BorderLayout.CENTER);
-
-        // Rooms
-        JTextField roomsText = new JTextField();
-        roomCardPanel.setBorder(new TitledBorder("Rooms"));
-        roomsText.setEditable(false);
-        roomsText.setText("rooms");
-        roomCardPanel.add(roomsText);
-        cardPanel.add(roomCardPanel, BorderLayout.SOUTH);
-
+        // Adds Cards in hand
         for (Card c : playerCards) {
             switch (c.getType()) {
             case PERSON:
-                JTextField peopleText = new JTextField();
-                peopleText.setText(c.toString());
-                peopleText.setEditable(false);
+                JLabel peopleText = new JLabel();
+                peopleText.setText(c.getCardName().toString());
+                peopleText.setBackground(player.getColor());
+                peopleText.setOpaque(true);
+                peopleText.setPreferredSize(new Dimension(170, 35));
+                peopleText.setHorizontalAlignment(JLabel.CENTER);
                 peopleCardPanel.add(peopleText);
                 break;
             case WEAPON:
-                JTextField weaponText = new JTextField();
-                weaponText.setText(c.toString());
-                weaponText.setEditable(false);
+                JLabel weaponText = new JLabel();
+                weaponText.setText(c.getCardName().toString());
+                weaponText.setBackground(player.getColor());
+                weaponText.setOpaque(true);
+                weaponText.setPreferredSize(new Dimension(170, 35));
+                weaponText.setHorizontalAlignment(JLabel.CENTER);
                 weaponCardPanel.add(weaponText);
                 break;
             case ROOM:
-                JTextField roomText = new JTextField();
-                roomText.setText(c.toString());
-                roomText.setEditable(false);
+                JLabel roomText = new JLabel();
+                roomText.setText(c.getCardName().toString());
+                roomText.setBackground(player.getColor());
+                roomText.setOpaque(true);
+                roomText.setPreferredSize(new Dimension(170, 35));
+                roomText.setHorizontalAlignment(JLabel.CENTER);
                 roomCardPanel.add(roomText);
                 break;
             }
+        }
 
+        // Weapons
+        JLabel seenWeapon = new JLabel();
+        weaponCardPanel.setBorder(new TitledBorder("Weapons"));
+        seenWeapon.setText("Seen:");
+        seenWeapon.setPreferredSize(new Dimension(170, 35));
+        weaponCardPanel.add(seenWeapon);
+        cardPanel.add(weaponCardPanel, BorderLayout.NORTH);
+
+        // People
+        JLabel seenPeople = new JLabel();
+        peopleCardPanel.setBorder(new TitledBorder("People"));
+        seenPeople.setText("Seen:");
+        seenPeople.setPreferredSize(new Dimension(170, 35));
+        peopleCardPanel.add(seenPeople);
+        cardPanel.add(peopleCardPanel, BorderLayout.CENTER);
+
+        // Rooms
+        JLabel seenRoom = new JLabel();
+        roomCardPanel.setBorder(new TitledBorder("Rooms"));
+        seenRoom.setText("Seen:");
+        seenRoom.setPreferredSize(new Dimension(170, 35));
+        roomCardPanel.add(seenRoom);
+        cardPanel.add(roomCardPanel, BorderLayout.SOUTH);
+
+        // Adds Cards in hand
+        for (Card x : seenCards) {
+            switch (x.getType()) {
+            case PERSON:
+                JLabel peopleText = new JLabel();
+                peopleText.setText(x.getCardName().toString());
+                peopleText.setBackground(player.getColor());
+                peopleText.setOpaque(true);
+                peopleText.setPreferredSize(new Dimension(170, 35));
+                peopleText.setHorizontalAlignment(JLabel.CENTER);
+                peopleCardPanel.add(peopleText);
+                break;
+            case WEAPON:
+                JLabel weaponText = new JLabel();
+                weaponText.setText(x.getCardName().toString());
+                weaponText.setBackground(player.getColor());
+                weaponText.setOpaque(true);
+                weaponText.setPreferredSize(new Dimension(170, 35));
+                weaponText.setHorizontalAlignment(JLabel.CENTER);
+                weaponCardPanel.add(weaponText);
+                break;
+            case ROOM:
+                JLabel roomText = new JLabel();
+                roomText.setText(x.getCardName().toString());
+                roomText.setBackground(player.getColor());
+                roomText.setOpaque(true);
+                roomText.setPreferredSize(new Dimension(170, 35));
+                roomText.setHorizontalAlignment(JLabel.CENTER);
+                roomCardPanel.add(roomText);
+                break;
+            }
         }
 
         mainPanel.add(boardPanel, BorderLayout.CENTER);
@@ -175,6 +252,8 @@ public class GameControlPanel extends JFrame {
 
         player = board.getHumanPlayer();
         playerCards = player.getHand();
+        seenCards = player.getSeen();
+        whoseTurn = board.getPlayerList().get(board.getCurrentPlayerIndex()).getName();
 
         GameControlPanel panel = new GameControlPanel(); // create the panel
         panel.setVisible(true);
