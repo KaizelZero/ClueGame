@@ -75,12 +75,14 @@ public class GameControlPanel extends JFrame {
         dicePanel.setBorder(new TitledBorder("Dice"));
         JLabel diceRoll = new JLabel();
         diceRoll.setText(String.valueOf(roll));
+        dicePanel.add(diceRoll);
         bottomControl.add(dicePanel);
 
         // Guess
         JPanel guessPanel = new JPanel(new GridLayout(1, 2));
         guessPanel.setBorder(new TitledBorder("Guess"));
         JLabel guess = new JLabel(guessString);
+        guessPanel.add(guess);
 
         JPanel guessResultPanel = new JPanel(new GridLayout(1, 2));
         guessResultPanel.setBorder(new TitledBorder("Guess Result"));
