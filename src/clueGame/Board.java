@@ -1,7 +1,6 @@
 package clueGame;
 
 import java.util.*;
-import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -18,6 +17,7 @@ public class Board {
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	private static Board theInstance = new Board();
 	private Solution gameSolution;
+	private HumanPlayer humanPlayer;
 	static int cols = 0;
 	static int rows = 0;
 	File layoutCSV;
@@ -69,7 +69,7 @@ public class Board {
 			if (newLine[0].charAt(0) == '/') {
 				continue;
 			}
-			
+
 			Card inCard;
 			switch (newLine[0]) { // Add new card to the deck
 			case "Weapon":
@@ -83,10 +83,11 @@ public class Board {
 			case "Person":
 				inCard = new Card(newLine[1], CardType.PERSON, newLine[2]);
 				Player player;
-				
+
 				if (playerList.size() == 0) {
-					player = new HumanPlayer(newLine[1], newLine[2], Integer.parseInt(newLine[3]),
+					humanPlayer = new HumanPlayer(newLine[1], newLine[2], Integer.parseInt(newLine[3]),
 							Integer.parseInt(newLine[4]));
+					player = humanPlayer;
 				} else {
 					player = new ComputerPlayer(newLine[1], newLine[2], Integer.parseInt(newLine[3]),
 							Integer.parseInt(newLine[4]));
@@ -108,6 +109,8 @@ public class Board {
 			}
 		}
 		layoutIn.close();
+		deal();
+		System.out.println(humanPlayer.getHand());
 	}
 
 	private void generateCells(int rows, int cols) { // Generates the actual BoardCells and places them in the array
@@ -393,6 +396,10 @@ public class Board {
 
 	public ArrayList<Player> getPlayerList() {
 		return playerList;
+	}
+
+	public HumanPlayer getHumanPlayer() {
+		return humanPlayer;
 	}
 
 	public Solution getSolution() {

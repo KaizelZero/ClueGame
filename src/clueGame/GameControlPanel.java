@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.GridLayout;
 
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,10 +16,12 @@ import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JFrame {
 
-    // private String playerName = "First Player", guess = "First guess",
-    // guessResult = "First guess result";
+    private static Board board;
+    private static HumanPlayer player;
+    private static ArrayList<Card> playerCards;
+
     private int roll;
-    private String whoseTurn = "No player yet";
+    private static String whoseTurn = "No player yet";
     private String resultString = "So you have nothing";
     private String guessString = "I have no guess";
     private Color color;
@@ -141,11 +145,16 @@ public class GameControlPanel extends JFrame {
     }
 
     public static void main(String[] args) {
-        GameControlPanel panel = new GameControlPanel(); // create the panel
+        board = Board.getInstance(); // Only creates one instance of the board
+        board.setConfigFiles("bin/data/Clue Excel Diagram2.csv", "bin/data/ClueSetup.txt");
+        board.initialize();
 
-        // test filling in the data
-        panel.setTurn(p, 5);
-        panel.setGuess("I have no guess!");
-        panel.setGuessResult("So you have nothing?");
+        player = board.getHumanPlayer();
+        playerCards = player.getHand();
+
+        GameControlPanel panel = new GameControlPanel(); // create the panel
+        panel.setVisible(true);
+
+        whoseTurn = board.getHumanPlayer().getName();
     }
 }
