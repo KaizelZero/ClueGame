@@ -109,11 +109,11 @@ public class GameControlPanel extends JFrame {
         cardPanel.add(weaponCardPanel, BorderLayout.NORTH);
 
         // People
-        JTextField peopleText = new JTextField();
+        JTextField peoplesText = new JTextField();
         peopleCardPanel.setBorder(new TitledBorder("People"));
-        peopleText.setEditable(false);
-        peopleText.setText("people");
-        peopleCardPanel.add(peopleText);
+        peoplesText.setEditable(false);
+        peoplesText.setText("people");
+        peopleCardPanel.add(peoplesText);
         cardPanel.add(peopleCardPanel, BorderLayout.CENTER);
 
         // Rooms
@@ -123,6 +123,30 @@ public class GameControlPanel extends JFrame {
         roomsText.setText("rooms");
         roomCardPanel.add(roomsText);
         cardPanel.add(roomCardPanel, BorderLayout.SOUTH);
+
+        for (Card c : playerCards) {
+            switch (c.getType()) {
+            case PERSON:
+                JTextField peopleText = new JTextField();
+                peopleText.setText(c.toString());
+                peopleText.setEditable(false);
+                peopleCardPanel.add(peopleText);
+                break;
+            case WEAPON:
+                JTextField weaponText = new JTextField();
+                weaponText.setText(c.toString());
+                weaponText.setEditable(false);
+                weaponCardPanel.add(weaponText);
+                break;
+            case ROOM:
+                JTextField roomText = new JTextField();
+                roomText.setText(c.toString());
+                roomText.setEditable(false);
+                roomCardPanel.add(roomText);
+                break;
+            }
+
+        }
 
         mainPanel.add(boardPanel, BorderLayout.CENTER);
         mainPanel.add(cardPanel, BorderLayout.EAST);
