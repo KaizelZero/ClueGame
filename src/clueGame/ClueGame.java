@@ -35,7 +35,6 @@ public class ClueGame extends JFrame{
 		clueGame = new ClueGame(board);
 		clueGame.add(board, BorderLayout.CENTER);
 		clueGame.repaint();
-		clueGame.pack();
 		clueGame.setVisible(true);
 	}
 }
