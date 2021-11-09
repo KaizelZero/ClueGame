@@ -2,8 +2,10 @@ package clueGame;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.awt.Color;
+import java.awt.Graphics;
 
-public class BoardCell {
+public class BoardCell{
 	// Variables
 	private int row, column;
 	private Set<BoardCell> adjList = new HashSet<BoardCell>();
@@ -116,6 +118,37 @@ public class BoardCell {
 		}
 		return false;
 	}
+	
+	public void drawCell(int row, int col, int width, int height, Graphics g, Board board) {
+		if (this.isRoom()) {
+			g.fillRect(row, col, width, height);
+			g.setColor(Color.gray);
+		}else {
+			g.drawRect(row, col, width, height);
+			g.setColor(Color.yellow);
+		}
+		switch (doorDirection) {
+			case UP:
+				g.fillRect(row - 50, col, width, height / 10);
+				
+				break;
+			case DOWN:
+				g.fillRect(row + 50, col, width, height / 10);
+				
+				break;
+			case LEFT:
+				g.fillRect(row, col - 50, width / 10, height);
+				
+				break;
+			case RIGHT:
+				g.fillRect(row, width + 50, width / 10, height);
+				break;
+			case NONE:
+				break;
+		}
+		
+	}
+	
 	@Override //Simple toString for debugging cells
 	public String toString() {
 		return "BoardCell [row=" + row + ", column=" + column + "]";
