@@ -35,6 +35,8 @@ public class GameControlPanel extends JFrame {
 
     public void createLayout() {
 
+        Dimension textbox = new Dimension(170, 20);
+
         JPanel mainPanel = new JPanel(new BorderLayout()); // Whole GUI
         JPanel controlPanel = new JPanel(new GridLayout(2, 0)); // Control panel at the bottom
         JPanel cardPanel = new JPanel(new GridLayout(3, 0)); // Shows cards
@@ -108,7 +110,7 @@ public class GameControlPanel extends JFrame {
                 JLabel inHandPeople = new JLabel();
                 peopleCardPanel.setBorder(new TitledBorder("People"));
                 inHandPeople.setText("In Hand:");
-                inHandPeople.setPreferredSize(new Dimension(170, 35));
+                inHandPeople.setPreferredSize(textbox);
                 peopleCardPanel.add(inHandPeople);
                 cardPanel.add(peopleCardPanel, BorderLayout.CENTER);
                 personCount++;
@@ -118,7 +120,7 @@ public class GameControlPanel extends JFrame {
                 JLabel inHandRoom = new JLabel();
                 roomCardPanel.setBorder(new TitledBorder("Rooms"));
                 inHandRoom.setText("In Hand:");
-                inHandRoom.setPreferredSize(new Dimension(170, 35));
+                inHandRoom.setPreferredSize(textbox);
                 roomCardPanel.add(inHandRoom);
                 cardPanel.add(roomCardPanel, BorderLayout.SOUTH);
                 roomCount++;
@@ -128,7 +130,7 @@ public class GameControlPanel extends JFrame {
                 JLabel inHandWeapon = new JLabel();
                 weaponCardPanel.setBorder(new TitledBorder("Weapons"));
                 inHandWeapon.setText("In Hand:");
-                inHandWeapon.setPreferredSize(new Dimension(170, 35));
+                inHandWeapon.setPreferredSize(textbox);
                 weaponCardPanel.add(inHandWeapon);
                 cardPanel.add(weaponCardPanel, BorderLayout.NORTH);
                 weaponCount++;
@@ -143,7 +145,7 @@ public class GameControlPanel extends JFrame {
                 peopleText.setText(c.getCardName().toString());
                 peopleText.setBackground(player.getColor());
                 peopleText.setOpaque(true);
-                peopleText.setPreferredSize(new Dimension(170, 35));
+                peopleText.setPreferredSize(textbox);
                 peopleText.setHorizontalAlignment(JLabel.CENTER);
                 peopleCardPanel.add(peopleText);
                 break;
@@ -152,7 +154,7 @@ public class GameControlPanel extends JFrame {
                 weaponText.setText(c.getCardName().toString());
                 weaponText.setBackground(player.getColor());
                 weaponText.setOpaque(true);
-                weaponText.setPreferredSize(new Dimension(170, 35));
+                weaponText.setPreferredSize(textbox);
                 weaponText.setHorizontalAlignment(JLabel.CENTER);
                 weaponCardPanel.add(weaponText);
                 break;
@@ -161,7 +163,7 @@ public class GameControlPanel extends JFrame {
                 roomText.setText(c.getCardName().toString());
                 roomText.setBackground(player.getColor());
                 roomText.setOpaque(true);
-                roomText.setPreferredSize(new Dimension(170, 35));
+                roomText.setPreferredSize(textbox);
                 roomText.setHorizontalAlignment(JLabel.CENTER);
                 roomCardPanel.add(roomText);
                 break;
@@ -172,7 +174,7 @@ public class GameControlPanel extends JFrame {
         JLabel seenWeapon = new JLabel();
         weaponCardPanel.setBorder(new TitledBorder("Weapons"));
         seenWeapon.setText("Seen:");
-        seenWeapon.setPreferredSize(new Dimension(170, 35));
+        seenWeapon.setPreferredSize(textbox);
         weaponCardPanel.add(seenWeapon);
         cardPanel.add(weaponCardPanel, BorderLayout.NORTH);
 
@@ -180,7 +182,7 @@ public class GameControlPanel extends JFrame {
         JLabel seenPeople = new JLabel();
         peopleCardPanel.setBorder(new TitledBorder("People"));
         seenPeople.setText("Seen:");
-        seenPeople.setPreferredSize(new Dimension(170, 35));
+        seenPeople.setPreferredSize(textbox);
         peopleCardPanel.add(seenPeople);
         cardPanel.add(peopleCardPanel, BorderLayout.CENTER);
 
@@ -188,7 +190,7 @@ public class GameControlPanel extends JFrame {
         JLabel seenRoom = new JLabel();
         roomCardPanel.setBorder(new TitledBorder("Rooms"));
         seenRoom.setText("Seen:");
-        seenRoom.setPreferredSize(new Dimension(170, 35));
+        seenRoom.setPreferredSize(textbox);
         roomCardPanel.add(seenRoom);
         cardPanel.add(roomCardPanel, BorderLayout.SOUTH);
 
@@ -200,7 +202,7 @@ public class GameControlPanel extends JFrame {
                 peopleText.setText(x.getCardName().toString());
                 peopleText.setBackground(player.getColor());
                 peopleText.setOpaque(true);
-                peopleText.setPreferredSize(new Dimension(170, 35));
+                peopleText.setPreferredSize(textbox);
                 peopleText.setHorizontalAlignment(JLabel.CENTER);
                 peopleCardPanel.add(peopleText);
                 break;
@@ -209,7 +211,7 @@ public class GameControlPanel extends JFrame {
                 weaponText.setText(x.getCardName().toString());
                 weaponText.setBackground(player.getColor());
                 weaponText.setOpaque(true);
-                weaponText.setPreferredSize(new Dimension(170, 35));
+                weaponText.setPreferredSize(textbox);
                 weaponText.setHorizontalAlignment(JLabel.CENTER);
                 weaponCardPanel.add(weaponText);
                 break;
@@ -218,7 +220,7 @@ public class GameControlPanel extends JFrame {
                 roomText.setText(x.getCardName().toString());
                 roomText.setBackground(player.getColor());
                 roomText.setOpaque(true);
-                roomText.setPreferredSize(new Dimension(170, 35));
+                roomText.setPreferredSize(textbox);
                 roomText.setHorizontalAlignment(JLabel.CENTER);
                 roomCardPanel.add(roomText);
                 break;

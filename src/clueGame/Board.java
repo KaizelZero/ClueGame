@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class Board {
+import javax.swing.JPanel;
+
+public class Board extends JPanel {
 
 	// Variables
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
