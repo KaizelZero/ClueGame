@@ -1,13 +1,11 @@
 package clueGame;
 
 import java.util.*;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -458,11 +456,17 @@ public class Board extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		int xOffset, yOffset;
+		int width = this.getWidth() / cols;
+		int height = this.getHeight() / rows;
+		
 		System.out.println("TEST");
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
+				xOffset = j * width;
+				yOffset = i * height;
 				System.out.println(i + " " + j);
-				board[i][j].drawCell(i * 50, j * 50, 50, 50, g, this);
+				getCell(i, j).drawCell(xOffset, yOffset, width, height, g, this);
 			}
 		}
 	}

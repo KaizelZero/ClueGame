@@ -122,6 +122,8 @@ public class BoardCell{
 	public void drawCell(int row, int col, int width, int height, Graphics g, Board board) {
 		if (this.isRoom()) {
 			g.fillRect(row, col, width, height);
+			g.setColor(Color.black);
+			g.drawRect(row, col, width, height);
 			g.setColor(Color.gray);
 		}else {
 			g.drawRect(row, col, width, height);
@@ -129,19 +131,19 @@ public class BoardCell{
 		}
 		switch (doorDirection) {
 			case UP:
-				g.fillRect(row - 50, col, width, height / 10);
+				g.fillRect(row - 10, col, width, height / 10);
 				
 				break;
 			case DOWN:
-				g.fillRect(row + 50, col, width, height / 10);
+				g.fillRect(row + 10, col, width, height / 10);
 				
 				break;
 			case LEFT:
-				g.fillRect(row, col - 50, width / 10, height);
+				g.fillRect(row, col - 10, width / 10, height);
 				
 				break;
 			case RIGHT:
-				g.fillRect(row, width + 50, width / 10, height);
+				g.fillRect(row, width + 10, width / 10, height);
 				break;
 			case NONE:
 				break;

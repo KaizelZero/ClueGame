@@ -32,8 +32,7 @@ public class GameControlPanel extends JPanel {
     	
 		player = board.getHumanPlayer();
 	    whoseTurn = board.getPlayerList().get(board.getCurrentPlayerIndex()).getName();
-
-        JPanel mainPanel = new JPanel(new BorderLayout()); // Whole GUI
+	    
         JPanel controlPanel = new JPanel(new GridLayout(2, 0)); // Control panel at the bottom
 
         // --- Buttons and Whose Turn ---
@@ -59,7 +58,6 @@ public class GameControlPanel extends JPanel {
 
         // --- Dice Roll and Guess ---
         JPanel bottomControl = new JPanel(new GridLayout(1, 3)); // Bottom row with 3 columns
-
         // Dice rolls
         JPanel dicePanel = new JPanel(new GridLayout(1, 2));
         dicePanel.setBorder(new TitledBorder("Dice"));
@@ -83,11 +81,8 @@ public class GameControlPanel extends JPanel {
 
         controlPanel.add(topControl);
         controlPanel.add(bottomControl);
-
-        mainPanel.add(controlPanel, BorderLayout.SOUTH);
         
         add(controlPanel, BorderLayout.SOUTH);
-
     }
 
     public void setTurn(Player p, int roll) {

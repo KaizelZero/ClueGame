@@ -10,7 +10,7 @@ public class ClueGame extends JFrame{
 	
     GameControlPanel controlPanel;
 	GameCardPanel cardPanel;
-	ClueGame game;
+	static ClueGame clueGame;
 	
 
 	public ClueGame(Board board) {
@@ -32,7 +32,7 @@ public class ClueGame extends JFrame{
 		board.setConfigFiles("bin/data/Clue Excel Diagram2.csv", "bin/data/ClueSetup.txt");
 		board.initialize();
 		
-		ClueGame clueGame = new ClueGame(board);
+		clueGame = new ClueGame(board);
 		clueGame.add(board, BorderLayout.CENTER);
 		clueGame.repaint();
 		clueGame.pack();
