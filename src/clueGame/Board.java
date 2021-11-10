@@ -166,9 +166,9 @@ public class Board extends JPanel {
 				this.getCell(cRow, cCol).getCellRoom().setRoom(inCell.substring(0, 1));
 				this.getCell(cRow, cCol).getCellRoom().setName(roomMap.get(inCell.substring(0, 1)).getName());
 				if (inCell.equals("X")) { // Base cases (to be expanded)
-					this.getCell(cRow, cCol).setRoom(true); // Closet cells are set to rooms to simplify code
+					this.getCell(cRow, cCol).setUnused(); // Unused Cells
 				} else if (inCell.equals("W")) {
-
+					this.getCell(cRow, cCol).setWalkway();
 				} else if (inCell.length() == 1) {
 					this.getCell(cRow, cCol).setRoom(true);
 				} else if (inCell.charAt(1) == '#') { // If label
@@ -177,6 +177,7 @@ public class Board extends JPanel {
 					this.getCell(cRow, cCol).getCellRoom().setLabelCell(this.getCell(cRow, cCol));
 				} else if (inCell.charAt(1) == '*') { // If centerCell
 					this.getCell(cRow, cCol).setRoom(true);
+					
 					roomMap.get(inCell.substring(0, 1)).setCenterCell(this.getCell(cRow, cCol));
 					this.getCell(cRow, cCol).getCellRoom().setCenterCell(this.getCell(cRow, cCol));
 				} else if (inCell.charAt(1) == '^' || inCell.charAt(1) == '<' || inCell.charAt(1) == '>'
@@ -453,19 +454,16 @@ public class Board extends JPanel {
 			}
 		}
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		int xOffset, yOffset;
 		int width = this.getWidth() / cols;
 		int height = this.getHeight() / rows;
-		
-		System.out.println("TEST");
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				xOffset = j * width;
 				yOffset = i * height;
-				System.out.println(i + " " + j);
 				getCell(i, j).drawCell(xOffset, yOffset, width, height, g, this);
 			}
 		}
