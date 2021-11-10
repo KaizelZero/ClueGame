@@ -158,7 +158,7 @@ public class BoardCell {
 			g.setColor(Color.black);
 			g.drawString("S", row + width / 3, col + height / 2);
 		}
-		if (this.isRoomCenter()) {
+		if (this.isRoomCenter() && !this.isDoorway()) {
 			g.setColor(Color.black);
 			g.drawString(this.getCellRoom().getName(), row, col);
 		}
