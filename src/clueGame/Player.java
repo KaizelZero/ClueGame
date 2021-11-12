@@ -2,6 +2,7 @@ package clueGame;
 
 import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Graphics;
 
 public abstract class Player {
     private String name;
@@ -48,7 +49,10 @@ public abstract class Player {
     public String getName() {
         return name;
     }
-
+    public void drawPlayer(int row, int col, int width, int height, Graphics g, Board board) {
+		g.setColor(this.color);
+		g.fillOval(row, col, width, height);
+	}
     public Color convertColor(String strColor) {
         int alpha = 180;
         // https://stackoverflow.com/questions/2854043/converting-a-string-to-color-in-java

@@ -465,7 +465,13 @@ public class Board extends JPanel {
 				xOffset = j * width;
 				yOffset = i * height;
 				getCell(i, j).drawCell(xOffset, yOffset, width, height, g, this);
+				for(Player p : playerList) {
+					if(p.location == this.getCell(i, j)) {
+						p.drawPlayer(xOffset, yOffset, width, height, g, this);
+					}
+				}
 			}
 		}
+
 	}
 }

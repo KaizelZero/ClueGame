@@ -118,7 +118,7 @@ public class BoardCell {
 
 	public void drawCell(int row, int col, int width, int height, Graphics g, Board board) {
 		if (this.isWalkway || this.isDoorway()) {
-			g.setColor(Color.blue);
+			g.setColor(Color.white);
 			g.fillRect(row, col, width, height);
 			g.setColor(Color.black);
 			g.drawRect(row, col, width, height);
@@ -159,8 +159,9 @@ public class BoardCell {
 			g.drawString("S", row + width / 3, col + height / 2);
 		}
 		if (this.isRoomCenter() && !this.isDoorway()) {
-			g.setColor(Color.black);
-			g.drawString(this.getCellRoom().getName(), row, col);
+			g.setColor(Color.white);
+			int offset = this.getCellRoom().getName().length() * 3;
+			g.drawString(this.getCellRoom().getName(), row - offset, col);
 		}
 	}
 

@@ -31,6 +31,7 @@ public class GameCardPanel extends JPanel {
         JPanel roomCardPanel = new JPanel();
         JPanel cardPanel = new JPanel(new GridLayout(3, 0)); // Shows cards
         cardPanel.setBorder(new TitledBorder("Known Cards"));
+        cardPanel.setMinimumSize(new Dimension(190, 600));
         cardPanel.setPreferredSize(new Dimension(190, 680));
         
         player = board.getHumanPlayer();
