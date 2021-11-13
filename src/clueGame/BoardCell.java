@@ -2,7 +2,10 @@ package clueGame;
 
 import java.util.HashSet;
 import java.util.Set;
+
+
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 public class BoardCell {
@@ -116,7 +119,7 @@ public class BoardCell {
 		this.secretPassage = pass;
 	}
 
-	public void drawCell(int row, int col, int width, int height, Graphics g, Board board) {
+	public void drawCell(int row, int col, int width, int height, Graphics g, Board board) { //Code for drawing in the cells
 		if (this.isWalkway || this.isDoorway()) {
 			g.setColor(Color.white);
 			g.fillRect(row, col, width, height);
@@ -129,7 +132,7 @@ public class BoardCell {
 			g.setColor(Color.black);
 			g.drawRect(row, col, width, height);
 		}
-		if (this.isDoorway()) {
+		if (this.isDoorway()) { //Draws door in correct position
 			g.setColor(Color.yellow);
 			switch (this.doorDirection) {
 			case UP:
@@ -158,10 +161,14 @@ public class BoardCell {
 			g.setColor(Color.black);
 			g.drawString("S", row + width / 3, col + height / 2);
 		}
-		if (this.isRoomCenter() && !this.isDoorway()) {
-			g.setColor(Color.white);
+		if (this.isRoomCenter() && !this.isDoorway()) { //Draws in room name
+			g.setColor(Color.red);
 			int offset = this.getCellRoom().getName().length() * 3;
+			g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, g.getFont().getSize())); 
 			g.drawString(this.getCellRoom().getName(), row - offset, col);
+			g.setColor(Color.orange);
+			g.setFont(new Font(g.getFont().getFontName(), Font.BOLD - 50, g.getFont().getSize())); 
+		    g.drawString(this.getCellRoom().getName(), row - offset, col);
 		}
 	}
 
