@@ -4,7 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.GridLayout;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -22,14 +23,17 @@ public class GameControlPanel extends JPanel {
     private String resultString = "So you have nothing";
     private String guessString = "I have no guess";
     private Color color;
+    
+    private JLabel whoseTurnField = new JLabel();
+    private JLabel diceRoll = new JLabel();
 
+    
     public GameControlPanel() {
         createLayout();
     }
 	
 
     public void createLayout() {
-    	
 		player = board.getHumanPlayer();
 	    whoseTurn = board.getPlayerList().get(board.getCurrentPlayerIndex()).getName();
 	    
@@ -40,7 +44,6 @@ public class GameControlPanel extends JPanel {
 
         // Whose Turn
         JPanel whoseTurnPanel = new JPanel();
-        JLabel whoseTurnField = new JLabel();
         whoseTurnPanel.setBorder(new TitledBorder("Whose Turn"));
         whoseTurnField.setText(whoseTurn);
         whoseTurnField.setBackground(player.getColor());
@@ -52,6 +55,14 @@ public class GameControlPanel extends JPanel {
 
         // Buttons
         JButton nextButton = new JButton("Next Player");
+        
+        nextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Board.getInstance().nextPlayer();
+				
+			}
+        });
         topControl.add(nextButton);
         JButton accuseButton = new JButton("Make Accusation");
         topControl.add(accuseButton);
@@ -61,7 +72,6 @@ public class GameControlPanel extends JPanel {
         // Dice rolls
         JPanel dicePanel = new JPanel(new GridLayout(1, 2));
         dicePanel.setBorder(new TitledBorder("Dice"));
-        JLabel diceRoll = new JLabel();
         diceRoll.setText(String.valueOf(roll));
         dicePanel.add(diceRoll);
         bottomControl.add(dicePanel);
@@ -84,9 +94,16 @@ public class GameControlPanel extends JPanel {
         
         add(controlPanel, BorderLayout.SOUTH);
     }
-
+    
     public void setTurn(Player p, int roll) {
         whoseTurn = p.getName();
+        this.roll = roll;
+    	whoseTurnField.setText(whoseTurn);
+        whoseTurnField.setBackground(p.getColor());
+        whoseTurnField.setOpaque(true);
+
+    	diceRoll.setText(Integer.toString(roll));
+
     }
 
     public void setGuess(String guess) {

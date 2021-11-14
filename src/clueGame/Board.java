@@ -1,7 +1,10 @@
 package clueGame;
 
 import java.util.*;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -19,6 +22,7 @@ public class Board extends JPanel {
 	private ArrayList<String> roomTracker = new ArrayList<String>();
 	private ArrayList<Card> deck = new ArrayList<Card>();
 	private ArrayList<Player> playerList = new ArrayList<Player>();
+	private int currentPlayer = 5;
 	private static Board theInstance = new Board();
 	private Solution gameSolution;
 	private HumanPlayer humanPlayer;
@@ -30,6 +34,8 @@ public class Board extends JPanel {
 
 	private Board() {// constructor is private to ensure only one can be created
 		super();
+		addMouseListener(new BoardListener());
+
 	}
 
 	public static Board getInstance() { // this method returns the only Board
@@ -41,7 +47,6 @@ public class Board extends JPanel {
 		roomTracker.clear();
 		deck.clear();
 		playerList.clear();
-
 		try {
 			loadSetupConfig();
 		} catch (BadConfigFormatException e1) {
@@ -255,29 +260,18 @@ public class Board extends JPanel {
 		findAllTargets(startCell, pathlength);
 	}
 
-	private void findAllTargets(BoardCell thisCell, int numSteps) { // Recursively searches through adj cells for
-																	// targets given a roll
+	private void findAllTargets(BoardCell thisCell, int numSteps) { // Recursively searches through adj cells for targets given a roll
 		for (BoardCell adjCell : thisCell.getAdjList()) {
 			if (visited.contains(adjCell) || (adjCell.getOccupied() && adjCell.getCellRoom().getCenterCell() != adjCell)
-					|| (adjCell.getOccupied() && thisCell.getCellRoom().getCenterCell() == thisCell)) { // If visited,
-																										// skip that
-																										// cell
+					|| (adjCell.getOccupied() && thisCell.getCellRoom().getCenterCell() == thisCell)) { // If visited, skip that cell
 				continue;
 			}
 			visited.add(adjCell);
 			if (numSteps == 1) { // If at limit of dice roll, then the current cell must be a target
-				if (!adjCell.getOccupied() && !adjCell.isRoom() || adjCell.getCellRoom().getCenterCell() == adjCell) { // Checks
-																														// if
-																														// current
-																														// cell
-																														// is
-																														// not
-																														// occupied
+				if ((!adjCell.getOccupied() && !adjCell.isRoom() && !adjCell.isUnused()) || adjCell.getCellRoom().getCenterCell() == adjCell) { // Checks if current cell is not occupied
 					targets.add(adjCell);
 				}
-			} else if (adjCell.getCellRoom().getCenterCell() == adjCell) { // If the adj cell is a room center, then
-																			// stop the recursive call and add that room
-																			// to the targets list
+			} else if (adjCell.getCellRoom().getCenterCell() == adjCell) { // If the adj cell is a room center, then stop the recursive call and add that room to the targets list
 				targets.add(adjCell);
 			} else { // Recursively checks next targets
 				findAllTargets(adjCell, numSteps - 1);
@@ -288,31 +282,30 @@ public class Board extends JPanel {
 
 	public Set<BoardCell> calcAdj(int row, int col) { // Calculates adjacent cells from a given cell
 		Set<BoardCell> adjList = new HashSet<BoardCell>();
-		if (board[row][col].isRoom()) {
+		if (board[row][col].isRoom() || board[row][col].isUnused()) {
 			if (board[row][col].isRoomCenter()) { // If the cell is a super-room (room center) then add all doors and
 													// portals to the adj list for that cell
 				adjList.addAll(roomMap.get(String.valueOf(this.getCell(row, col).getCellRoom().getRoom().charAt(0)))
 						.getRoomDoors());
 			}
 		} else {
-			if (row > 0) { // If the cell we are calculating adj for is not a room or doorway, then simply
-							// add all adj non-room cells to it
-				if (!board[row - 1][col].isRoom()) {
+			if (row > 0) { // If the cell we are calculating adj for is not a room or doorway, then simply add all adj non-room cells to it
+				if (!board[row - 1][col].isRoom() && !board[row - 1][col].isUnused()) {
 					adjList.add(board[row - 1][col]);
 				}
 			}
 			if (row < rows - 1) {
-				if (!board[row + 1][col].isRoom()) {
+				if (!board[row + 1][col].isRoom() && !board[row + 1][col].isUnused()) {
 					adjList.add(board[row + 1][col]);
 				}
 			}
 			if (col < cols - 1) {
-				if (!board[row][col + 1].isRoom()) {
+				if (!board[row][col + 1].isRoom() && !board[row][col + 1].isUnused()) {
 					adjList.add(board[row][col + 1]);
 				}
 			}
 			if (col > 0) {
-				if (!board[row][col - 1].isRoom()) {
+				if (!board[row][col - 1].isRoom() && !board[row][col - 1].isUnused()) {
 					adjList.add(board[row][col - 1]);
 				}
 			}
@@ -473,5 +466,83 @@ public class Board extends JPanel {
 			}
 		}
 
+	}
+	public void nextPlayer() {
+		boolean currentTurn = false;
+		if(currentPlayer == 0) {
+			for(BoardCell[] row : board) {
+				for(BoardCell colorChecker : row) {
+					if(colorChecker.getColor() == Color.magenta) {
+						currentTurn = true;
+					}
+				}
+			}
+		}
+		if(currentTurn) {
+			System.out.println("You must first move your piece!");
+		}else {
+			int roll = (int) Math.floor(Math.random() * (6)) + 1;
+			currentPlayer++;
+			if(currentPlayer >= playerList.size()) {
+				currentPlayer = 0;
+			}
+			ClueGame.getClueGame().setNewTurn(playerList.get(currentPlayer), roll);
+			playerList.get(currentPlayer).diceRoll = roll;
+			this.calcTargets(playerList.get(currentPlayer).getLocation(), roll);
+			if(currentPlayer != 0) {
+				int rand = (int) Math.floor(Math.random() * (getTargets().size()));
+				playerList.get(currentPlayer).setLocation((BoardCell) this.getTargets().toArray()[rand]);
+			}else {
+				for(BoardCell cell : this.getTargets()) {
+					cell.setColor(Color.magenta);
+				}
+			}
+			this.repaint();
+		}
+
+	}
+	private class BoardListener implements MouseListener {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			for(BoardCell[] row : board) {
+				for(BoardCell cell : row) {
+					if((cell.getXPos() < e.getX() && cell.getXPos() + cell.getWidth() > e.getX()) && (cell.getYPos() < e.getY() && cell.getYPos() + cell.getHeight() > e.getY())) {
+						if(targets.contains(cell)) {
+							playerList.get(currentPlayer).setLocation(cell);
+							for(BoardCell colorCell : Board.getInstance().getTargets()) {
+								colorCell.setColor(Color.white);
+							}
+							Board.getInstance().repaint();
+						}else {
+							System.out.println("You must click on a target!");
+						}
+					}
+				}
+			}
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }

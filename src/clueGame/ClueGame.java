@@ -25,13 +25,19 @@ public class ClueGame extends JFrame{
 		add(cardPanel, BorderLayout.EAST);
 	}
 	
+	public void setNewTurn(Player p, int roll) {
+		controlPanel.setTurn(p, roll);
+		
+	}
+	public static ClueGame getClueGame() {
+		return clueGame;
+	}
 	
 	
 	public static void main(String[] args) {
 		Board board = Board.getInstance(); // Only creates one instance of the board
 		board.setConfigFiles("bin/data/Clue Excel Diagram2.csv", "bin/data/ClueSetup.txt");
 		board.initialize();
-		
 		clueGame = new ClueGame(board);
 		clueGame.add(board, BorderLayout.CENTER);
 		clueGame.repaint();

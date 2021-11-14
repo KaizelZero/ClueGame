@@ -15,6 +15,8 @@ public class BoardCell {
 	private Room thisRoom = new Room();
 	private char secretPassage = ']';
 	private DoorDirection doorDirection = DoorDirection.NONE;
+	private int xPos, yPos, width, height;
+	private Color cellColor = Color.white;
 
 	// isser's
 	private boolean isRoom;
@@ -28,6 +30,7 @@ public class BoardCell {
 		super();
 		this.row = row;
 		this.column = column;
+		isUnused = false;
 	}
 
 	public Room getCellRoom() {
@@ -120,14 +123,22 @@ public class BoardCell {
 	}
 
 	public void drawCell(int row, int col, int width, int height, Graphics g, Board board) { //Code for drawing in the cells
+		this.xPos = row;
+		this.yPos = col;
+		this.width = width;
+		this.height = height;
 		if (this.isWalkway || this.isDoorway()) {
-			g.setColor(Color.white);
+			g.setColor(cellColor);
 			g.fillRect(row, col, width, height);
 			g.setColor(Color.black);
 			g.drawRect(row, col, width, height);
 		}
 		if (this.isRoom) {
-			g.setColor(Color.gray);
+			if(cellColor == Color.magenta) {
+				g.setColor(Color.green);
+			}else {
+				g.setColor(Color.gray);
+			}
 			g.fillRect(row, col, width, height);
 			g.setColor(Color.black);
 			g.drawRect(row, col, width, height);
@@ -196,10 +207,27 @@ public class BoardCell {
 	public boolean isUnused() {
 		return isUnused;
 	}
-
+	public int getXPos() {
+		return this.xPos;
+	}
+	public int getYPos() {
+		return this.yPos;
+	}
+	public int getWidth() {
+		return this.width;
+	}
+	public int getHeight() {
+		return this.height;
+	}
+	public void setColor(Color newColor) {
+		this.cellColor = newColor;
+	}
+	public Color getColor() {
+		return this.cellColor;
+	}
 	@Override // Simple toString for debugging cells
 	public String toString() {
 		return "BoardCell [row=" + row + ", column=" + column + "]";
 	}
-
+	
 }
