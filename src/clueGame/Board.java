@@ -22,7 +22,7 @@ public class Board extends JPanel {
 	private ArrayList<String> roomTracker = new ArrayList<String>();
 	private ArrayList<Card> deck = new ArrayList<Card>();
 	private ArrayList<Player> playerList = new ArrayList<Player>();
-	private int currentPlayer = 5;
+	private int currentPlayer = -1;
 	private static Board theInstance = new Board();
 	private Solution gameSolution;
 	private HumanPlayer humanPlayer;
