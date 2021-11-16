@@ -44,7 +44,7 @@ public class ClueGame extends JFrame{
 		clueGame.add(board, BorderLayout.CENTER);
 		clueGame.repaint();
 		clueGame.setVisible(true);
-    	JOptionPane.showMessageDialog(clueGame, "You are " + player.getName() + " and your color is " + player.getColorString() + ",\npress Next Player to begin play");
-
+    	JOptionPane.showMessageDialog(clueGame, "You are " + player.getName() + " and your color is " + player.getColorString());
+    	Board.getInstance().nextPlayer();
 	}
 }

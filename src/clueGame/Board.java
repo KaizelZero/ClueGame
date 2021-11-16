@@ -479,6 +479,7 @@ public class Board extends JPanel {
 					}
 				}
 			}
+			playerList.get(currentPlayer).setMoved(false);
 		}
 		if(currentTurn) {
 			JOptionPane.showMessageDialog(this, "You must first move your piece!");
@@ -506,20 +507,25 @@ public class Board extends JPanel {
 	private class BoardListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			for(BoardCell[] row : board) {
-				for(BoardCell cell : row) {
-					if((cell.getXPos() < e.getX() && cell.getXPos() + cell.getWidth() > e.getX()) && (cell.getYPos() < e.getY() && cell.getYPos() + cell.getHeight() > e.getY())) {
-						if(targets.contains(cell)) {
-							playerList.get(currentPlayer).setLocation(cell);
-							for(BoardCell colorCell : Board.getInstance().getTargets()) {
-								colorCell.setColor(Color.white);
+			if(currentPlayer == 0 && playerList.get(currentPlayer).getMoved() == false) {
+				for(BoardCell[] row : board) {
+					for(BoardCell cell : row) {
+						if((cell.getXPos() < e.getX() && cell.getXPos() + cell.getWidth() > e.getX()) && (cell.getYPos() < e.getY() && cell.getYPos() + cell.getHeight() > e.getY())) {
+							if(targets.contains(cell)) {
+								playerList.get(currentPlayer).setLocation(cell);
+								for(BoardCell colorCell : Board.getInstance().getTargets()) {
+									colorCell.setColor(Color.white);
+								}
+								Board.getInstance().repaint();
+								playerList.get(currentPlayer).setMoved(true);
+							}else{
+								JOptionPane.showMessageDialog(null, "You cannot move there!", "Message", currentPlayer);
 							}
-							Board.getInstance().repaint();
-						}else{
-							JOptionPane.showMessageDialog(null, "You cannot move there!", "Message", currentPlayer);
 						}
 					}
 				}
+			}else {
+				//JOptionPane.showMessageDialog(null, "You must wait until your turn!", "Message", currentPlayer);
 			}
 		}
 		@Override

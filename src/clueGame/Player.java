@@ -8,6 +8,7 @@ public abstract class Player {
     private String name;
     private Color color;
     private String colorString;
+    private boolean moved;
 
     protected ArrayList<Card> hand;
     protected ArrayList<Card> currentSuggestion;
@@ -112,7 +113,12 @@ public abstract class Player {
     public static String getSymbol(String symbol) {
         return symbol;
     }
-
+    public boolean getMoved() {
+    	return this.moved;
+    }
+    public void setMoved(boolean isMoved) {
+    	this.moved = isMoved;
+    }
     public String toString() {
         return ("Name: " + getName() + " Color: " + this.color + "Location: " + getLocation());
     }
