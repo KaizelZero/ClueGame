@@ -450,7 +450,7 @@ public class Board extends JPanel {
 		}
 	}
 
-	public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) { //Paint in all cells and players of the board
 		super.paintComponent(g);
 		int xOffset, yOffset;
 		int width = this.getWidth() / cols;
@@ -469,7 +469,7 @@ public class Board extends JPanel {
 		}
 
 	}
-	public void nextPlayer() {
+	public void nextPlayer() { //Called by next player button, allows the game to properly process all it needs to do
 		boolean currentTurn = false;
 		if(currentPlayer == 0) {
 			for(BoardCell[] row : board) {
@@ -506,7 +506,7 @@ public class Board extends JPanel {
 	}
 	private class BoardListener implements MouseListener {
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseClicked(MouseEvent e) {//Checks if the player is clicking on a correct cell, then moves them there
 			if(currentPlayer == 0 && playerList.get(currentPlayer).getMoved() == false) {
 				for(BoardCell[] row : board) {
 					for(BoardCell cell : row) {
@@ -525,7 +525,7 @@ public class Board extends JPanel {
 					}
 				}
 			}else {
-				//JOptionPane.showMessageDialog(null, "You must wait until your turn!", "Message", currentPlayer);
+				//JOptionPane.showMessageDialog(Board.getInstance(), "You must wait until your turn!", "Message", currentPlayer);
 			}
 		}
 		@Override
