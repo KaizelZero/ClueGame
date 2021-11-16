@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -23,6 +24,7 @@ public class GameControlPanel extends JPanel {
     private String resultString = "So you have nothing";
     private String guessString = "I have no guess";
     private Color color;
+
     
     private JLabel whoseTurnField = new JLabel();
     private JLabel diceRoll = new JLabel();
@@ -34,6 +36,7 @@ public class GameControlPanel extends JPanel {
 	
 
     public void createLayout() {
+    	    	
 		player = board.getHumanPlayer();
 	    whoseTurn = board.getPlayerList().get(board.getCurrentPlayerIndex()).getName();
 	    
@@ -60,7 +63,6 @@ public class GameControlPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Board.getInstance().nextPlayer();
-				
 			}
         });
         topControl.add(nextButton);

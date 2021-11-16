@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -22,13 +23,15 @@ public class Board extends JPanel {
 	private ArrayList<String> roomTracker = new ArrayList<String>();
 	private ArrayList<Card> deck = new ArrayList<Card>();
 	private ArrayList<Player> playerList = new ArrayList<Player>();
-	private int currentPlayer = 5;
+	private int currentPlayer = -1;
 	private static Board theInstance = new Board();
 	private Solution gameSolution;
 	private HumanPlayer humanPlayer;
 	static int cols = 0;
 	static int rows = 0;
 	private int currentPlayerIndex;
+	private boolean currentTurn = false;
+
 	File layoutCSV;
 	File layoutText;
 
@@ -468,7 +471,6 @@ public class Board extends JPanel {
 
 	}
 	public void nextPlayer() {
-		boolean currentTurn = false;
 		if(currentPlayer == 0) {
 			for(BoardCell[] row : board) {
 				for(BoardCell colorChecker : row) {
@@ -479,7 +481,7 @@ public class Board extends JPanel {
 			}
 		}
 		if(currentTurn) {
-			System.out.println("You must first move your piece!");
+			JOptionPane.showMessageDialog(this, "You must first move your piece!");
 		}else {
 			int roll = (int) Math.floor(Math.random() * (6)) + 1;
 			currentPlayer++;
@@ -513,8 +515,8 @@ public class Board extends JPanel {
 								colorCell.setColor(Color.white);
 							}
 							Board.getInstance().repaint();
-						}else {
-							System.out.println("You must click on a target!");
+						}else{
+							JOptionPane.showMessageDialog(null, "You cannot move there!", "Message", currentPlayer);
 						}
 					}
 				}

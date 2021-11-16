@@ -1,9 +1,8 @@
 package clueGame;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class ClueGame extends JFrame{
     
@@ -11,6 +10,8 @@ public class ClueGame extends JFrame{
     GameControlPanel controlPanel;
 	GameCardPanel cardPanel;
 	static ClueGame clueGame;
+    private static HumanPlayer player;
+
 	
 
 	public ClueGame(Board board) {
@@ -38,9 +39,12 @@ public class ClueGame extends JFrame{
 		Board board = Board.getInstance(); // Only creates one instance of the board
 		board.setConfigFiles("bin/data/Clue Excel Diagram2.csv", "bin/data/ClueSetup.txt");
 		board.initialize();
+		player = board.getHumanPlayer();
 		clueGame = new ClueGame(board);
 		clueGame.add(board, BorderLayout.CENTER);
 		clueGame.repaint();
 		clueGame.setVisible(true);
+    	JOptionPane.showMessageDialog(clueGame, "You are " + player.getName() + " and your color is " + player.getColorString() + ",\npress Next Player to begin play");
+
 	}
 }
