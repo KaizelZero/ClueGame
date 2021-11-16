@@ -4,37 +4,34 @@ import java.awt.BorderLayout;
 
 import javax.swing.*;
 
-public class ClueGame extends JFrame{
-    
-	
-    GameControlPanel controlPanel;
+public class ClueGame extends JFrame {
+
+	GameControlPanel controlPanel;
 	GameCardPanel cardPanel;
 	static ClueGame clueGame;
-    private static HumanPlayer player;
-
-	
+	private static HumanPlayer player;
 
 	public ClueGame(Board board) {
 		setTitle("Clue Game");
 		setSize(750, 750);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		controlPanel = new GameControlPanel();
 		cardPanel = new GameCardPanel();
-		
+
 		add(controlPanel, BorderLayout.SOUTH);
 		add(cardPanel, BorderLayout.EAST);
 	}
-	
+
 	public void setNewTurn(Player p, int roll) {
 		controlPanel.setTurn(p, roll);
-		
+
 	}
+
 	public static ClueGame getClueGame() {
 		return clueGame;
 	}
-	
-	
+
 	public static void main(String[] args) {
 		Board board = Board.getInstance(); // Only creates one instance of the board
 		board.setConfigFiles("bin/data/Clue Excel Diagram2.csv", "bin/data/ClueSetup.txt");
@@ -44,7 +41,9 @@ public class ClueGame extends JFrame{
 		clueGame.add(board, BorderLayout.CENTER);
 		clueGame.repaint();
 		clueGame.setVisible(true);
-    	JOptionPane.showMessageDialog(clueGame, "You are " + player.getName() + " and your color is " + player.getColorString());
-    	Board.getInstance().nextPlayer();
+		JLabel message = new JLabel("<html>You are " + player.getName() + " and your color is " + player.getColorString()
+				+ ".<br>Can you find the solution<br>before the Computer Players?</html>");
+		JOptionPane.showMessageDialog(clueGame, message);
+		Board.getInstance().nextPlayer();
 	}
 }

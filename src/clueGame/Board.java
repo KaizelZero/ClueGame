@@ -9,8 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class Board extends JPanel {
@@ -29,6 +28,7 @@ public class Board extends JPanel {
 	private HumanPlayer humanPlayer;
 	static int cols = 0;
 	static int rows = 0;
+	private boolean occupied = false;
 	private int currentPlayerIndex;
 
 	File layoutCSV;
@@ -447,6 +447,13 @@ public class Board extends JPanel {
 					|| (i == playerList.size() - 1 && playerList.indexOf(currentPlayer) == 0)) {
 				return null; // Returns null if no matching cards done
 			}
+			if(playerList.get(this.currentPlayer).getLocation().isRoomCenter()) {
+				for(Player p: playerList) {
+					if (p.getName() == person.getCardName()) {
+						p.setLocation(currentPlayer.getLocation());
+					}
+				}
+			}
 		}
 	}
 
@@ -462,13 +469,25 @@ public class Board extends JPanel {
 				getCell(i, j).drawCell(xOffset, yOffset, width, height, g, this);
 				for(Player p : playerList) {
 					if(p.location == this.getCell(i, j)) {
+						int occupants;
+						if(this.occupied) {
+							occupants = playerList.get(currentPlayer).getLocation().getCellRoom().getOccupants();
+						}else {
+							occupants = 0;
+						}
+						System.out.println(occupants);
+						if(occupants > 1) {
+							p.drawPlayer(xOffset - 10 * occupants, yOffset, width, height, g, this);
+						}
 						p.drawPlayer(xOffset, yOffset, width, height, g, this);
+
 					}
 				}
 			}
 		}
-
+		this.occupied = true;
 	}
+	
 	public void nextPlayer() { //Called by next player button, allows the game to properly process all it needs to do
 		boolean currentTurn = false;
 		if(currentPlayer == 0) {
@@ -493,8 +512,20 @@ public class Board extends JPanel {
 			playerList.get(currentPlayer).diceRoll = roll;
 			this.calcTargets(playerList.get(currentPlayer).getLocation(), roll);
 			if(currentPlayer != 0) {
+				if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+					playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(-1);
+					
+				}
+				
+				playerList.get(currentPlayer).getLocation().setOccupied(false);
 				int rand = (int) Math.floor(Math.random() * (getTargets().size()));
 				playerList.get(currentPlayer).setLocation((BoardCell) this.getTargets().toArray()[rand]);
+				playerList.get(currentPlayer).getLocation().setOccupied(true);
+				
+				if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+					
+					playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(1);
+				}
 			}else {
 				for(BoardCell cell : this.getTargets()) {
 					cell.setColor(Color.magenta);
@@ -512,7 +543,17 @@ public class Board extends JPanel {
 					for(BoardCell cell : row) {
 						if((cell.getXPos() < e.getX() && cell.getXPos() + cell.getWidth() > e.getX()) && (cell.getYPos() < e.getY() && cell.getYPos() + cell.getHeight() > e.getY())) {
 							if(targets.contains(cell)) {
+								if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+									playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(-1);
+								}
+								playerList.get(currentPlayer).getLocation().setOccupied(false);
 								playerList.get(currentPlayer).setLocation(cell);
+								playerList.get(currentPlayer).getLocation().setOccupied(true);
+								if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+									Board.getInstance().handleSuggestion(playerList.get(currentPlayer), deck.get(20), playerList.get(currentPlayer).getLocation().getCellRoom().getRoomCard(), deck.get(15));
+									playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(1);
+								}
+
 								for(BoardCell colorCell : Board.getInstance().getTargets()) {
 									colorCell.setColor(Color.white);
 								}

@@ -9,6 +9,7 @@ public class Room {
 	private BoardCell centerCell = null;
 	private BoardCell labelCell = null;
 	private ArrayList<BoardCell> roomDoors = new ArrayList<BoardCell>();
+	private int occupants = 0;
 
 	public Room(String roomLetter) {
 		super();
@@ -65,5 +66,11 @@ public class Room {
 	
 	public Card getRoomCard() {
 		return this.roomCard;
+	}
+	public void setOccupants(int change) {
+		this.occupants += change;
+	}
+	public int getOccupants() {
+		return this.occupants;
 	}
 }
