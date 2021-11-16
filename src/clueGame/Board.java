@@ -30,7 +30,6 @@ public class Board extends JPanel {
 	static int cols = 0;
 	static int rows = 0;
 	private int currentPlayerIndex;
-	private boolean currentTurn = false;
 
 	File layoutCSV;
 	File layoutText;
@@ -471,6 +470,7 @@ public class Board extends JPanel {
 
 	}
 	public void nextPlayer() {
+		boolean currentTurn = false;
 		if(currentPlayer == 0) {
 			for(BoardCell[] row : board) {
 				for(BoardCell colorChecker : row) {
