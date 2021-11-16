@@ -519,7 +519,7 @@ public class Board extends JPanel {
 								Board.getInstance().repaint();
 								playerList.get(currentPlayer).setMoved(true);
 							}else{
-								JOptionPane.showMessageDialog(null, "You cannot move there!", "Message", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(Board.getInstance(), "You cannot move there!", "Message", JOptionPane.INFORMATION_MESSAGE);
 							}
 						}
 					}
