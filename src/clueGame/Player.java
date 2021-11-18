@@ -41,10 +41,12 @@ public abstract class Player {
 
     public void setLocation(int row, int col) {
         this.location = Board.getInstance().getCell(row, col);
+        Board.getInstance().calculateOccupants();
     }
 
     public void setLocation(BoardCell cell) {
         this.location = cell;
+        Board.getInstance().calculateOccupants();
     }
 
     public String getName() {
