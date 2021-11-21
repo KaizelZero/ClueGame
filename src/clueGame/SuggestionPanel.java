@@ -131,9 +131,12 @@ public class SuggestionPanel extends JDialog implements ActionListener {
             }
             accusePlayer = new Card(personBox.getSelectedItem().toString(), CardType.PERSON);
             accuseWeapon = new Card(weaponBox.getSelectedItem().toString(), CardType.WEAPON);
-
-            board.handleSuggestion(player, accusePlayer, accuseRoom, accuseWeapon);
-            setVisible(false);
+            if (isAccusation) {
+                board.handleSuggestion(player, accusePlayer, accuseRoom, accuseWeapon);
+                setVisible(false);
+            } else {
+                board.checkAccusation(accusePlayer, accuseRoom, accuseWeapon);
+            }
 
             break;
         case "Cancel":
