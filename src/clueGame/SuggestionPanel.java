@@ -33,6 +33,7 @@ public class SuggestionPanel extends JDialog implements ActionListener {
     private boolean isAccusation;
 
     public SuggestionPanel(Boolean bool) {
+        this.isAccusation = bool;
         player = board.getHumanPlayer();
         setSize(400, 300);
         createLayout();
@@ -66,7 +67,7 @@ public class SuggestionPanel extends JDialog implements ActionListener {
             }
             personDrop.add(personBox);
             weaponDrop.add(weaponBox);
-            roomDrop.add(roomDrop);
+            roomDrop.add(roomBox);
 
             roomLabel.setText("Room");
 

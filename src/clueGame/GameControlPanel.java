@@ -25,21 +25,18 @@ public class GameControlPanel extends JPanel {
     private String guessString = "I have no guess";
     private Color color;
 
-    
     private JLabel whoseTurnField = new JLabel();
     private JLabel diceRoll = new JLabel();
 
-    
     public GameControlPanel() {
         createLayout();
     }
-	
 
     public void createLayout() {
-    	    	
-		player = board.getHumanPlayer();
-	    whoseTurn = board.getPlayerList().get(board.getCurrentPlayerIndex()).getName();
-	    
+
+        player = board.getHumanPlayer();
+        whoseTurn = board.getPlayerList().get(board.getCurrentPlayerIndex()).getName();
+
         JPanel controlPanel = new JPanel(new GridLayout(2, 0)); // Control panel at the bottom
 
         // --- Buttons and Whose Turn ---
@@ -58,15 +55,22 @@ public class GameControlPanel extends JPanel {
 
         // Buttons
         JButton nextButton = new JButton("Next Player");
-        
+
         nextButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Board.getInstance().nextPlayer();
-			}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Board.getInstance().nextPlayer();
+            }
         });
         topControl.add(nextButton);
         JButton accuseButton = new JButton("Make Accusation");
+        accuseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SuggestionPanel panel = new SuggestionPanel(true);
+                panel.setVisible(true);
+            }
+        });
         topControl.add(accuseButton);
 
         // --- Dice Roll and Guess ---
@@ -93,18 +97,18 @@ public class GameControlPanel extends JPanel {
 
         controlPanel.add(topControl);
         controlPanel.add(bottomControl);
-        
+
         add(controlPanel, BorderLayout.SOUTH);
     }
-    
+
     public void setTurn(Player p, int roll) {
         whoseTurn = p.getName();
         this.roll = roll;
-    	whoseTurnField.setText(whoseTurn);
+        whoseTurnField.setText(whoseTurn);
         whoseTurnField.setBackground(p.getColor());
         whoseTurnField.setOpaque(true);
 
-    	diceRoll.setText(Integer.toString(roll));
+        diceRoll.setText(Integer.toString(roll));
 
     }
 
