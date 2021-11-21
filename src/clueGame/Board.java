@@ -185,7 +185,7 @@ public class Board extends JPanel {
 					this.getCell(cRow, cCol).getCellRoom().setLabelCell(this.getCell(cRow, cCol));
 				} else if (inCell.charAt(1) == '*') { // If centerCell
 					this.getCell(cRow, cCol).setRoom(true);
-					
+
 					roomMap.get(inCell.substring(0, 1)).setCenterCell(this.getCell(cRow, cCol));
 					this.getCell(cRow, cCol).getCellRoom().setCenterCell(this.getCell(cRow, cCol));
 				} else if (inCell.charAt(1) == '^' || inCell.charAt(1) == '<' || inCell.charAt(1) == '>'
@@ -263,18 +263,24 @@ public class Board extends JPanel {
 		findAllTargets(startCell, pathlength);
 	}
 
-	private void findAllTargets(BoardCell thisCell, int numSteps) { // Recursively searches through adj cells for targets given a roll
+	private void findAllTargets(BoardCell thisCell, int numSteps) { // Recursively searches through adj cells for
+																	// targets given a roll
 		for (BoardCell adjCell : thisCell.getAdjList()) {
 			if (visited.contains(adjCell) || (adjCell.getOccupied() && adjCell.getCellRoom().getCenterCell() != adjCell)
-					|| (adjCell.getOccupied() && thisCell.getCellRoom().getCenterCell() == thisCell)) { // If visited, skip that cell
+					|| (adjCell.getOccupied() && thisCell.getCellRoom().getCenterCell() == thisCell)) { // If visited,
+																										// skip that
+																										// cell
 				continue;
 			}
 			visited.add(adjCell);
 			if (numSteps == 1) { // If at limit of dice roll, then the current cell must be a target
-				if ((!adjCell.getOccupied() && !adjCell.isRoom() && !adjCell.isUnused()) || adjCell.getCellRoom().getCenterCell() == adjCell) { // Checks if current cell is not occupied
+				if ((!adjCell.getOccupied() && !adjCell.isRoom() && !adjCell.isUnused())
+						|| adjCell.getCellRoom().getCenterCell() == adjCell) { // Checks if current cell is not occupied
 					targets.add(adjCell);
 				}
-			} else if (adjCell.getCellRoom().getCenterCell() == adjCell) { // If the adj cell is a room center, then stop the recursive call and add that room to the targets list
+			} else if (adjCell.getCellRoom().getCenterCell() == adjCell) { // If the adj cell is a room center, then
+																			// stop the recursive call and add that room
+																			// to the targets list
 				targets.add(adjCell);
 			} else { // Recursively checks next targets
 				findAllTargets(adjCell, numSteps - 1);
@@ -292,7 +298,8 @@ public class Board extends JPanel {
 						.getRoomDoors());
 			}
 		} else {
-			if (row > 0) { // If the cell we are calculating adj for is not a room or doorway, then simply add all adj non-room cells to it
+			if (row > 0) { // If the cell we are calculating adj for is not a room or doorway, then simply
+							// add all adj non-room cells to it
 				if (!board[row - 1][col].isRoom() && !board[row - 1][col].isUnused()) {
 					adjList.add(board[row - 1][col]);
 				}
@@ -426,8 +433,8 @@ public class Board extends JPanel {
 	// Player disproves suggestion and handle a suggestion made
 	public Card handleSuggestion(Player currentPlayer, Card person, Card room, Card weapon) {
 		// This for loop round robins and starts at the player making a suggestion
-		if(currentPlayer.getLocation().isRoomCenter()) {
-			for(Player p: playerList) {
+		if (currentPlayer.getLocation().isRoomCenter()) {
+			for (Player p : playerList) {
 				if (p.getName() == person.getCardName()) {
 					p.setLocation(currentPlayer.getLocation());
 				}
@@ -458,7 +465,7 @@ public class Board extends JPanel {
 		}
 	}
 
-	public void paintComponent(Graphics g) { //Paint in all cells and players of the board
+	public void paintComponent(Graphics g) { // Paint in all cells and players of the board
 		super.paintComponent(g);
 		int xOffset, yOffset;
 		int width = this.getWidth() / cols;
@@ -469,69 +476,75 @@ public class Board extends JPanel {
 				yOffset = i * height;
 				getCell(i, j).drawCell(xOffset, yOffset, width, height, g, this);
 				int offsetLine = roomMap.get(this.getCell(i, j).getCellRoom().getRoom()).getOccupants() - 1;
-				for(Player p : playerList) {
-					if(p.location == this.getCell(i, j)) {
-						//System.out.println(this.getCell(i, j).getCellRoom().getName() + " " + roomMap.get(this.getCell(i, j).getCellRoom().getRoom()).getOccupants());
-						if(roomMap.get(this.getCell(i, j).getCellRoom().getRoom()).getOccupants() > 0) {
+				for (Player p : playerList) {
+					if (p.location == this.getCell(i, j)) {
+						// System.out.println(this.getCell(i, j).getCellRoom().getName() + " " +
+						// roomMap.get(this.getCell(i, j).getCellRoom().getRoom()).getOccupants());
+						if (roomMap.get(this.getCell(i, j).getCellRoom().getRoom()).getOccupants() > 0) {
 							p.drawPlayer(xOffset - 10 * offsetLine, yOffset, width, height, g, this);
-							offsetLine --;
-						}else {
+							offsetLine--;
+						} else {
 							p.drawPlayer(xOffset, yOffset, width, height, g, this);
 						}
+						Board.getInstance().repaint();
 					}
 				}
 			}
 		}
 		this.occupied = true;
 	}
+
 	public void calculateOccupants() {
-		for(Entry<String, Room> room : roomMap.entrySet()) {
-			room.getValue().setOccupants(-room.getValue().getOccupants()); //Set occupants to 0
-			for(Player player : playerList) {
-				if(room.getValue().getCenterCell() == player.getLocation()) { //Add an occupant for each person seen in that cell
+		for (Entry<String, Room> room : roomMap.entrySet()) {
+			room.getValue().setOccupants(-room.getValue().getOccupants()); // Set occupants to 0
+			for (Player player : playerList) {
+				if (room.getValue().getCenterCell() == player.getLocation()) { // Add an occupant for each person seen
+																				// in that cell
 					room.getValue().setOccupants(1);
 				}
 			}
 		}
 	}
-	public void nextPlayer() { //Called by next player button, allows the game to properly process all it needs to do
+
+	public void nextPlayer() { // Called by next player button, allows the game to properly process all it
+								// needs to do
 		boolean currentTurn = false;
-		if(currentPlayer == 0) {
-			for(BoardCell[] row : board) {
-				for(BoardCell colorChecker : row) {
-					if(colorChecker.getColor() == Color.magenta) {
+		if (currentPlayer == 0) {
+			for (BoardCell[] row : board) {
+				for (BoardCell colorChecker : row) {
+					if (colorChecker.getColor() == Color.magenta) {
 						currentTurn = true;
 					}
 				}
 			}
 			playerList.get(currentPlayer).setMoved(false);
 		}
-		if(currentTurn) {
+		if (currentTurn) {
 			JOptionPane.showMessageDialog(this, "You must first move your piece!");
-		}else {
+		} else {
 			int roll = (int) Math.floor(Math.random() * (6)) + 1;
 			currentPlayer++;
-			if(currentPlayer >= playerList.size()) {
+			if (currentPlayer >= playerList.size()) {
 				currentPlayer = 0;
 			}
 			ClueGame.getClueGame().setNewTurn(playerList.get(currentPlayer), roll);
 			playerList.get(currentPlayer).diceRoll = roll;
 			this.calcTargets(playerList.get(currentPlayer).getLocation(), roll);
-			if(currentPlayer != 0) {
-//				if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
-//					playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(-1);
-//				}
-				
+			if (currentPlayer != 0) {
+				// if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+				// playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(-1);
+				// }
+
 				playerList.get(currentPlayer).getLocation().setOccupied(false);
 				int rand = (int) Math.floor(Math.random() * (getTargets().size()));
 				playerList.get(currentPlayer).setLocation((BoardCell) this.getTargets().toArray()[rand]);
 				playerList.get(currentPlayer).getLocation().setOccupied(true);
-				
-//				if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
-//					playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(1);
-//				}
-			}else {
-				for(BoardCell cell : this.getTargets()) {
+
+				// if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+				// playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(1);
+				// }
+			} else {
+				for (BoardCell cell : this.getTargets()) {
 					cell.setColor(Color.magenta);
 				}
 			}
@@ -539,64 +552,69 @@ public class Board extends JPanel {
 		}
 
 	}
+
 	private class BoardListener implements MouseListener {
 		@Override
-		public void mouseClicked(MouseEvent e) {//Checks if the player is clicking on a correct cell, then moves them there
-			if(currentPlayer == 0 && playerList.get(currentPlayer).getMoved() == false) {
-				for(BoardCell[] row : board) {
-					for(BoardCell cell : row) {
-						if((cell.getXPos() < e.getX() && cell.getXPos() + cell.getWidth() > e.getX()) && (cell.getYPos() < e.getY() && cell.getYPos() + cell.getHeight() > e.getY())) {
-							if(targets.contains(cell)) {
-//								if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
-//									playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(-1);
-//								}
+		public void mouseClicked(MouseEvent e) {// Checks if the player is clicking on a correct cell, then moves them
+												// there
+			if (currentPlayer == 0 && playerList.get(currentPlayer).getMoved() == false) {
+				for (BoardCell[] row : board) {
+					for (BoardCell cell : row) {
+						if ((cell.getXPos() < e.getX() && cell.getXPos() + cell.getWidth() > e.getX())
+								&& (cell.getYPos() < e.getY() && cell.getYPos() + cell.getHeight() > e.getY())) {
+							if (targets.contains(cell)) {
+								// if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+								// playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(-1);
+								// }
 								playerList.get(currentPlayer).getLocation().setOccupied(false);
 								playerList.get(currentPlayer).setLocation(cell);
 								playerList.get(currentPlayer).getLocation().setOccupied(true);
-								if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
-									//playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(1);
-									Board.getInstance().handleSuggestion(playerList.get(currentPlayer), deck.get(19), playerList.get(currentPlayer).getLocation().getCellRoom().getRoomCard(), deck.get(15));
-
+								if (playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+									SuggestionPanel panel = new SuggestionPanel(false);
+									panel.setVisible(true);
 								}
 
-								for(BoardCell colorCell : Board.getInstance().getTargets()) {
+								for (BoardCell colorCell : Board.getInstance().getTargets()) {
 									colorCell.setColor(Color.white);
 								}
 								Board.getInstance().repaint();
 								playerList.get(currentPlayer).setMoved(true);
-							}else{
-								JOptionPane.showMessageDialog(Board.getInstance(), "You cannot move there!", "Message", JOptionPane.INFORMATION_MESSAGE);
+							} else {
+								JOptionPane.showMessageDialog(Board.getInstance(), "You cannot move there!", "Message",
+										JOptionPane.INFORMATION_MESSAGE);
 							}
 						}
 					}
 				}
-			}else {
-				//JOptionPane.showMessageDialog(Board.getInstance(), "You must wait until your turn!", "Message", currentPlayer);
+			} else {
+				// JOptionPane.showMessageDialog(Board.getInstance(), "You must wait until your
+				// turn!", "Message", currentPlayer);
 			}
 		}
+
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
 }
