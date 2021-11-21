@@ -41,8 +41,8 @@ public class ClueGame extends JFrame {
 		clueGame.add(board, BorderLayout.CENTER);
 		clueGame.repaint();
 		clueGame.setVisible(true);
-		JLabel message = new JLabel("<html>You are " + player.getName() + " and your color is " + player.getColorString()
-				+ ".<br>Can you find the solution<br>before the Computer Players?</html>");
+		JLabel message = new JLabel("<html>You are " + player.getName() + " and your color is "
+				+ player.getColorString() + ".<br>Can you find the solution<br>before the Computer Players?</html>");
 		JOptionPane.showMessageDialog(clueGame, message);
 		Board.getInstance().nextPlayer();
 	}
