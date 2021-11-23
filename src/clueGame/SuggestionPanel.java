@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class SuggestionPanel extends JDialog implements ActionListener {
 
@@ -142,13 +143,23 @@ public class SuggestionPanel extends JDialog implements ActionListener {
             		System.exit(0);
             	}
                 setVisible(false);
-                board.nextPlayer();
+//                board.nextPlayer();
             } else {
             	result = board.handleSuggestion(Board.getInstance().getPlayerList().get(0), accusePlayer, accuseRoom, accuseWeapon);
-            	Board.getInstance().getHumanPlayer().updateSeen(result);
-            	for(Card c : Board.getInstance().getHumanPlayer().getSeen()) {
-            		System.out.println("Seen: " + c);
+            	ArrayList<Player> playerList = Board.getInstance().getPlayerList();
+            	Player owner = null;
+            	for (Player p: playerList) {
+            		for(Card c : p.getHand()) {
+            			if(c.equals(result)) {
+            				owner = p;
+                			System.out.println("Owner: " + owner);
+
+            			}
+            		}
             	}
+            	
+            	Board.getInstance().getHumanPlayer().updateSeen(owner, result);
+
             	Board.getInstance().getCardPanel().updateDisplay();
                 setVisible(false);
             }

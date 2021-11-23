@@ -44,7 +44,7 @@ public class BoardCell {
 
 	// Returns the adjacencyList
 	public Set<BoardCell> getAdjList() {
-		return this.adjList;
+		return adjList;
 	}
 
 	// Checks whether the cell is occupied

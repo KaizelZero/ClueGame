@@ -135,6 +135,7 @@ public class GameControlPanel extends JPanel {
     	guess.setText(guessString);
     	guessResult.setText(resultString);
     	guessResult.setBackground(resultPlayer.getColor());
+    	System.out.println("Dumbass: " + resultPlayer);
         guessResult.setOpaque(true);
 	}
 }

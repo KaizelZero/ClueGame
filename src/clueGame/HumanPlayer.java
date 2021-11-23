@@ -1,18 +1,20 @@
 package clueGame;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class HumanPlayer extends Player {
 
     private boolean hasMoved;
     private boolean isTurn;
-    private Set<Card> seen;
+    private Map<Player, HashSet<Card>> seen;
 
     public HumanPlayer(String name, String color, int row, int col) {
         super(name, color, row, col);
-        seen = new HashSet<Card>();
+        seen = new HashMap<Player, HashSet<Card>>();
         hasMoved = false;
     }
 
@@ -28,14 +30,20 @@ public class HumanPlayer extends Player {
         return this.hasMoved;
     }
 
-    public Set<Card> getSeen() {
+    public Map<Player, HashSet<Card>> getSeen() {
         return seen;
     }
-    
-    public void updateSeen(Card newCard) {
-    	if(!hand.contains(newCard)) {
-    		this.seen.add(newCard);
-    	}
+
+    public void updateSeen(Player owner, Card newCard) {
+        if (!hand.contains(newCard)) {
+            if (this.seen.containsKey(owner)) {
+                this.seen.get(owner).add(newCard);
+            } else {
+                HashSet<Card> temp = new HashSet<Card>();
+                temp.add(newCard);
+                this.seen.put(owner, temp);
+            }
+        }
     }
 
     public Boolean isTurn() {

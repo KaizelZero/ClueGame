@@ -28,14 +28,14 @@ public class FileInitTests {
     @Test
     public void testRoomLabels() {//Test that all rooms are correctly loaded
         assertEquals("Helm", board.getRoom('H').getName());
-        assertEquals("Medical", board.getRoom('M').getName());
-        assertEquals("Weapons", board.getRoom('D').getName());
-        assertEquals("Sleeping", board.getRoom('S').getName());
+        assertEquals("Medical Room", board.getRoom('M').getName());
+        assertEquals("Weapons Room", board.getRoom('D').getName());
+        assertEquals("Sleeping Quarters", board.getRoom('S').getName());
         assertEquals("Right Thruster", board.getRoom('R').getName());
         assertEquals("Left Thruster", board.getRoom('L').getName());
-        assertEquals("Engine", board.getRoom('E').getName());
+        assertEquals("Engine Room", board.getRoom('E').getName());
         assertEquals("Canteen", board.getRoom('C').getName());
-        assertEquals("Communications", board.getRoom('A').getName());
+        assertEquals("Communications Room", board.getRoom('A').getName());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class FileInitTests {
         cell = board.getCell(10, 18); //Room center test
         room = board.getRoom(cell);
         assertTrue(room != null);
-        assertEquals(room.getName(), "Engine");
+        assertEquals(room.getName(), "Engine Room");
         assertTrue(cell.isRoomCenter());
         assertTrue(room.getCenterCell() == cell);
 

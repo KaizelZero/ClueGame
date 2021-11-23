@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.JLabel;
@@ -17,7 +19,7 @@ public class GameCardPanel extends JPanel {
 	Board board = Board.getInstance();
     private static HumanPlayer player;
     private static ArrayList<Card> playerCards;
-    private static Set<Card> seenCards;
+    private static Map<Player, HashSet<Card>> seenCards;
     
     private JPanel mainPanel;
     
@@ -137,36 +139,39 @@ public class GameCardPanel extends JPanel {
         cardPanel.add(roomCardPanel, BorderLayout.SOUTH);
 
         // Adds Cards in hand
-        for (Card x : seenCards) {
-            switch (x.getType()) {
-            case PERSON:
-                JLabel peopleText = new JLabel();
-                peopleText.setText(x.getCardName().toString());
-                peopleText.setBackground(player.getColor());
-                peopleText.setOpaque(true);
-                peopleText.setPreferredSize(textbox);
-                peopleText.setHorizontalAlignment(JLabel.CENTER);
-                peopleCardPanel.add(peopleText);
-                break;
-            case WEAPON:
-                JLabel weaponText = new JLabel();
-                weaponText.setText(x.getCardName().toString());
-                weaponText.setBackground(player.getColor());
-                weaponText.setOpaque(true);
-                weaponText.setPreferredSize(textbox);
-                weaponText.setHorizontalAlignment(JLabel.CENTER);
-                weaponCardPanel.add(weaponText);
-                break;
-            case ROOM:
-                JLabel roomText = new JLabel();
-                roomText.setText(x.getCardName().toString());
-                roomText.setBackground(player.getColor());
-                roomText.setOpaque(true);
-                roomText.setPreferredSize(textbox);
-                roomText.setHorizontalAlignment(JLabel.CENTER);
-                roomCardPanel.add(roomText);
-                break;
+        for (Entry<Player, HashSet<Card>> entry : seenCards.entrySet()) {
+            for (Card c: entry.getValue()) {
+            	switch (c.getType()) {
+                case PERSON:
+                    JLabel peopleText = new JLabel();
+                    peopleText.setText(c.getCardName().toString());
+                    peopleText.setBackground(entry.getKey().getColor());
+                    peopleText.setOpaque(true);
+                    peopleText.setPreferredSize(textbox);
+                    peopleText.setHorizontalAlignment(JLabel.CENTER);
+                    peopleCardPanel.add(peopleText);
+                    break;
+                case WEAPON:
+                    JLabel weaponText = new JLabel();
+                    weaponText.setText(c.getCardName().toString());
+                    weaponText.setBackground(entry.getKey().getColor());
+                    weaponText.setOpaque(true);
+                    weaponText.setPreferredSize(textbox);
+                    weaponText.setHorizontalAlignment(JLabel.CENTER);
+                    weaponCardPanel.add(weaponText);
+                    break;
+                case ROOM:
+                    JLabel roomText = new JLabel();
+                    roomText.setText(c.getCardName().toString());
+                    roomText.setBackground(entry.getKey().getColor());
+                    roomText.setOpaque(true);
+                    roomText.setPreferredSize(textbox);
+                    roomText.setHorizontalAlignment(JLabel.CENTER);
+                    roomCardPanel.add(roomText);
+                    break;
+                }
             }
+        	
         }
         add(cardPanel, BorderLayout.EAST);
     }

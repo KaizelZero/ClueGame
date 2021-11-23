@@ -395,6 +395,7 @@ public class Board extends JPanel {
 				break;
 			}
 		}
+		System.out.println(gameSolution);
 		while (tempDeck.size() > 0) {
 			for (Player p : playerList) { // Randomly looks for a card and gives it to the next player
 				if (tempDeck.size() > 0) { // If there are more cards, then continue dealing
@@ -428,7 +429,7 @@ public class Board extends JPanel {
 
 	// REQUIREMENT: Check an accusation
 	public boolean checkAccusation(Card person, Card room, Card weapon) {
-		if (person == gameSolution.person && room == gameSolution.room && weapon == gameSolution.weapon) {
+		if (person.getCardName().equals(gameSolution.person.getCardName()) && room.getCardName().equals(gameSolution.room.getCardName()) && weapon.getCardName().equals(gameSolution.weapon.getCardName())) {
 			return true;
 		}
 		return false;
@@ -441,7 +442,6 @@ public class Board extends JPanel {
 	// Player disproves suggestion and handle a suggestion made
 	@SuppressWarnings("unused")
 	public Card handleSuggestion(Player currentPlayer, Card person, Card room, Card weapon) {
-		// This for loop round robins and starts at the player making a suggestion
 		if (currentPlayer.getLocation().isRoomCenter()) {
 			for (Player p : playerList) {
 				if (p.getName() == person.getCardName()) {
@@ -453,7 +453,7 @@ public class Board extends JPanel {
 		System.out.println("Current: " + current);
 		int count = (playerList.indexOf(currentPlayer) + 1) % playerList.size();
 		ArrayList<Card> matchingCards = new ArrayList<Card>();
-		while(current != count) {
+		while(current != count) {		// This for loop round robins and starts at the player making a suggestion
 			
 			System.out.println("Count: " + count);
 			if (false) {
@@ -485,18 +485,21 @@ public class Board extends JPanel {
 			count = (count + 1) % playerList.size();
 		}
 		if(matchingCards.size() == 0) {
+			controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName()); //Suggestion disproved
 			controlPanel.setGuessResult("Suggestion Disproved");
+			controlPanel.updateDisplay(this.getHumanPlayer());
+			result = this.getHumanPlayer().getHand().get(0);
+			System.out.println("No matching cards!");
 		}else {
-			controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName());
+			controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName()); //Suggestion proven
 			controlPanel.setGuessResult(result.getCardName());
 			controlPanel.updateDisplay(resultPlayer);
 			cardPanel.updateDisplay();
 		}
 		this.repaint();
-		
-
-		return result;
-	}
+	
+		return result; //Return the matching card (if there is one)
+		}
 
 	public void paintComponent(Graphics g) { // Paint in all cells and players of the board
 		super.paintComponent(g);
@@ -569,6 +572,7 @@ public class Board extends JPanel {
 						}
 					}
 					JOptionPane.showMessageDialog(this, playerList.get(currentPlayer).getName() + " won the game! The solution was: " + suggestedPerson + " with the " + suggestedWeapon + " in the " + suggestedRoom);
+            		System.exit(0);
 				}
 			}
 			
@@ -586,7 +590,7 @@ public class Board extends JPanel {
 				int rand = (int) Math.floor(Math.random() * (getTargets().size()));
 				playerList.get(currentPlayer).setLocation((BoardCell) this.getTargets().toArray()[rand]);
 				playerList.get(currentPlayer).getLocation().setOccupied(true);
-				if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+				if(playerList.get(currentPlayer).getLocation().isRoomCenter() && !playerList.get(currentPlayer).getLocation().isDoorway() ) {
 					handleComputerSuggestion(currentPlayer);
 				}
 			} else {
