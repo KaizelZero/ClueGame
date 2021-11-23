@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,7 +17,9 @@ public class GameCardPanel extends JPanel {
 	Board board = Board.getInstance();
     private static HumanPlayer player;
     private static ArrayList<Card> playerCards;
-    private static ArrayList<Card> seenCards;
+    private static Set<Card> seenCards;
+    
+    private JPanel mainPanel;
     
     private Color color;
     
@@ -165,5 +169,10 @@ public class GameCardPanel extends JPanel {
             }
         }
         add(cardPanel, BorderLayout.EAST);
+    }
+    
+    public void updateDisplay() {
+    	removeAll();
+    	createLayout();
     }
 }

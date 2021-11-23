@@ -35,6 +35,13 @@ public class Board extends JPanel {
 
 	File layoutCSV;
 	File layoutText;
+	
+	GameControlPanel controlPanel;
+	GameCardPanel cardPanel;
+	public void setPanels(GameControlPanel gc, GameCardPanel gcp) {
+		this.controlPanel = gc;
+		this.cardPanel = gcp;
+	}
 
 	private Board() {// constructor is private to ensure only one can be created
 		super();
@@ -442,44 +449,53 @@ public class Board extends JPanel {
 				}
 			}
 		}
-		int count = -1;
-		while(playerList.indexOf(currentPlayer) != count) {
-			count = (playerList.indexOf(currentPlayer) + 1) % playerList.size();
+		int current = playerList.indexOf(currentPlayer);
+		System.out.println("Current: " + current);
+		int count = (playerList.indexOf(currentPlayer) + 1) % playerList.size();
+		ArrayList<Card> matchingCards = new ArrayList<Card>();
+		while(current != count) {
+			
+			System.out.println("Count: " + count);
 			if (false) {
 				currentPlayer = playerList.get(playerList.size() - 1);
 			} else {
 				currentPlayer = playerList.get(count);
 			}
-			
-			ArrayList<Card> matchingCards = new ArrayList<Card>();
+			matchingCards.clear();
 			for (Card c : playerList.get(count).getHand()) {
-				if (c == person) {
+				if (c.getCardName().equals(person.getCardName())) {
 					matchingCards.add(c);
-				} else if (c == room) {
+				} else if (c.getCardName().equals(room.getCardName())) {
 					matchingCards.add(c);
-				} else if (c == weapon) {
+				} else if (c.getCardName().equals(weapon.getCardName())) {
 					matchingCards.add(c);
 				}
 			}
+			System.out.println("Matching Cards: " + matchingCards.size());
 			// Return card based on how many matching cards
 			if (matchingCards.size() == 1) {
 				resultPlayer = currentPlayer;
 				result = matchingCards.get(0);
-				ClueGame.getClueGame().setNewGuess(currentPlayer, person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName(), result.getCardName());
-
-				return result;
+				break;
 			} else if (matchingCards.size() > 1) {
 				resultPlayer = currentPlayer;
 				result = matchingCards.get((int) Math.floor(Math.random() * (matchingCards.size())));
-				ClueGame.getClueGame().setNewGuess(currentPlayer, person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName(), result.getCardName());
-				return result;
+				break;
 			}
-			if (count == playerList.indexOf(currentPlayer) - 1
-					|| (count == playerList.size() - 1 && playerList.indexOf(currentPlayer) == 0)) {
-				return null; // Returns null if no matching cards done
-			}
+			count = (count + 1) % playerList.size();
 		}
-		return null;
+		if(matchingCards.size() == 0) {
+			controlPanel.setGuessResult("Suggestion Disproved");
+		}else {
+			controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName());
+			controlPanel.setGuessResult(result.getCardName());
+			controlPanel.updateDisplay(resultPlayer);
+			cardPanel.updateDisplay();
+		}
+		this.repaint();
+		
+
+		return result;
 	}
 
 	public void paintComponent(Graphics g) { // Paint in all cells and players of the board
@@ -538,6 +554,24 @@ public class Board extends JPanel {
 		if (currentTurn) {
 			JOptionPane.showMessageDialog(this, "You must first move your piece!");
 		} else {
+			if(currentPlayer > 0) {
+				if(((ComputerPlayer) playerList.get(currentPlayer)).getSeen().size() + 3 == this.getDeck().size()) { //If the computer has found the solution, make the accusation!
+					Card suggestedPerson = null; Card suggestedWeapon = null; Card suggestedRoom = null;
+					for(Card c : this.getDeck()) {
+						if(!((ComputerPlayer) playerList.get(currentPlayer)).getSeen().contains(c)) {
+							if(c.getType() == CardType.PERSON) {
+								suggestedPerson = c;
+							}else if(c.getType() == CardType.WEAPON) {
+								suggestedWeapon = c;
+							}else {
+								suggestedRoom = c;
+							}
+						}
+					}
+					JOptionPane.showMessageDialog(this, playerList.get(currentPlayer).getName() + " won the game! The solution was: " + suggestedPerson + " with the " + suggestedWeapon + " in the " + suggestedRoom);
+				}
+			}
+			
 			int roll = (int) Math.floor(Math.random() * (6)) + 1;
 			currentPlayer++;
 			if (currentPlayer >= playerList.size()) {
@@ -552,7 +586,9 @@ public class Board extends JPanel {
 				int rand = (int) Math.floor(Math.random() * (getTargets().size()));
 				playerList.get(currentPlayer).setLocation((BoardCell) this.getTargets().toArray()[rand]);
 				playerList.get(currentPlayer).getLocation().setOccupied(true);
-
+				if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+					handleComputerSuggestion(currentPlayer);
+				}
 			} else {
 				for (BoardCell cell : this.getTargets()) {
 					cell.setColor(Color.magenta);
@@ -561,6 +597,21 @@ public class Board extends JPanel {
 			this.repaint();
 		}
 
+	}
+	
+	private void handleComputerSuggestion(int player) {
+		Card suggestedPerson = null; Card suggestedWeapon = null; 
+		Card suggestedRoom = roomMap.get(playerList.get(player).getLocation().getCellRoom().getRoom()).getRoomCard();
+		
+		while(suggestedPerson == null || suggestedWeapon == null) {
+			int rand = (int) Math.floor(Math.random() * (this.getDeck().size()));
+			if(this.getDeck().get(rand).getType() == CardType.PERSON && !playerList.get(player).getHand().contains(this.getDeck().get(rand))) {
+				suggestedPerson = this.getDeck().get(rand);
+			}else if(this.getDeck().get(rand).getType() == CardType.WEAPON && !playerList.get(player).getHand().contains(this.getDeck().get(rand))) {
+				suggestedWeapon = this.getDeck().get(rand);
+			}
+		}
+		((ComputerPlayer) this.playerList.get(player)).getSeen().add(handleSuggestion(playerList.get(player), suggestedPerson, suggestedRoom, suggestedWeapon));
 	}
 
 	private class BoardListener implements MouseListener {
@@ -623,6 +674,10 @@ public class Board extends JPanel {
 
 		}
 
+	}
+	
+	public GameCardPanel getCardPanel() {
+		return cardPanel;
 	}
 	
 	public Card getResult() {

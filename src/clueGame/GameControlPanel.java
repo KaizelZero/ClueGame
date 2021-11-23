@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JPanel {
@@ -24,6 +25,8 @@ public class GameControlPanel extends JPanel {
     private String resultString = "So you have nothing";
     private String guessString = "I have no guess";
     private Color color;
+    
+    private JPanel mainPanel;
 
     private JLabel whoseTurnField = new JLabel();
     private JLabel diceRoll = new JLabel();
@@ -42,7 +45,7 @@ public class GameControlPanel extends JPanel {
         JPanel controlPanel = new JPanel(new GridLayout(2, 0)); // Control panel at the bottom
 
         // --- Buttons and Whose Turn ---
-        JPanel topControl = new JPanel(new GridLayout(1, 3)); // Top row with 3 columns
+        JPanel topControl = new JPanel(new GridLayout(1, 4)); // Top row with 3 columns
 
         // Whose Turn
         JPanel whoseTurnPanel = new JPanel();
@@ -54,6 +57,12 @@ public class GameControlPanel extends JPanel {
         whoseTurnField.setHorizontalAlignment(JLabel.CENTER);
         whoseTurnPanel.add(whoseTurnField);
         topControl.add(whoseTurnPanel);
+        
+        JPanel dicePanel = new JPanel(new GridLayout(1, 2));
+        dicePanel.setBorder(new TitledBorder("Dice"));
+        diceRoll.setText(String.valueOf(roll));
+        dicePanel.add(diceRoll);
+        topControl.add(dicePanel);
 
         // Buttons
         JButton nextButton = new JButton("Next Player");
@@ -80,11 +89,7 @@ public class GameControlPanel extends JPanel {
         // --- Dice Roll and Guess ---
         JPanel bottomControl = new JPanel(new GridLayout(1, 3)); // Bottom row with 3 columns
         // Dice rolls
-        JPanel dicePanel = new JPanel(new GridLayout(1, 2));
-        dicePanel.setBorder(new TitledBorder("Dice"));
-        diceRoll.setText(String.valueOf(roll));
-        dicePanel.add(diceRoll);
-        bottomControl.add(dicePanel);
+        
 
         // Guess
         JPanel guessPanel = new JPanel(new GridLayout(1, 2));
@@ -96,12 +101,14 @@ public class GameControlPanel extends JPanel {
         guessResultPanel.setBorder(new TitledBorder("Guess Result"));
         guessResult.setText(resultString);
         guessResultPanel.add(guessResult);
+        
         bottomControl.add(guessPanel);
         bottomControl.add(guessResultPanel);
 
-        
         controlPanel.add(topControl);
         controlPanel.add(bottomControl);
+        
+        controlPanel.setBorder(new EmptyBorder(0, 100, 0, 100));
 
         add(controlPanel, BorderLayout.SOUTH);
     }
@@ -116,11 +123,18 @@ public class GameControlPanel extends JPanel {
         diceRoll.setText(Integer.toString(roll));
     }
 
-    public void setGuess(String guess) {
-        this.guess.setText(guess);
+    public void setGuess(String guessString) {
+    	this.guessString = guessString;
     }
 
     public void setGuessResult(String result) {
-        guessResult.setText(result);
+    	this.resultString = result;
     }
+    
+    public void updateDisplay(Player resultPlayer) {
+    	guess.setText(guessString);
+    	guessResult.setText(resultString);
+    	guessResult.setBackground(resultPlayer.getColor());
+        guessResult.setOpaque(true);
+	}
 }

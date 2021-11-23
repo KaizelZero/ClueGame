@@ -14,7 +14,7 @@ public class ClueGame extends JFrame {
 
 	public ClueGame(Board board) {
 		setTitle("Clue Game");
-		setSize(750, 750);
+		setSize(875, 875);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		controlPanel = new GameControlPanel();
@@ -22,23 +22,16 @@ public class ClueGame extends JFrame {
 
 		add(controlPanel, BorderLayout.SOUTH);
 		add(cardPanel, BorderLayout.EAST);
+		Board.getInstance().setPanels(controlPanel, cardPanel);
 	}
+	
 
 	public void setNewTurn(Player p, int roll) {
 		controlPanel.setTurn(p, roll);
 	}
-
-	public void setNewGuess(Player p, String guess, String guessResult) {
-		controlPanel.setGuess(guess);
-		controlPanel.setGuessResult(guessResult);
-	}
 	
 	public static ClueGame getClueGame() {
 		return clueGame;
-	}
-
-	public GameControlPanel getControlPanel() {
-		return controlPanel;
 	}
 
 	public static void main(String[] args) {

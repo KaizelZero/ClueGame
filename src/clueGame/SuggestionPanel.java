@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 public class SuggestionPanel extends JDialog implements ActionListener {
 
+	Card accusePlayer, accuseRoom, accuseWeapon;
+	
     private String roomText;
     private Card result;
 
@@ -122,7 +124,7 @@ public class SuggestionPanel extends JDialog implements ActionListener {
         String action = e.getActionCommand();
         switch (action) {
         case "Submit":
-            Card accusePlayer, accuseRoom, accuseWeapon;
+            
 
             if (isAccusation) {
                 accuseRoom = new Card(roomBox.getSelectedItem().toString(), CardType.ROOM);
@@ -143,8 +145,11 @@ public class SuggestionPanel extends JDialog implements ActionListener {
                 board.nextPlayer();
             } else {
             	result = board.handleSuggestion(Board.getInstance().getPlayerList().get(0), accusePlayer, accuseRoom, accuseWeapon);
-            	Board.getInstance().getHumanPlayer().getSeen().add(result);
-            	
+            	Board.getInstance().getHumanPlayer().updateSeen(result);
+            	for(Card c : Board.getInstance().getHumanPlayer().getSeen()) {
+            		System.out.println("Seen: " + c);
+            	}
+            	Board.getInstance().getCardPanel().updateDisplay();
                 setVisible(false);
             }
 
@@ -154,6 +159,18 @@ public class SuggestionPanel extends JDialog implements ActionListener {
             break;
         }
 
+    }
+    
+    public Card getAccusePlayer() {
+    	return accusePlayer;
+    }
+    
+    public Card getAccuseRoom() {
+    	return accuseRoom;
+    }
+    
+    public Card getAccuseWeapon() {
+    	return accuseWeapon;
     }
     
     

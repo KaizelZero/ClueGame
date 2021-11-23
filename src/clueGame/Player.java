@@ -2,6 +2,7 @@ package clueGame;
 
 import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 
 public abstract class Player {
@@ -124,5 +125,6 @@ public abstract class Player {
     public String toString() {
         return ("Name: " + getName() + " Color: " + this.color + "Location: " + getLocation());
     }
+
 
 }

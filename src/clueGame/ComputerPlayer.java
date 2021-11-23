@@ -1,19 +1,21 @@
 package clueGame;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.awt.Color;
 
 public class ComputerPlayer extends Player {
-	private ArrayList<Card> seen;
+	private Set<Card> seen;
 
 	public ComputerPlayer(String name, String color, int row, int col) {
 		super(name, color, row, col);
-		seen = new ArrayList<Card>();
+		seen = new HashSet<Card>();
 	}
 
 	public ComputerPlayer(String name, String color, BoardCell location) {
 		super(name, color, location);
-		seen = new ArrayList<Card>();
+		seen = new HashSet<Card>();
 		diceRoll = 0;
 	}
 
@@ -64,7 +66,7 @@ public class ComputerPlayer extends Player {
 		seen.add(newCard);
 	}
 
-	public ArrayList<Card> getSeen() {
+	public Set<Card> getSeen() {
 		return seen;
 	}
 
