@@ -30,7 +30,8 @@ public class Board extends JPanel {
 	static int cols = 0;
 	static int rows = 0;
 	private boolean occupied = false;
-	private int currentPlayerIndex;
+	private Player resultPlayer;
+	private Card result;
 
 	File layoutCSV;
 	File layoutText;
@@ -426,11 +427,12 @@ public class Board extends JPanel {
 		return false;
 	}
 
-	public int getCurrentPlayerIndex() {
-		return currentPlayerIndex;
+	public int getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	// Player disproves suggestion and handle a suggestion made
+	@SuppressWarnings("unused")
 	public Card handleSuggestion(Player currentPlayer, Card person, Card room, Card weapon) {
 		// This for loop round robins and starts at the player making a suggestion
 		if (currentPlayer.getLocation().isRoomCenter()) {
@@ -440,10 +442,17 @@ public class Board extends JPanel {
 				}
 			}
 		}
-		for (int i = playerList.indexOf(currentPlayer) + 1;; i = (i + 1) % playerList.size()) {
-			currentPlayer = playerList.get(i - 1);
+		int count = -1;
+		while(playerList.indexOf(currentPlayer) != count) {
+			count = (playerList.indexOf(currentPlayer) + 1) % playerList.size();
+			if (false) {
+				currentPlayer = playerList.get(playerList.size() - 1);
+			} else {
+				currentPlayer = playerList.get(count);
+			}
+			
 			ArrayList<Card> matchingCards = new ArrayList<Card>();
-			for (Card c : playerList.get(i).getHand()) {
+			for (Card c : playerList.get(count).getHand()) {
 				if (c == person) {
 					matchingCards.add(c);
 				} else if (c == room) {
@@ -454,15 +463,23 @@ public class Board extends JPanel {
 			}
 			// Return card based on how many matching cards
 			if (matchingCards.size() == 1) {
-				return matchingCards.get(0);
+				resultPlayer = currentPlayer;
+				result = matchingCards.get(0);
+				ClueGame.getClueGame().setNewGuess(currentPlayer, person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName(), result.getCardName());
+
+				return result;
 			} else if (matchingCards.size() > 1) {
-				return matchingCards.get((int) Math.floor(Math.random() * (matchingCards.size())));
+				resultPlayer = currentPlayer;
+				result = matchingCards.get((int) Math.floor(Math.random() * (matchingCards.size())));
+				ClueGame.getClueGame().setNewGuess(currentPlayer, person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName(), result.getCardName());
+				return result;
 			}
-			if (i == playerList.indexOf(currentPlayer) - 1
-					|| (i == playerList.size() - 1 && playerList.indexOf(currentPlayer) == 0)) {
+			if (count == playerList.indexOf(currentPlayer) - 1
+					|| (count == playerList.size() - 1 && playerList.indexOf(currentPlayer) == 0)) {
 				return null; // Returns null if no matching cards done
 			}
 		}
+		return null;
 	}
 
 	public void paintComponent(Graphics g) { // Paint in all cells and players of the board
@@ -478,8 +495,7 @@ public class Board extends JPanel {
 				int offsetLine = roomMap.get(this.getCell(i, j).getCellRoom().getRoom()).getOccupants() - 1;
 				for (Player p : playerList) {
 					if (p.location == this.getCell(i, j)) {
-						// System.out.println(this.getCell(i, j).getCellRoom().getName() + " " +
-						// roomMap.get(this.getCell(i, j).getCellRoom().getRoom()).getOccupants());
+
 						if (roomMap.get(this.getCell(i, j).getCellRoom().getRoom()).getOccupants() > 0) {
 							p.drawPlayer(xOffset - 10 * offsetLine, yOffset, width, height, g, this);
 							offsetLine--;
@@ -531,18 +547,12 @@ public class Board extends JPanel {
 			playerList.get(currentPlayer).diceRoll = roll;
 			this.calcTargets(playerList.get(currentPlayer).getLocation(), roll);
 			if (currentPlayer != 0) {
-				// if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
-				// playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(-1);
-				// }
 
 				playerList.get(currentPlayer).getLocation().setOccupied(false);
 				int rand = (int) Math.floor(Math.random() * (getTargets().size()));
 				playerList.get(currentPlayer).setLocation((BoardCell) this.getTargets().toArray()[rand]);
 				playerList.get(currentPlayer).getLocation().setOccupied(true);
 
-				// if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
-				// playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(1);
-				// }
 			} else {
 				for (BoardCell cell : this.getTargets()) {
 					cell.setColor(Color.magenta);
@@ -563,13 +573,10 @@ public class Board extends JPanel {
 						if ((cell.getXPos() < e.getX() && cell.getXPos() + cell.getWidth() > e.getX())
 								&& (cell.getYPos() < e.getY() && cell.getYPos() + cell.getHeight() > e.getY())) {
 							if (targets.contains(cell)) {
-								// if(playerList.get(currentPlayer).getLocation().isRoomCenter()) {
-								// playerList.get(currentPlayer).getLocation().getCellRoom().setOccupants(-1);
-								// }
 								playerList.get(currentPlayer).getLocation().setOccupied(false);
 								playerList.get(currentPlayer).setLocation(cell);
 								playerList.get(currentPlayer).getLocation().setOccupied(true);
-								if (playerList.get(currentPlayer).getLocation().isRoomCenter()) {
+								if (playerList.get(currentPlayer).getLocation().isRoomCenter() && !playerList.get(currentPlayer).getLocation().isDoorway()) {
 									SuggestionPanel panel = new SuggestionPanel(false);
 									panel.setVisible(true);
 								}
@@ -617,4 +624,9 @@ public class Board extends JPanel {
 		}
 
 	}
+	
+	public Card getResult() {
+    	return result;
+    }
+
 }

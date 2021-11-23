@@ -27,6 +27,9 @@ public class GameControlPanel extends JPanel {
 
     private JLabel whoseTurnField = new JLabel();
     private JLabel diceRoll = new JLabel();
+    private JLabel guessResult = new JLabel();
+    private JLabel guess = new JLabel();
+	
 
     public GameControlPanel() {
         createLayout();
@@ -35,7 +38,6 @@ public class GameControlPanel extends JPanel {
     public void createLayout() {
 
         player = board.getHumanPlayer();
-        whoseTurn = board.getPlayerList().get(board.getCurrentPlayerIndex()).getName();
 
         JPanel controlPanel = new JPanel(new GridLayout(2, 0)); // Control panel at the bottom
 
@@ -67,8 +69,10 @@ public class GameControlPanel extends JPanel {
         accuseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	if(Board.getInstance().getCurrentPlayer() == 0) {
                 SuggestionPanel panel = new SuggestionPanel(true);
                 panel.setVisible(true);
+            	}
             }
         });
         topControl.add(accuseButton);
@@ -85,16 +89,17 @@ public class GameControlPanel extends JPanel {
         // Guess
         JPanel guessPanel = new JPanel(new GridLayout(1, 2));
         guessPanel.setBorder(new TitledBorder("Guess"));
-        JLabel guess = new JLabel(guessString);
+        guess.setText(guessString);
         guessPanel.add(guess);
 
         JPanel guessResultPanel = new JPanel(new GridLayout(1, 2));
         guessResultPanel.setBorder(new TitledBorder("Guess Result"));
-        JLabel guessResult = new JLabel(resultString);
+        guessResult.setText(resultString);
         guessResultPanel.add(guessResult);
         bottomControl.add(guessPanel);
         bottomControl.add(guessResultPanel);
 
+        
         controlPanel.add(topControl);
         controlPanel.add(bottomControl);
 
@@ -109,14 +114,13 @@ public class GameControlPanel extends JPanel {
         whoseTurnField.setOpaque(true);
 
         diceRoll.setText(Integer.toString(roll));
-
     }
 
     public void setGuess(String guess) {
-        guessString = guess;
+        this.guess.setText(guess);
     }
 
     public void setGuessResult(String result) {
-        resultString = result;
+        guessResult.setText(result);
     }
 }

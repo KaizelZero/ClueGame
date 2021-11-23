@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class ClueGame extends JFrame {
 
 	GameControlPanel controlPanel;
@@ -25,11 +26,19 @@ public class ClueGame extends JFrame {
 
 	public void setNewTurn(Player p, int roll) {
 		controlPanel.setTurn(p, roll);
-
 	}
 
+	public void setNewGuess(Player p, String guess, String guessResult) {
+		controlPanel.setGuess(guess);
+		controlPanel.setGuessResult(guessResult);
+	}
+	
 	public static ClueGame getClueGame() {
 		return clueGame;
+	}
+
+	public GameControlPanel getControlPanel() {
+		return controlPanel;
 	}
 
 	public static void main(String[] args) {

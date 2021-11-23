@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 public class SuggestionPanel extends JDialog implements ActionListener {
 
     private String roomText;
+    private Card result;
 
     private JPanel mainPanel = new JPanel(new GridLayout(0, 2));
     private JPanel leftPanel = new JPanel(new GridLayout(4, 0));
@@ -28,13 +29,11 @@ public class SuggestionPanel extends JDialog implements ActionListener {
     private JLabel currentRoom;
 
     private static Board board = Board.getInstance();
-    private static HumanPlayer player;
 
     private boolean isAccusation;
 
     public SuggestionPanel(Boolean bool) {
         this.isAccusation = bool;
-        player = board.getHumanPlayer();
         setSize(400, 300);
         createLayout();
     }
@@ -133,10 +132,20 @@ public class SuggestionPanel extends JDialog implements ActionListener {
             accusePlayer = new Card(personBox.getSelectedItem().toString(), CardType.PERSON);
             accuseWeapon = new Card(weaponBox.getSelectedItem().toString(), CardType.WEAPON);
             if (isAccusation) {
-                board.handleSuggestion(player, accusePlayer, accuseRoom, accuseWeapon);
+            	if(board.checkAccusation(accusePlayer, accuseRoom, accuseWeapon)) {
+        			JOptionPane.showMessageDialog(Board.getInstance(), "You win!");
+        			System.exit(0);
+            	} else {
+            		JOptionPane.showMessageDialog(Board.getInstance(), "You lose!");
+            		System.exit(0);
+            	}
                 setVisible(false);
+                board.nextPlayer();
             } else {
-                board.checkAccusation(accusePlayer, accuseRoom, accuseWeapon);
+            	result = board.handleSuggestion(Board.getInstance().getPlayerList().get(0), accusePlayer, accuseRoom, accuseWeapon);
+            	Board.getInstance().getHumanPlayer().getSeen().add(result);
+            	
+                setVisible(false);
             }
 
             break;
@@ -146,5 +155,6 @@ public class SuggestionPanel extends JDialog implements ActionListener {
         }
 
     }
-
+    
+    
 }
