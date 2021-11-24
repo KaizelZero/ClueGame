@@ -21,10 +21,6 @@ public class GameCardPanel extends JPanel {
     private static ArrayList<Card> playerCards;
     private static Map<Player, HashSet<Card>> seenCards;
     
-    private JPanel mainPanel;
-    
-    private Color color;
-    
     public GameCardPanel() {
     	createLayout();
     }

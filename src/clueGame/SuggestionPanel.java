@@ -125,8 +125,6 @@ public class SuggestionPanel extends JDialog implements ActionListener {
         String action = e.getActionCommand();
         switch (action) {
         case "Submit":
-            
-
             if (isAccusation) {
                 accuseRoom = new Card(roomBox.getSelectedItem().toString(), CardType.ROOM);
             } else {
@@ -148,18 +146,15 @@ public class SuggestionPanel extends JDialog implements ActionListener {
             	result = board.handleSuggestion(Board.getInstance().getPlayerList().get(0), accusePlayer, accuseRoom, accuseWeapon);
             	ArrayList<Player> playerList = Board.getInstance().getPlayerList();
             	Player owner = null;
-            	for (Player p: playerList) {
+            	for (Player p: playerList) { //Finds the player who has the matching card in their hand
             		for(Card c : p.getHand()) {
             			if(c.equals(result)) {
             				owner = p;
-                			System.out.println("Owner: " + owner);
-
             			}
             		}
             	}
             	
-            	Board.getInstance().getHumanPlayer().updateSeen(owner, result);
-
+            	Board.getInstance().getHumanPlayer().updateSeen(owner, result); //Update pannel
             	Board.getInstance().getCardPanel().updateDisplay();
                 setVisible(false);
             }
