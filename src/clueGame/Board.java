@@ -459,16 +459,29 @@ public class Board extends JPanel {
 			}
 			count = (count + 1) % playerList.size();
 		}
-		if(matchingCards.size() == 0) { //No matching cards
-			controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName()); //Suggestion disproved
-			controlPanel.setGuessResult("Suggestion Disproved");
-			controlPanel.updateDisplay(this.getHumanPlayer());
-			result = this.getHumanPlayer().getHand().get(0);
-		}else { //Update display pannel if there was a matching card
-			controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName()); //Suggestion proven
-			controlPanel.setGuessResult(result.getCardName());
-			controlPanel.updateDisplay(resultPlayer);
-			cardPanel.updateDisplay();
+		if(Board.getInstance().currentPlayer == 0) {
+			if(matchingCards.size() == 0) { //No matching cards
+				controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName()); //Suggestion disproved
+				controlPanel.setGuessResult("Suggestion Disproved");
+				controlPanel.updateDisplay(this.getHumanPlayer());
+				result = this.getHumanPlayer().getHand().get(0);
+			}else { //Update display pannel if there was a matching card
+				controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName()); //Suggestion proven
+				controlPanel.setGuessResult(result.getCardName());
+				controlPanel.updateDisplay(resultPlayer);
+				cardPanel.updateDisplay();
+			}
+		} else {
+			if(matchingCards.size() == 0) { //No matching cards
+				controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName()); //Suggestion disproved
+				controlPanel.updateDisplay(this.getHumanPlayer());
+				result = this.getHumanPlayer().getHand().get(0);
+			}else { //Update display pannel if there was a matching card
+				controlPanel.setGuess(person.getCardName() + ", " + room.getCardName() + ", " + weapon.getCardName()); //Suggestion proven
+				controlPanel.setGuessResult("Suggestion Disproved");
+				controlPanel.updateDisplay(resultPlayer);
+				cardPanel.updateDisplay();
+			}
 		}
 		this.repaint();
 	

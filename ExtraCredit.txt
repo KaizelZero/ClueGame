@@ -1,0 +1,4 @@
+Jimmy Truong
+Tony Capra
+
+We implemented a playable jar file and a JMenuBar that holds an exit and reset button. These allow you to exit the game and reset the game to the initial conditions.
